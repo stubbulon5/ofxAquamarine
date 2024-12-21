@@ -7,7 +7,7 @@ OpenGL based UI Framework written on top of OpenFrameworks. It is:
 - Optimized (target is 60fps)
 - Vectorial and scalable
 - Supports expression based layout
-- Highly configurable
+- Highly configurable, including full control over theme
 - Supports loading and saving state
 - Interprets a very simple markup language similar to HTML
 
