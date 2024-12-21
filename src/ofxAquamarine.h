@@ -67,6 +67,7 @@
 #include "./viz/widget/element/WidgetElmButton.h"
 #include "./viz/widget/element/WidgetElmImage.h"
 #include "./viz/widget/element/WidgetElmSlider.h"
+#include "./viz/widget/element/WidgetElmXYPad.h"
 
 // WIP elements
 // #include "./viz/widget/element/WIP/WidgetElmAudioClip.h"
