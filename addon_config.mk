@@ -18,8 +18,8 @@ meta:
 	ADDON_NAME = ofxAquamarine
 	ADDON_DESCRIPTION = Aquamarine Widget UI framework for openFrameworks.
 	ADDON_AUTHOR = stubbulon5
-	ADDON_TAGS = "ui" "widget" "framework" "theming"
-	ADDON_URL = https://github.com/stubbulon5/Cognition
+	ADDON_TAGS = "ui" "GUI" "widget" "framework" "theming"
+	ADDON_URL = https://github.com/stubbulon5/ofxAquamarine
 
 common:
 	# dependencies with other addons, a list of them separated by spaces 

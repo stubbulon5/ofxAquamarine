@@ -18,20 +18,20 @@ OpenGL based UI Framework written on top of OpenFrameworks. It is:
 
 ### Object hierarchy
 ```
-- uiVizWidgetBase
-    + uiVizWidget
-    | ---+ uiVizWidgetPopout
-    | ---+ uiVizWidgetMenu
+- WidgetBase
+    + Widget
+    | ---+ WidgetPopout
+    | ---+ WidgetMenu
     |
     | ---+ your own widget
     |
-    + uiVizWidgetElm
-        + uiVizWidgetElementTextbox
+    + WidgetElm
+        + WidgetElementTextbox
         ...
 ```
 
 ### Widget Manager
-The uiVizWidgetManager static class maintains a collection of widget (pointers) and helps manage their state. It also offers public methods to:
+The WidgetManager static class maintains a collection of widget (pointers) and helps manage their state. It also offers public methods to:
 - Save and load widget collection state to/from file
 - Return a pointer to a widget by a widget's id
 - Remove a particular widget by id or remove all widgets altogether
@@ -41,7 +41,7 @@ The uiVizWidgetManager static class maintains a collection of widget (pointers) 
 
 ### Widget Manager
 +--------------------+
-| uiVizWidgetManager | ----[uiVizWidget w]---> addWidget, w->draw(), etc
+| WidgetManager | ----[Widget w]---> addWidget, w->draw(), etc
 +--------------------+
 ```
 Usage of the Widget Manager is however, entirely optional and you may opt for instantiating and drawing widgets manually.  Please see here for full documentation.
@@ -49,11 +49,11 @@ Usage of the Widget Manager is however, entirely optional and you may opt for in
 
 
 ### Widget
-The uiVizWidget class is a container for modularized functionality. It could be a form containing a collection of elements or a highly complex visualization. It's provides you a core Widget lifecycle and management thereof while giving you the starting point to implement your own core functionality. Please see here for full documentation.
+The Widget class is a container for modularized functionality. It could be a form containing a collection of elements or a highly complex visualization. It's provides you a core Widget lifecycle and management thereof while giving you the starting point to implement your own core functionality. Please see here for full documentation.
 
 
 ### Elements
-The uiVizElm class is the base class for all....
+The Elm class is the base class for all....
 
 
 ### Debugging

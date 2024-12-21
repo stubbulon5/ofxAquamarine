@@ -5,9 +5,9 @@
 // ^^ ofxSmartFont.h to be replaced by :
 #include "ofxFontStash2.h"
 
-#include "uiVizIcon.h"
-#include "uiLang.h"
-#include "uiVizCoord.h"
+#include "Icon.h"
+#include "Lang.h"
+#include "Coord.h"
 #include "ofxOsc.h"
 
 namespace Aquamarine
@@ -32,15 +32,15 @@ namespace Aquamarine
 #define VIZ_KEY_NUMBER_5 53
 
     //------------------------------ WIDGET THEME  --------------------------------
-    class uiVizWidgetTheme
+    class WidgetTheme
     {
 
     public:
-        uiVizWidgetTheme()
+        WidgetTheme()
         {
         }
 
-        bool loadForWidget(uiVizWidgetTheme &fallback, string themeXML)
+        bool loadForWidget(WidgetTheme &fallback, string themeXML)
         {
             ofxXmlSettings settings;
             if (settings.loadFromBuffer(themeXML.c_str()))
@@ -60,7 +60,7 @@ namespace Aquamarine
             return false;
         }
 
-        bool loadForElement(uiVizWidgetTheme &fallback, string themeXML)
+        bool loadForElement(WidgetTheme &fallback, string themeXML)
         {
             ofxXmlSettings settings;
             if (settings.loadFromBuffer(themeXML.c_str()))
@@ -119,7 +119,7 @@ namespace Aquamarine
             return false;
         }
 
-        void populateWidgetTheme(uiVizWidgetTheme &fallback, ofxXmlSettings &settings)
+        void populateWidgetTheme(WidgetTheme &fallback, ofxXmlSettings &settings)
         {
 
             setWidgetColor(settings.getAttribute("widgetColor", "color", ""));
@@ -176,7 +176,7 @@ namespace Aquamarine
                 settings.getAttribute("hover", "background", fallback.getHoverBackgroundColorHex()));
         }
 
-        void populateElementTheme(uiVizWidgetTheme &fallback, ofxXmlSettings &settings)
+        void populateElementTheme(WidgetTheme &fallback, ofxXmlSettings &settings)
         {
 
             setElementForegroundColor(settings.getAttribute("foregroundColor", "color", ""));
@@ -1012,20 +1012,20 @@ namespace Aquamarine
         bool mTitleGradientSet = false;
     };
 
-    class uiVizWidgetThemeManager
+    class WidgetThemeManager
     {
 
     public:
-        uiVizWidgetThemeManager()
+        WidgetThemeManager()
         {
         }
 
-        uiVizWidgetThemeManager(ofxXmlSettings themesXML)
+        WidgetThemeManager(ofxXmlSettings themesXML)
         {
             load(themesXML);
         }
 
-        uiVizWidgetThemeManager(string themesXML)
+        WidgetThemeManager(string themesXML)
         {
             load(themesXML);
         }
@@ -1044,7 +1044,7 @@ namespace Aquamarine
                     themeElm->Accept(&printer);
                     string themeXML = printer.CStr();
 
-                    uiVizWidgetTheme currTheme = uiVizWidgetTheme();
+                    WidgetTheme currTheme = WidgetTheme();
                     if (currTheme.load(themeXML))
                     {
                         mThemes.push_back(currTheme);
@@ -1082,14 +1082,14 @@ namespace Aquamarine
             }
         }
 
-        std::vector<uiVizWidgetTheme> getThemes()
+        std::vector<WidgetTheme> getThemes()
         {
             return mThemes;
         }
 
-        uiVizWidgetTheme getThemeByName(string themeName)
+        WidgetTheme getThemeByName(string themeName)
         {
-            for (uiVizWidgetTheme theme : mThemes)
+            for (WidgetTheme theme : mThemes)
             {
                 if (ofToLower(theme.Name) == ofToLower(themeName))
                 {
@@ -1099,9 +1099,9 @@ namespace Aquamarine
             return getDefaultTheme();
         }
 
-        uiVizWidgetTheme getThemeByName(string themeName, bool lessOpacity)
+        WidgetTheme getThemeByName(string themeName, bool lessOpacity)
         {
-            uiVizWidgetTheme theme = getThemeByName(themeName);
+            WidgetTheme theme = getThemeByName(themeName);
             if (lessOpacity)
             {
                 theme = getLessOpacity(theme, false);
@@ -1109,19 +1109,19 @@ namespace Aquamarine
             return theme;
         }
 
-        uiVizWidgetTheme getDefaultTheme()
+        WidgetTheme getDefaultTheme()
         {
             return mDefaultTheme;
         }
 
-        void setDefaultTheme(uiVizWidgetTheme theme)
+        void setDefaultTheme(WidgetTheme theme)
         {
             mDefaultTheme = theme;
         }
 
-        uiVizWidgetTheme getSystemTheme(bool lessOpacity)
+        WidgetTheme getSystemTheme(bool lessOpacity)
         {
-            uiVizWidgetTheme theme = (getDefaultTheme().IsDark ? mSystemThemeDark : mSystemTheme);
+            WidgetTheme theme = (getDefaultTheme().IsDark ? mSystemThemeDark : mSystemTheme);
             if (lessOpacity)
             {
                 theme = getLessOpacity(theme, false);
@@ -1129,9 +1129,9 @@ namespace Aquamarine
             return theme;
         }
 
-        uiVizWidgetTheme getSystemThemeLight(bool lessOpacity)
+        WidgetTheme getSystemThemeLight(bool lessOpacity)
         {
-            uiVizWidgetTheme theme = mSystemTheme;
+            WidgetTheme theme = mSystemTheme;
             if (lessOpacity)
             {
                 theme = getLessOpacity(theme, false);
@@ -1139,9 +1139,9 @@ namespace Aquamarine
             return theme;
         }
 
-        uiVizWidgetTheme getSystemThemeDark(bool lessOpacity)
+        WidgetTheme getSystemThemeDark(bool lessOpacity)
         {
-            uiVizWidgetTheme theme = mSystemThemeDark;
+            WidgetTheme theme = mSystemThemeDark;
             if (lessOpacity)
             {
                 theme = getLessOpacity(theme, false);
@@ -1149,31 +1149,31 @@ namespace Aquamarine
             return theme;
         }
 
-        uiVizWidgetTheme getThemeForMainMenu()
+        WidgetTheme getThemeForMainMenu()
         {
-            uiVizWidgetTheme theme = getDefaultTheme();
+            WidgetTheme theme = getDefaultTheme();
             theme.setWidgetColor(theme.MainMenuColor);
             theme.setTitleGradientColors(theme.MainMenuColor, theme.MainMenuColor, theme.MainMenuColor, theme.MainMenuColor);
             theme.setTitleColor(theme.MainMenuColor);
             return theme;
         }
 
-        uiVizWidgetTheme getThemeForPopout()
+        WidgetTheme getThemeForPopout()
         {
-            uiVizWidgetTheme theme = getDefaultTheme();
+            WidgetTheme theme = getDefaultTheme();
             theme.setWidgetColor(theme.PopoutMenuColor);
             theme.setTitleGradientColors(theme.PopoutMenuColor, theme.PopoutMenuColor, theme.PopoutMenuColor, theme.PopoutMenuColor);
             theme.setTitleColor(theme.PopoutMenuColor);
             return theme;
         }
 
-        uiVizWidgetTheme getLessOpacity(uiVizWidgetTheme theme, bool includingElements)
+        WidgetTheme getLessOpacity(WidgetTheme theme, bool includingElements)
         {
             theme = getLessOpacity(theme, includingElements, 0.97f);
             return theme;
         }
 
-        uiVizWidgetTheme getLessOpacity(uiVizWidgetTheme theme, bool includingElements, float perc)
+        WidgetTheme getLessOpacity(WidgetTheme theme, bool includingElements, float perc)
         {
             theme.HoveredWidgetAlpha *= perc;
             theme.UnhoveredWidgetAlpha *= perc;
@@ -1193,21 +1193,21 @@ namespace Aquamarine
             return theme;
         }
 
-        uiVizWidgetTheme getContrastingSystemTheme(uiVizWidgetTheme theme, bool lessOpacity)
+        WidgetTheme getContrastingSystemTheme(WidgetTheme theme, bool lessOpacity)
         {
             return (theme.IsDark ? getSystemThemeLight(lessOpacity) : getSystemThemeDark(lessOpacity));
         }
 
-        uiVizWidgetTheme getMatchingSystemTheme(uiVizWidgetTheme theme, bool lessOpacity)
+        WidgetTheme getMatchingSystemTheme(WidgetTheme theme, bool lessOpacity)
         {
             return (theme.IsDark ? getSystemThemeDark(lessOpacity) : getSystemThemeLight(lessOpacity));
         }
 
     private:
-        std::vector<uiVizWidgetTheme> mThemes = std::vector<uiVizWidgetTheme>();
-        uiVizWidgetTheme mDefaultTheme = uiVizWidgetTheme();
-        uiVizWidgetTheme mSystemTheme = uiVizWidgetTheme();
-        uiVizWidgetTheme mSystemThemeDark = uiVizWidgetTheme();
+        std::vector<WidgetTheme> mThemes = std::vector<WidgetTheme>();
+        WidgetTheme mDefaultTheme = WidgetTheme();
+        WidgetTheme mSystemTheme = WidgetTheme();
+        WidgetTheme mSystemThemeDark = WidgetTheme();
     };
 
     //------------------------------ UI VIZ CLASS --------------------------------
@@ -1226,8 +1226,8 @@ namespace Aquamarine
         int MAX_FPS = 60;
         int MIN_FPS = 10;
         int MIN_FPS_FOR_ANIMATION = 20;
-        uiLang mLang = uiLang();
-        uiLang mLangHelp = uiLang();
+        Lang mLang = Lang();
+        Lang mLangHelp = Lang();
 
         uiViz(float SETTING_User_Scale, string SETTING_language, int SETTING_userExperience, bool SETTING_useFbo = true, bool SETTING_showFps = false, string SETTING_absoluteFontPath = "", bool SETTING_autoLoadMostRecentProject = true, string SETTING_themeName = "")
         {
@@ -1248,7 +1248,7 @@ namespace Aquamarine
             mLang.populateFromFile(SETTING_language);
             mLangHelp.populateFromHelpFile(SETTING_language);
 
-            uiVizIconCache::bootstrapIconMapDefault(getScale());
+            IconCache::bootstrapIconMapDefault(getScale());
 
             ofFile *f;
 
@@ -1283,7 +1283,7 @@ namespace Aquamarine
         void loadTheme(string themeName, bool reInit = true)
         {
             themeManager.loadThemesFromFile("themes.xml");
-            uiVizWidgetTheme theme = themeManager.getThemeByName(themeName);
+            WidgetTheme theme = themeManager.getThemeByName(themeName);
             themeManager.setDefaultTheme(theme);
 
             if (reInit)
@@ -1295,7 +1295,7 @@ namespace Aquamarine
 
             setResolutionMultiplier();
 
-            uiVizIconCache::scale(getScale());
+            IconCache::scale(getScale());
 
             scaleFonts();
 
@@ -1698,7 +1698,7 @@ namespace Aquamarine
             mXXXLargeFont.reset();
         }
 
-        /* TODO ---------------- PORT THIS OVER TO uiVizWidgetManager class  BEGIN  ------ */
+        /* TODO ---------------- PORT THIS OVER TO WidgetManager class  BEGIN  ------ */
 
         void setIsWidgetDragging(bool value)
         {
@@ -1949,11 +1949,11 @@ namespace Aquamarine
         string mTargetDropWidgetId = "";
         bool mIsAnyWidgetDraggingOrResizing = false;
 
-        /* TODO ---------------- PORT THIS OVER TO uiVizWidgetManager class  END  ------ */
+        /* TODO ---------------- PORT THIS OVER TO WidgetManager class  END  ------ */
 
         // todo set up some constants
 
-        void cacheFontStyles(uiVizWidgetTheme theme)
+        void cacheFontStyles(WidgetTheme theme)
         {
 
             int resolutionMultiplier = getResolutionMultiplier();
@@ -2033,7 +2033,7 @@ namespace Aquamarine
             return mFonts.getStyle(styleName);
         }
 
-        ofxFontStash2::Fonts *getFonts(uiVizWidgetTheme theme)
+        ofxFontStash2::Fonts *getFonts(WidgetTheme theme)
         {
 
             int resolutionMultiplier = getResolutionMultiplier();
@@ -2449,7 +2449,7 @@ namespace Aquamarine
             return mXXXLargeFont;
         }
 
-        uiVizWidgetThemeManager *getThemeManager()
+        WidgetThemeManager *getThemeManager()
         {
             return &themeManager;
         }
@@ -2689,7 +2689,7 @@ namespace Aquamarine
         bool mIsBoostingUserExperience = false;
         bool mIsThrottlingUserExperience = false;
         bool mSETTING_SETTING_autoLoadMostRecentProject = true;
-        uiVizWidgetThemeManager themeManager = uiVizWidgetThemeManager();
+        WidgetThemeManager themeManager = WidgetThemeManager();
         // v2 fonts:
         ofxFontStash2::Fonts mFonts;
         ofxFontStash2::Style mFontStyle;
