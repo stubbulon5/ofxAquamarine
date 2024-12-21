@@ -223,7 +223,7 @@ namespace Aquamarine
 
             debugInfo += "<small-mono>ANIMATIONS:<br/></small-mono>";
 
-            for (uiViz::AnimationData animation : getViz()->getAnimations())
+            for (Viz::AnimationData animation : getViz()->getAnimations())
             {
                 string s = animation.animationName;
                 if (s.length() < LEFT_PADDING)

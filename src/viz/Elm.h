@@ -14,18 +14,18 @@ namespace Aquamarine
 
 
          void setStringBounds(int x, int y, int width, int height) {
-         bounds = uiViz::vizBounds(x, y, width, height);
+         bounds = Viz::vizBounds(x, y, width, height);
          p.rectangle(x, y, width, height);
          path.update(p);
          }
 
          void setStringBounds(int x, int y, int width, int height, ofColor color = ofColor(0, 0, 0, 180)) {
-         bounds = uiViz::vizBounds(x, y, width, height);
+         bounds = Viz::vizBounds(x, y, width, height);
          p.rectangle(x, y, width, height);
          path.update(p, color);
          }
 
-         uiViz::vizBounds getStringBounds() {
+         Viz::vizBounds getStringBounds() {
          return bounds;
          }
 

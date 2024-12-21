@@ -506,7 +506,7 @@ namespace Aquamarine
         // Local event listener event dispatch
         while (Shared::getViz()->hasLocalListenEventsInTransmitQueue())
         {
-            uiViz::WidgetEvent e = Shared::getViz()->getNextLocalListenMessageToTransmit();
+            Viz::WidgetEvent e = Shared::getViz()->getNextLocalListenMessageToTransmit();
             WidgetManager::handleEventReceive(e.eventSenderType, e.eventSenderId, e.eventTargetId, e.eventName, e.eventXML);
         }
 

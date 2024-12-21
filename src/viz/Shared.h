@@ -1,6 +1,6 @@
 
 #pragma once
-#include "uiViz.h"
+#include "Viz.h"
 #include "Lang.h"
 #include "ofxXmlSettings.h"
 
@@ -27,7 +27,7 @@ namespace Aquamarine
                               bool SETTING_SETTING_autoLoadMostRecentProject,
                               string SETTING_themeName);
 
-        static std::shared_ptr<uiViz> getViz();
+        static std::shared_ptr<Viz> getViz();
         static void setUserScale(float val);
         static void setUserExperience(float val);
         static void setUseFbo(bool useFbo);
@@ -59,7 +59,7 @@ namespace Aquamarine
         static void setVizDebug(int val);
 
     private:
-        static std::shared_ptr<uiViz> viz;
+        static std::shared_ptr<Viz> viz;
         static string APP_SETTINGS_PATH;
         static string APP_SETTINGS_FILE_NAME;
         static string APP_SETTINGS_FILE_FULL_PATH;

@@ -71,7 +71,7 @@ Updating a project using projectGenerator will cause some project config / setti
 
 ## General
 - Use the corresponding openFrameworks framework projectGenerator to generate new project
-- Inside project, right click src group and add GROUP references (and make sure "Copy items" is not enabled) to the master app_widgets and uiViz folders git repo (this is common code across platforms / devices / sdk's). These groups location group should be set to "Relative to Group"
+- Inside project, right click src group and add GROUP references (and make sure "Copy items" is not enabled) to the master app_widgets and Viz folders git repo (this is common code across platforms / devices / sdk's). These groups location group should be set to "Relative to Group"
 - Follow any additional instructions below and compile!
 
 - Stick with Legacy build system, see:
@@ -119,7 +119,7 @@ ofxMidi -> CoreFoundation.framework
 
 HAving cloned the code boom / cognition repo, left drag the files onto the XCode ide, drop the files under 'src' folder and create GROUP, RELATIVE TO GROUP (don't copy). Making relative to group is acheived by:
 1.) After the drop operation into the src folder and creating reference
-2.) Left click the uiViz folder and on the right hand pane of Xcode, click the dropdown and select location "Relative to Group"
+2.) Left click the Viz folder and on the right hand pane of Xcode, click the dropdown and select location "Relative to Group"
 
 *Clean build folder -> Use New build system*
 Copy / refresh files in:

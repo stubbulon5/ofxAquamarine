@@ -1211,16 +1211,16 @@ namespace Aquamarine
     };
 
     //------------------------------ UI VIZ CLASS --------------------------------
-    class uiViz
+    class Viz
     {
 
     public:
         // Events
         ofEvent<float> scaleChanged;
 
-        uiViz()
+        Viz()
         {
-            uiViz(1.0f, "English", 60, true, false, "", "");
+            Viz(1.0f, "English", 60, true, false, "", "");
         }
 
         int MAX_FPS = 60;
@@ -1229,7 +1229,7 @@ namespace Aquamarine
         Lang mLang = Lang();
         Lang mLangHelp = Lang();
 
-        uiViz(float SETTING_User_Scale, string SETTING_language, int SETTING_userExperience, bool SETTING_useFbo = true, bool SETTING_showFps = false, string SETTING_absoluteFontPath = "", bool SETTING_autoLoadMostRecentProject = true, string SETTING_themeName = "")
+        Viz(float SETTING_User_Scale, string SETTING_language, int SETTING_userExperience, bool SETTING_useFbo = true, bool SETTING_showFps = false, string SETTING_absoluteFontPath = "", bool SETTING_autoLoadMostRecentProject = true, string SETTING_themeName = "")
         {
             mSETTING_User_Scale = SETTING_User_Scale;
             mSETTING_language = SETTING_language;
@@ -2630,8 +2630,8 @@ namespace Aquamarine
 
         void removeListeningEvents(string eventListenerId)
         { // The list of events this widget is listening to
-            vector<uiViz::WidgetEvent> listeningEvents = getListeningEvents(eventListenerId);
-            for (uiViz::WidgetEvent e : listeningEvents)
+            vector<Viz::WidgetEvent> listeningEvents = getListeningEvents(eventListenerId);
+            for (Viz::WidgetEvent e : listeningEvents)
             {
                 removeFromWidgetEventListenMap(e.eventTargetId, e.eventSenderId, e.eventName, e.redirectEventName);
             }

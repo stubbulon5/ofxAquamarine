@@ -9,7 +9,7 @@
 #define exprtk_disable_rtl_vecops
 #define exprtk_disable_caseinsensitivity
 #include "../core/exprtk/exprtk.hpp"
-#include "../uiViz.h"
+#include "../Viz.h"
 #include "../Elm.h"
 #include "ofxSvg.h"
 #include "ofxXmlSettings.h"
@@ -749,7 +749,7 @@ namespace Aquamarine
             }
 
             // if has theme specified, use it, otherwise use getDefaultTheme
-            // getDefaultTheme is set by uiViz (loaded at app start)
+            // getDefaultTheme is set by Viz (loaded at app start)
 
             /**** Widget Class Type ****/
             mWidgetClassType = mWidgetXML.getAttribute(parentTag, "class", "Widget");
@@ -997,13 +997,13 @@ namespace Aquamarine
                 }
 
                 // Listen events
-                vector<uiViz::WidgetEvent> listeningEvents = getViz()->getListeningEvents(getPersistentId());
+                vector<Viz::WidgetEvent> listeningEvents = getViz()->getListeningEvents(getPersistentId());
                 if (listeningEvents.size() > 0)
                 {
                     mWidgetXML.addTag("listenEvents");
                     mWidgetXML.pushTag("listenEvents");
                     int eventIndex = 0;
-                    for (uiViz::WidgetEvent e : listeningEvents)
+                    for (Viz::WidgetEvent e : listeningEvents)
                     {
                         mWidgetXML.addTag("event");
                         mWidgetXML.setAttribute("event", "source", e.eventSenderId, eventIndex);
@@ -3068,7 +3068,7 @@ namespace Aquamarine
             // Implement any behaviour in derrived class which should handle key pressed
         }
 
-        shared_ptr<uiViz> getViz()
+        shared_ptr<Viz> getViz()
         {
             //ofLogNotice("ofxAquamarine") << "[" << getPersistentId() << "] getViz()";
             return viz;
@@ -3526,7 +3526,7 @@ namespace Aquamarine
         bool mRespondedToFirstMouseReleasedEvent = false;
         bool mMousePressWasRegisteredWhenCheckingForReleased = false;
 
-        shared_ptr<uiViz> viz;
+        shared_ptr<Viz> viz;
         int mZIndex = 0;
         bool mIsNextInLineForFocus = true;
         bool mIsDraggingContent = false;
@@ -4923,7 +4923,7 @@ namespace Aquamarine
 
         virtual void onWidgetEventReceived(WidgetEventArgs &args) override
         {
-// Override this in derrived widget to handle incoming events from uiVizElements, etc
+// Override this in derrived widget to handle incoming events from VizElements, etc
 #if VIZ_DEBUG_LEVEL >= 2 && VIZ_DEBUG_LEVEL < 3
             string xml;
             args.eventXML.copyXmlToString(xml);

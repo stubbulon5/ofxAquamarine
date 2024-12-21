@@ -131,8 +131,8 @@ namespace Aquamarine
 
             eventListenLog->clearTableRows();
 
-            vector<uiViz::WidgetEvent> listeningEvents = getViz()->getListeningEvents(owner->getPersistentId());
-            for (uiViz::WidgetEvent e : listeningEvents)
+            vector<Viz::WidgetEvent> listeningEvents = getViz()->getListeningEvents(owner->getPersistentId());
+            for (Viz::WidgetEvent e : listeningEvents)
             {
                 eventListenLog->addRow(
                     WidgetTableRow("HEADER", {WidgetTableCell(

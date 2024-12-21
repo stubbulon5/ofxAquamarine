@@ -9,7 +9,7 @@ namespace Aquamarine
     string Shared::APP_SETTINGS_PATH;
     string Shared::APP_SETTINGS_FILE_NAME = "settings.xml";
     string Shared::APP_SETTINGS_FILE_FULL_PATH;
-    std::shared_ptr<uiViz> Shared::viz;
+    std::shared_ptr<Viz> Shared::viz;
     int Shared::mVizDebug = -1;
 
     /*
@@ -93,7 +93,7 @@ namespace Aquamarine
 
         cout << "Configuring Shared: " << SETTING_language << ", " << SETTING_absoluteFontPath << endl;
 
-        viz = make_shared<uiViz>(
+        viz = make_shared<Viz>(
             SETTING_User_Scale,
             SETTING_language,
             SETTING_userExperience,
@@ -108,14 +108,14 @@ namespace Aquamarine
     methods that should only be called after Shared::configure is called
      */
 
-    std::shared_ptr<uiViz> Shared::getViz()
+    std::shared_ptr<Viz> Shared::getViz()
     {
         if (viz == nullptr)
         {
             cout << "***************************** ERROR ***************************** " << endl;
             cout << "Shared::configure was not called, MUST call it before using Shared::getViz()" << endl;
             cout << "***************************************************************** " << endl;
-            viz = make_shared<uiViz>(); // Use the defaults!!
+            viz = make_shared<Viz>(); // Use the defaults!!
             return nullptr;
         }
         return viz;

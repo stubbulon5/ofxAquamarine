@@ -110,7 +110,7 @@ namespace Aquamarine
         string label = "";
         string key = "";
         bool isSelected = false;
-        WidgetBase *cellWidget = nullptr; // can be a Widget or uiVizEidgetElm
+        WidgetBase *cellWidget = nullptr; // can be a Widget or VizEidgetElm
         bool cellWidgetInitialized = false;
         string horizontalAlign = "left"; // left || center || right
 
