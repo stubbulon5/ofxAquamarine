@@ -3,7 +3,7 @@
 #include "Widget.h"
 #include "WidgetTable.h"
 #include "WidgetMenuCollection.h"
-#include "WidgetWidgetList.h"
+#include "./system/WidgetWidgetList.h"
 
 namespace Aquamarine
 {

@@ -35,5 +35,7 @@ namespace Aquamarine
     const std::string WIDGET_ELM_CLASS::BREADCRUMB = "WidgetElmBreadcrumb";
     const std::string WIDGET_ELM_CLASS::IMAGE = "WidgetElmImage";
     const std::string WIDGET_ELM_CLASS::PROGRESS_BAR = "WidgetElmProgressBar";
+    const std::string WIDGET_ELM_CLASS::XY_PAD = "WidgetElmXYPad";
+    
 
 }

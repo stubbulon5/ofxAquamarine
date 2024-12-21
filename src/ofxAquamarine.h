@@ -8,7 +8,7 @@
 #include "./viz/core/exprtk/exprtk.hpp"
 #include "./viz/core/machineid/machineid.h"
 
-// Viz (to be renamed)
+// Viz
 #include "./viz/Lang.h"
 #include "./viz/Coord.h"
 #include "./viz/Shared.h"
@@ -42,6 +42,7 @@
 #include "./viz/widget/WidgetMediaPlayerBase.h"
 #include "./viz/widget/WidgetSettings.h"
 #include "./viz/widget/WidgetWindowTitle.h"
+#include "./viz/widget/WidgetColorPicker.h"
 
 // System widgets
 #include "./viz/widget/system/WidgetDialog.h"

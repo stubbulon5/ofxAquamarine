@@ -5,6 +5,7 @@
 #include "widget/WidgetEventListener.h"
 #include "widget/WidgetClipboardMenu.h"
 #include "widget/WidgetTable.h"
+#include "widget/WidgetMenuCollection.h"
 #include "widget/WidgetMatrix.h"
 #include "widget/WidgetSequencer.h"
 #include "widget/WidgetPianoRoll.h"
@@ -14,6 +15,8 @@
 #include "widget/WidgetImageView.h"
 #include "widget/WidgetSettings.h"
 #include "widget/WidgetTextEditor.h"
+#include "widget/WidgetColorPicker.h"
+
 #include "widget/system/WidgetFileList.h"
 #include "widget/system/WidgetFileLocationsList.h"
 #include "widget/system/WidgetFileExplorer.h"
@@ -23,7 +26,8 @@
 #include "widget/system/WidgetThemePreview.h"
 #include "widget/system/WidgetWidgetList.h"
 #include "widget/system/WidgetDialog.h"
-#include "widget/WidgetMenuCollection.h"
+
+
 
 #include "ofxOsc.h"
 
@@ -61,6 +65,80 @@ namespace Aquamarine
     WidgetBase *targetDropWidget = nullptr;
 
     static ofEvent<WidgetEventArgs> widgetManagerEventReceived;
+
+    const string WidgetManager::WIDGET_CLASS = "Widget";
+    const string WidgetManager::WIDGET_CLASS_MENU = "WidgetMenu";                      // these are not yet general purpose, and rely on parent widgets initializing them
+    const string WidgetManager::WIDGET_CLASS_MENU_COLLECTION = "WidgetMenuCollection"; // these are not yet general purpose, and rely on parent widgets initializing them
+    const string WidgetManager::WIDGET_CLASS_TABLE = "WidgetTable";
+    const string WidgetManager::WIDGET_CLASS_MATRIX = "WidgetMatrix";
+    const string WidgetManager::WIDGET_CLASS_SEQUENCER = "WidgetSequencer";
+    const string WidgetManager::WIDGET_CLASS_PIANO_ROLL = "WidgetPianoRoll";
+    const string WidgetManager::WIDGET_CLASS_VIDEO_PLAYER = "WidgetVideoPlayer";
+    const string WidgetManager::WIDGET_CLASS_VIDEO_GRABBER = "WidgetVideoGrabber";
+    const string WidgetManager::WIDGET_CLASS_SOUND_PLAYER = "WidgetSoundPlayer";
+    const string WidgetManager::WIDGET_CLASS_IMAGE_VIEW = "WidgetImageView";
+    const string WidgetManager::WIDGET_CLASS_DEBUG = "WidgetDebug";
+    const string WidgetManager::WIDGET_CLASS_EVENT_LISTENER = "WidgetEventListener";
+    const string WidgetManager::WIDGET_CLASS_CLIPBOARD_MENU = "WidgetClipboardMenu";
+    const string WidgetManager::WIDGET_CLASS_SETTINGS = "WidgetSettings";
+    const string WidgetManager::WIDGET_CLASS_TEXT_EDITOR = "WidgetTextEditor";
+    const string WidgetManager::WIDGET_CLASS_COLOR_PICKER = "WidgetColorPicker";
+
+    // System
+    const string WidgetManager::WIDGET_CLASS_FILE_LIST = "WidgetFileList";
+    const string WidgetManager::WIDGET_CLASS_FILE_LOCATIONS_LIST = "WidgetFileLocationsList";
+    const string WidgetManager::WIDGET_CLASS_FILE_EXPLORER = "WidgetFileExplorer";
+    const string WidgetManager::WIDGET_CLASS_FILE_LOAD = "WidgetFileLoad";
+    const string WidgetManager::WIDGET_CLASS_FILE_SAVE = "WidgetFileSave";
+    const string WidgetManager::WIDGET_CLASS_THEME_EDITOR = "WidgetThemeEditor";
+    const string WidgetManager::WIDGET_CLASS_THEME_PREVIEW = "WidgetThemePreview";
+    const string WidgetManager::WIDGET_CLASS_WIDGET_LIST = "WidgetWidgetList";
+    const string WidgetManager::WIDGET_CLASS_DIALOG = "WidgetDialog";
+
+    void WidgetManager::bootstrapWidgetMapDefault()
+    {
+        if (applicationProperties.applicationVersion == "0.0.0")
+        {
+            string exceptionStr = "A valid version number has not been set for this aplication. Set it using 'WidgetManager::initWidgetManager' Terminating...";
+            throw std::runtime_error(exceptionStr.c_str());
+            OF_EXIT_APP(1);
+        }
+        widgetClassMap[WIDGET_CLASS] = &createWidget<Widget>;
+        widgetClassMap[WIDGET_CLASS_DEBUG] = &createWidget<WidgetDebug>;
+        widgetClassMap[WIDGET_CLASS_EVENT_LISTENER] = &createWidget<WidgetEventListener>;
+        widgetClassMap[WIDGET_CLASS_MENU] = &createWidget<WidgetMenu>;
+        widgetClassMap[WIDGET_CLASS_MENU_COLLECTION] = &createWidget<WidgetMenuCollection>;
+        widgetClassMap[WIDGET_CLASS_TABLE] = &createWidget<WidgetTable>;
+        widgetClassMap[WIDGET_CLASS_MATRIX] = &createWidget<WidgetMatrix>;
+        widgetClassMap[WIDGET_CLASS_SEQUENCER] = &createWidget<WidgetSequencer>;
+        widgetClassMap[WIDGET_CLASS_PIANO_ROLL] = &createWidget<WidgetPianoRoll>;
+        widgetClassMap[WIDGET_CLASS_VIDEO_PLAYER] = &createWidget<WidgetVideoPlayer>;
+        widgetClassMap[WIDGET_CLASS_VIDEO_GRABBER] = &createWidget<WidgetVideoGrabber>;
+        widgetClassMap[WIDGET_CLASS_SOUND_PLAYER] = &createWidget<WidgetSoundPlayer>;
+        widgetClassMap[WIDGET_CLASS_IMAGE_VIEW] = &createWidget<WidgetImageView>;
+        widgetClassMap[WIDGET_CLASS_CLIPBOARD_MENU] = &createWidget<WidgetClipboardMenu>;
+        widgetClassMap[WIDGET_CLASS_SETTINGS] = &createWidget<WidgetSettings>;
+        widgetClassMap[WIDGET_CLASS_TEXT_EDITOR] = &createWidget<WidgetTextEditor>;
+        widgetClassMap[WIDGET_CLASS_COLOR_PICKER] = &createWidget<WidgetColorPicker>;
+
+        widgetClassMap[WIDGET_CLASS_FILE_LIST] = &createWidget<WidgetFileList>;
+        widgetClassMap[WIDGET_CLASS_FILE_LOCATIONS_LIST] = &createWidget<WidgetFileLocationsList>;
+        widgetClassMap[WIDGET_CLASS_FILE_EXPLORER] = &createWidget<WidgetFileExplorer>;
+        widgetClassMap[WIDGET_CLASS_FILE_LOAD] = &createWidget<WidgetFileLoad>;
+        widgetClassMap[WIDGET_CLASS_FILE_SAVE] = &createWidget<WidgetFileSave>;
+        widgetClassMap[WIDGET_CLASS_THEME_EDITOR] = &createWidget<WidgetThemeEditor>;
+        widgetClassMap[WIDGET_CLASS_THEME_PREVIEW] = &createWidget<WidgetThemePreview>;
+        widgetClassMap[WIDGET_CLASS_WIDGET_LIST] = &createWidget<WidgetWidgetList>;
+        widgetClassMap[WIDGET_CLASS_DIALOG] = &createWidget<WidgetDialog>;
+
+        // Clipboard menu
+        if (clipboardMenu == nullptr)
+        {
+            clipboardMenu = new WidgetClipboardMenu("CLIPBOARD", "<widget><appearance visible='0'/></widget>");
+            WidgetManager::addWidget(*clipboardMenu, false, "", false);
+        }
+    }
+
 
     void WidgetManager::addWidget(Widget &widget, bool shouldPersist, string ownerWidgetId, bool transmitOsc)
     {
@@ -1291,77 +1369,6 @@ namespace Aquamarine
     {
         std::vector<std::string> ver = ofSplitString(appVersionString, ".", false, true);
         return (ver.size() > 2) ? std::atoi(ver[2].c_str()) : 0;
-    }
-
-    const string WidgetManager::WIDGET_CLASS = "Widget";
-    const string WidgetManager::WIDGET_CLASS_MENU = "WidgetMenu";                      // these are not yet general purpose, and rely on parent widgets initializing them
-    const string WidgetManager::WIDGET_CLASS_MENU_COLLECTION = "WidgetMenuCollection"; // these are not yet general purpose, and rely on parent widgets initializing them
-    const string WidgetManager::WIDGET_CLASS_TABLE = "WidgetTable";
-    const string WidgetManager::WIDGET_CLASS_MATRIX = "WidgetMatrix";
-    const string WidgetManager::WIDGET_CLASS_SEQUENCER = "WidgetSequencer";
-    const string WidgetManager::WIDGET_CLASS_PIANO_ROLL = "WidgetPianoRoll";
-    const string WidgetManager::WIDGET_CLASS_VIDEO_PLAYER = "WidgetVideoPlayer";
-    const string WidgetManager::WIDGET_CLASS_VIDEO_GRABBER = "WidgetVideoGrabber";
-    const string WidgetManager::WIDGET_CLASS_SOUND_PLAYER = "WidgetSoundPlayer";
-    const string WidgetManager::WIDGET_CLASS_IMAGE_VIEW = "WidgetImageView";
-    const string WidgetManager::WIDGET_CLASS_DEBUG = "WidgetDebug";
-    const string WidgetManager::WIDGET_CLASS_EVENT_LISTENER = "WidgetEventListener";
-    const string WidgetManager::WIDGET_CLASS_CLIPBOARD_MENU = "WidgetClipboardMenu";
-    const string WidgetManager::WIDGET_CLASS_SETTINGS = "WidgetSettings";
-    const string WidgetManager::WIDGET_CLASS_TEXT_EDITOR = "WidgetTextEditor";
-
-    // System
-    const string WidgetManager::WIDGET_CLASS_FILE_LIST = "WidgetFileList";
-    const string WidgetManager::WIDGET_CLASS_FILE_LOCATIONS_LIST = "WidgetFileLocationsList";
-    const string WidgetManager::WIDGET_CLASS_FILE_EXPLORER = "WidgetFileExplorer";
-    const string WidgetManager::WIDGET_CLASS_FILE_LOAD = "WidgetFileLoad";
-    const string WidgetManager::WIDGET_CLASS_FILE_SAVE = "WidgetFileSave";
-    const string WidgetManager::WIDGET_CLASS_THEME_EDITOR = "WidgetThemeEditor";
-    const string WidgetManager::WIDGET_CLASS_THEME_PREVIEW = "WidgetThemePreview";
-    const string WidgetManager::WIDGET_CLASS_WIDGET_LIST = "WidgetWidgetList";
-    const string WidgetManager::WIDGET_CLASS_DIALOG = "WidgetDialog";
-
-    void WidgetManager::bootstrapWidgetMapDefault()
-    {
-        if (applicationProperties.applicationVersion == "0.0.0")
-        {
-            string exceptionStr = "A valid version number has not been set for this aplication. Set it using 'WidgetManager::initWidgetManager' Terminating...";
-            throw std::runtime_error(exceptionStr.c_str());
-            OF_EXIT_APP(1);
-        }
-        widgetClassMap[WIDGET_CLASS] = &createWidget<Widget>;
-        widgetClassMap[WIDGET_CLASS_DEBUG] = &createWidget<WidgetDebug>;
-        widgetClassMap[WIDGET_CLASS_EVENT_LISTENER] = &createWidget<WidgetEventListener>;
-        widgetClassMap[WIDGET_CLASS_MENU] = &createWidget<WidgetMenu>;
-        widgetClassMap[WIDGET_CLASS_MENU_COLLECTION] = &createWidget<WidgetMenuCollection>;
-        widgetClassMap[WIDGET_CLASS_TABLE] = &createWidget<WidgetTable>;
-        widgetClassMap[WIDGET_CLASS_MATRIX] = &createWidget<WidgetMatrix>;
-        widgetClassMap[WIDGET_CLASS_SEQUENCER] = &createWidget<WidgetSequencer>;
-        widgetClassMap[WIDGET_CLASS_PIANO_ROLL] = &createWidget<WidgetPianoRoll>;
-        widgetClassMap[WIDGET_CLASS_VIDEO_PLAYER] = &createWidget<WidgetVideoPlayer>;
-        widgetClassMap[WIDGET_CLASS_VIDEO_GRABBER] = &createWidget<WidgetVideoGrabber>;
-        widgetClassMap[WIDGET_CLASS_SOUND_PLAYER] = &createWidget<WidgetSoundPlayer>;
-        widgetClassMap[WIDGET_CLASS_IMAGE_VIEW] = &createWidget<WidgetImageView>;
-        widgetClassMap[WIDGET_CLASS_CLIPBOARD_MENU] = &createWidget<WidgetClipboardMenu>;
-        widgetClassMap[WIDGET_CLASS_SETTINGS] = &createWidget<WidgetSettings>;
-        widgetClassMap[WIDGET_CLASS_TEXT_EDITOR] = &createWidget<WidgetTextEditor>;
-
-        widgetClassMap[WIDGET_CLASS_FILE_LIST] = &createWidget<WidgetFileList>;
-        widgetClassMap[WIDGET_CLASS_FILE_LOCATIONS_LIST] = &createWidget<WidgetFileLocationsList>;
-        widgetClassMap[WIDGET_CLASS_FILE_EXPLORER] = &createWidget<WidgetFileExplorer>;
-        widgetClassMap[WIDGET_CLASS_FILE_LOAD] = &createWidget<WidgetFileLoad>;
-        widgetClassMap[WIDGET_CLASS_FILE_SAVE] = &createWidget<WidgetFileSave>;
-        widgetClassMap[WIDGET_CLASS_THEME_EDITOR] = &createWidget<WidgetThemeEditor>;
-        widgetClassMap[WIDGET_CLASS_THEME_PREVIEW] = &createWidget<WidgetThemePreview>;
-        widgetClassMap[WIDGET_CLASS_WIDGET_LIST] = &createWidget<WidgetWidgetList>;
-        widgetClassMap[WIDGET_CLASS_DIALOG] = &createWidget<WidgetDialog>;
-
-        // Clipboard menu
-        if (clipboardMenu == nullptr)
-        {
-            clipboardMenu = new WidgetClipboardMenu("CLIPBOARD", "<widget><appearance visible='0'/></widget>");
-            WidgetManager::addWidget(*clipboardMenu, false, "", false);
-        }
     }
 
     WidgetManager::widget_map_type WidgetManager::getWidgetMap()

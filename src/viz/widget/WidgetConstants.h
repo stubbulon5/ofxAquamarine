@@ -44,5 +44,6 @@ namespace Aquamarine
         static const std::string BREADCRUMB;
         static const std::string IMAGE;
         static const std::string PROGRESS_BAR;
+        static const std::string XY_PAD;
     };
 }

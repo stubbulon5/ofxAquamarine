@@ -29,7 +29,9 @@ namespace Aquamarine
         };
 
         typedef std::map<std::string, Widget *(*)(string persistentId, string widgetXML)> widget_map_type;
-
+        /* MAP STRING REPRESENTATION <---> ACTUAL CLASS */
+        static void bootstrapWidgetMapDefault();
+        
         static void addWidget(Widget &widget, bool shouldPersist, string ownerWidgetId, bool transmitOsc);
         static void addWidget(Widget &widget, bool shouldPersist, string ownerWidgetId);
         static void addWidget(Widget &widget, bool shouldPersist);
@@ -95,9 +97,6 @@ namespace Aquamarine
         static void drawDebugInfo(bool debug);
 
         static std::vector<std::reference_wrapper<Widget>> mWidgets;
-
-        /* MAP STRING REPRESENTATION <---> ACTUAL CLASS */
-        static void bootstrapWidgetMapDefault();
         static widget_map_type getWidgetMap();
 
         static void bootstrapWidgetMap(widget_map_type map);
@@ -127,6 +126,7 @@ namespace Aquamarine
         static const string WIDGET_CLASS_CLIPBOARD_MENU;
         static const string WIDGET_CLASS_SETTINGS;
         static const string WIDGET_CLASS_TEXT_EDITOR;
+        static const string WIDGET_CLASS_COLOR_PICKER;
 
         static const string WIDGET_CLASS_FILE_LIST;
         static const string WIDGET_CLASS_FILE_LOCATIONS_LIST;

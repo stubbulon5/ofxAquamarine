@@ -4289,6 +4289,8 @@ namespace Aquamarine
 #include "element/WidgetElmBreadcrumb.h"
 #include "element/WidgetElmImage.h"
 #include "element/WidgetElmProgressBar.h"
+#include "element/WidgetElmXYPad.h"
+
 
     using Aquamarine::WidgetElmTextbox;
     using Aquamarine::WidgetElmTextarea;
@@ -4300,6 +4302,7 @@ namespace Aquamarine
     using Aquamarine::WidgetElmBreadcrumb;
     using Aquamarine::WidgetElmImage;
     using Aquamarine::WidgetElmProgressBar;
+    using Aquamarine::WidgetElmXYPad;
 
     template <typename T>
     WidgetElm *createElement(string persistentId, string elementXML, WidgetBase *parent) { return new T(persistentId, elementXML, parent); }
@@ -4324,6 +4327,7 @@ namespace Aquamarine
             elmClassMap[WIDGET_ELM_CLASS::BREADCRUMB] = &createElement<WidgetElmBreadcrumb>;
             elmClassMap[WIDGET_ELM_CLASS::IMAGE] = &createElement<WidgetElmImage>;
             elmClassMap[WIDGET_ELM_CLASS::PROGRESS_BAR] = &createElement<WidgetElmProgressBar>;
+            elmClassMap[WIDGET_ELM_CLASS::XY_PAD] = &createElement<WidgetElmXYPad>;
         }
 
         enum class TitleStyle
@@ -5284,6 +5288,11 @@ namespace Aquamarine
         {
             return dynamic_cast<WidgetElmProgressBar *>(getWidgetElement(persistentId));
         }
+
+        WidgetElmXYPad *getXYPad(string persistentId)
+        {
+            return dynamic_cast<WidgetElmXYPad *>(getWidgetElement(persistentId));
+        }        
 
         void removeWidgetElement(WidgetElm *e)
         {

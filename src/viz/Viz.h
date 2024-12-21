@@ -944,12 +944,12 @@ namespace Aquamarine
 
         // Widget
         bool RoundedRectangle = true;
-        float UnhoveredWidgetAlpha = 0.7f;
-        float HoveredWidgetAlpha = 0.9f;
-        float ContentChromeAlpha = 0.7f;
+        float UnhoveredWidgetAlpha = 0.9f;
+        float HoveredWidgetAlpha = 0.95f;
+        float ContentChromeAlpha = 0.8f;
 
-        float UnhoveredTitleAlpha = 0.7f;
-        float HoveredTitleAlpha = 0.9f;
+        float UnhoveredTitleAlpha = 0.78f;
+        float HoveredTitleAlpha = 0.95f;
 
         float UnhoveredTitleFontAlpha = 0.7f;
         float HoveredTitleFontAlpha = 0.9f;
@@ -979,26 +979,26 @@ namespace Aquamarine
         ofColor MainMenuColor = ofColor(255, 255, 255, 255);
         ofColor PopoutMenuColor = ofColor(255, 255, 255, 255);
         ofColor WidgetColor = ofColor(255, 255, 255, 255);
-        ofColor WidgetContentColor = ofColor(255, 255, 255, 170);
+        ofColor WidgetContentColor = ofColor(255, 255, 255, 238);
 
-        ofColor WidgetAccent1Color = ofColor(0, 77, 122, 255);
-        ofColor WidgetAccent2Color = ofColor(5, 25, 55, 255);
-        ofColor WidgetAccent3Color = ofColor(0, 137, 147, 255);
-        ofColor WidgetAccent4Color = ofColor(168, 235, 18, 255);
+        ofColor WidgetAccent1Color = ofColor(0, 206, 209, 255);
+        ofColor WidgetAccent2Color = ofColor(95, 158, 160, 255);
+        ofColor WidgetAccent3Color = ofColor(0, 135, 147, 255);
+        ofColor WidgetAccent4Color = ofColor(0, 77, 122, 255);
 
-        ofColor BackgroundColor1 = ofColor(0, 77, 122, 255);
-        ofColor BackgroundColor2 = ofColor(5, 25, 55, 255);
+        ofColor BackgroundColor1 = ofColor(0, 206, 209, 255);
+        ofColor BackgroundColor2 = ofColor(95, 158, 160, 255);
         ofColor BackgroundColor3 = ofColor(0, 137, 147, 255);
-        ofColor BackgroundColor4 = ofColor(168, 235, 18, 255);
+        ofColor BackgroundColor4 = ofColor(0, 77, 122, 255);
 
         ofColor WidgetAlternating1Color = ofColor(213, 213, 213, 255);
-        ofColor WidgetAlternating2Color = ofColor(221, 221, 221, 238);
+        ofColor WidgetAlternating2Color = ofColor(221, 221, 221, 255);
         ofColor WidgetModalBackgroundColor = ofColor(0, 0, 0, 180);
 
         // Element
         bool ElementRoundedRectangle = true;
 
-        ofColor ElementForegroundColor = ofColor(33, 33, 33, 221);
+        ofColor ElementForegroundColor = ofColor(51, 51, 51, 221);
         ofColor ElementBackgroundColor = ofColor(204, 204, 204, 255);
 
         float ElementHoveredForegroundAlpha = 0.95f;
