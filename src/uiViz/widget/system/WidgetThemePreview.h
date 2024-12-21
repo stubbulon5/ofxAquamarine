@@ -1,9 +1,4 @@
-//
-//  uiVizMainMenu.h
-//  bloom-macos
-//
-//  Created by Stuart Barnes on 12/04/2019.
-//
+
 #pragma once
 #include "Widget.h"
 

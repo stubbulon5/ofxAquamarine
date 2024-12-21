@@ -1,8 +1,4 @@
-//
-//  Widget.h
-//  bloom-macos
-//
-//
+
 #pragma once
 #include "WidgetConstants.h"
 

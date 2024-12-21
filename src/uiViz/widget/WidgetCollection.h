@@ -1,9 +1,4 @@
-//
-//  WidgetCollection.h
-//  bloom-macos
-//
-//  Created by Stuart Barnes on 20/08/2018.
-//
+
 #pragma once
 #include "Widget.h"
 

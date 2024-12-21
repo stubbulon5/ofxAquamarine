@@ -1,9 +1,3 @@
-//
-//  WidgetManager.cpp
-//  bloom-macos
-//
-//  Created by Stuart Barnes on 06/09/2018.
-//
 
 #include "WidgetManager.h"
 #include "BG.h"

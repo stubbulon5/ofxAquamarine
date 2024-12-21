@@ -1,8 +1,4 @@
-//
-//  WidgetTable.h
-//  bloom-macos
-//
-//
+
 #pragma once
 #include "../WidgetTable.h"
 

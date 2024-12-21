@@ -1,8 +1,4 @@
-//
-//  uiViz.h
-//  bloom-macos
-//
-//
+
 #pragma once
 #include "Shared.h"
 #include "widget/Widget.h"
