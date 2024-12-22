@@ -47,6 +47,7 @@ namespace Aquamarine
         static string XOR_Encryption(string toBeEncrypted, string sKey, bool includeMachineIdInKey);
         static string Pretty_Bytes(uint64_t bytes);
         static string removeFileExtension(const std::string &filename);
+        static string safeFileName(std::string &filename);
         static vector<string> tokenize(const string &str, const string &delim);
         static void appendXMLToTarget(TiXmlElement *source, ofxXmlSettings *target, bool recursive);
         static string getXMLAtTag(ofxXmlSettings *xml, string tag, int which);

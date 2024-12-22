@@ -9,6 +9,7 @@
 #include "./viz/core/machineid/machineid.h"
 
 // Viz
+#include "./viz/App.h"
 #include "./viz/Lang.h"
 #include "./viz/Coord.h"
 #include "./viz/Shared.h"

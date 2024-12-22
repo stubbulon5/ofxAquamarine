@@ -286,6 +286,18 @@ namespace Aquamarine
         return filename.substr(0, lastdot);
     }
 
+    string Shared::safeFileName(std::string &filename)
+    {
+        string illegalChars = "\\/:?\"<>|[]";
+        for (auto it = filename.begin() ; it < filename.end() ; ++it){
+            bool found = illegalChars.find(*it) != string::npos;
+            if(found){
+                *it = ' ';
+            }
+        }
+        return filename;
+    }
+
     vector<string> Shared::tokenize(const string &str, const string &delim)
     {
         vector<string> tokens;
