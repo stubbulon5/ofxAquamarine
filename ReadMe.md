@@ -13,8 +13,16 @@ OpenGL based UI Framework written on top of OpenFrameworks. It is:
 
 
 ### Show me some bare bones usage:
+```
 
+```
 ### TL;DR What's it look like?
+
+### Setup
+
+```
+
+```
 
 ### Object hierarchy
 ```

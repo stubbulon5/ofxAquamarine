@@ -28,10 +28,15 @@ namespace Aquamarine
             ProjectProperties(string projectName, string absolutePath, string path, string fileName) : projectName(projectName), absolutePath(absolutePath), path(path), fileName(fileName) {};
         };
 
+        //template <typename T>
+        // static Widget *createWidget(string persistentId, string widgetXML);
+
+
+        template<typename T> static  Widget * createWidget(string persistentId, string widgetXML);
         typedef std::map<std::string, Widget *(*)(string persistentId, string widgetXML)> widget_map_type;
         /* MAP STRING REPRESENTATION <---> ACTUAL CLASS */
         static void bootstrapWidgetMapDefault();
-        
+
         static void addWidget(Widget &widget, bool shouldPersist, string ownerWidgetId, bool transmitOsc);
         static void addWidget(Widget &widget, bool shouldPersist, string ownerWidgetId);
         static void addWidget(Widget &widget, bool shouldPersist);
@@ -40,6 +45,7 @@ namespace Aquamarine
         static Widget *loadWidget(string widgetXML);
         static Widget *loadWidgetFromFile(string WIDGET_CLASS, string persistentId, string widgetFilePath);
         static Widget *loadWidgetFromFile(string widgetFilePath);
+        static Widget *loadAndAddWidget(string WIDGET_CLASS, string persistentId, string widgetXML, bool shouldPersist);
         static void loadWidgetFromFileToExisting(string widgetFilePath, Widget &widget);
 
         static void loadChildWidgets(Widget &targetWidget, string widgetXML);
@@ -85,6 +91,7 @@ namespace Aquamarine
         static bool load(string fileName, bool clearExisting);
         static bool load(string fileName, bool clearExisting, Widget *caller);
         static void showSaveDialog(string proposedFilePath, string proposedFileName, const std::function<void(const string &)> &saveButtonPressedCallback);
+        static void showLoadDialog(string proposedFilePath, const std::function<void(const string &)> &loadButtonPressedCallback);
         static void setTheme(WidgetTheme theme);
         static void initWidgetManager(string applicationName, string applicationVersion, string fileExtention, bool drawBG);
         static void setProjectProperties(string projectName, string absolutePath);
@@ -102,8 +109,8 @@ namespace Aquamarine
         static void bootstrapWidgetMap(widget_map_type map);
         static void showClipboardPopupMenu(int x, int y, string clipboardOperationTargetWidgetId);
         static void hideClipboardPopupMenu();
-
         static void showModal(Widget *widget, bool center);
+        static void showModal(string title, string message, bool formattedMessage, string buttonTitles, string buttonIDs, const std::function<void(const WidgetEventArgs &)> &callback);
         static void hideModal();
         static void centerWidget(Widget *w);
 

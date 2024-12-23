@@ -729,6 +729,14 @@ namespace Aquamarine
         }
 
         /*!
+            A flag to determing if Load state from XML succeeded.
+        */
+        virtual bool didWidgetLoad()
+        {
+            return mDidWidgetLoad;
+        }
+
+        /*!
             Load state from XML. Use this to popuate member level variables. Do not call virtual methods here.
         */
         virtual bool loadState(string widgetXML, string parentTag)
@@ -821,6 +829,7 @@ namespace Aquamarine
             }
 
             mWidgetXML.popTag(); // parentTag
+            setDidWidgetLoad(true);
             return true;
         }
 
@@ -906,6 +915,7 @@ namespace Aquamarine
         virtual bool loadState(string widgetXML)
         {
             bool success = loadState(widgetXML, "widget");
+            setDidWidgetLoad(success);
             onWidgetLoaded();
             return success;
         }
@@ -933,7 +943,7 @@ namespace Aquamarine
 
             string xmlBuff =
                 "<" + parentTag + " id='" + getPersistentId() + "' class='Widget'" + additionalAttrib + ">"
-                                                                                                             "<title>" +
+                                                                                                        "<title>" +
                 getTitle() + "</title>"
                              "<bounds "
                              "x='" +
@@ -1070,7 +1080,7 @@ namespace Aquamarine
             if (!xml.loadFromBuffer(eventXML.c_str()))
             {
                 ofLogWarning("Widget") << eventSenderId << "." << eventName << ": failed to parse event XML \n"
-                                            << eventXML;
+                                       << eventXML;
             }
 
             WidgetEventArgs args = WidgetEventArgs(eventSenderId, eventName, xml, sender, target);
@@ -3070,7 +3080,7 @@ namespace Aquamarine
 
         shared_ptr<Viz> getViz()
         {
-            //ofLogNotice("ofxAquamarine") << "[" << getPersistentId() << "] getViz()";
+            // ofLogNotice("ofxAquamarine") << "[" << getPersistentId() << "] getViz()";
             return viz;
         }
 
@@ -3344,16 +3354,10 @@ namespace Aquamarine
         {
             if (!externalDropInitialized)
             {
-                externalDrop = ofxExternalDrop(true);
+                externalDrop = ofxExternalDrop();
                 externalDropInitialized = true;
             }
             return externalDrop;
-        }
-
-        void clearExternalDrop()
-        {
-            externalDrop = ofxExternalDrop(false);
-            externalDropInitialized = false;
         }
 
         bool getTransmitOscMessages()
@@ -3364,6 +3368,11 @@ namespace Aquamarine
         void setTransmitOscMessages(bool val)
         {
             mTransmitOscMessages = val;
+        }
+
+        virtual void setDidWidgetLoad(bool val)
+        {
+            mDidWidgetLoad = val;
         }
 
         PopoutDirection mPopoutDirection = PopoutDirection::NONE;
@@ -3436,6 +3445,7 @@ namespace Aquamarine
         widgetTelemetry mWidgetTelemetry;
         WidgetTheme mTheme = WidgetTheme();
 
+        bool mDidWidgetLoad = false;
         bool mIsPermanentWidget = false;
         bool mIsHighlighted = false;
         bool mShouldDeleteThisWidget = false;
@@ -3767,8 +3777,8 @@ namespace Aquamarine
             }
             mWidgetXML.popTag(); // element
 
+            setDidWidgetLoad(true);
             onWidgetLoaded();
-
             return true;
         }
 
@@ -4291,17 +4301,16 @@ namespace Aquamarine
 #include "element/WidgetElmProgressBar.h"
 #include "element/WidgetElmXYPad.h"
 
-
-    using Aquamarine::WidgetElmTextbox;
-    using Aquamarine::WidgetElmTextarea;
-    using Aquamarine::WidgetElmLabel;
+    using Aquamarine::WidgetElmBreadcrumb;
     using Aquamarine::WidgetElmButton;
-    using Aquamarine::WidgetElmSlider;
     using Aquamarine::WidgetElmCheckbox;
     using Aquamarine::WidgetElmDropdown;
-    using Aquamarine::WidgetElmBreadcrumb;
     using Aquamarine::WidgetElmImage;
+    using Aquamarine::WidgetElmLabel;
     using Aquamarine::WidgetElmProgressBar;
+    using Aquamarine::WidgetElmSlider;
+    using Aquamarine::WidgetElmTextarea;
+    using Aquamarine::WidgetElmTextbox;
     using Aquamarine::WidgetElmXYPad;
 
     template <typename T>
@@ -4932,7 +4941,7 @@ namespace Aquamarine
             string xml;
             args.eventXML.copyXmlToString(xml);
             ofLogNotice("Widget") << "[" + getPersistentId() + "] received unhandled event " << args.widgetId << "." << args.eventName << " with data \n"
-                                       << xml;
+                                  << xml;
 #endif
         }
 
@@ -5292,7 +5301,7 @@ namespace Aquamarine
         WidgetElmXYPad *getXYPad(string persistentId)
         {
             return dynamic_cast<WidgetElmXYPad *>(getWidgetElement(persistentId));
-        }        
+        }
 
         void removeWidgetElement(WidgetElm *e)
         {

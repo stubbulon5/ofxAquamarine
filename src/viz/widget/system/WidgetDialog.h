@@ -74,9 +74,12 @@ namespace Aquamarine
                 if (priorModalWidgetId != "" && priorModalWidgetId != getWidgetId())
                 { // and not same
                     Widget *widget = WidgetManager::getWidget(priorModalWidgetId);
-                    widget->setModalWidget();
-                    widget->setActiveWidget();
-                    WidgetManager::moveWidgetToFront(*widget);
+                    if(widget != nullptr) {
+                        widget->setModalWidget();
+                        widget->setActiveWidget();
+                        WidgetManager::moveWidgetToFront(*widget);
+                    }
+
                 }
                 setIsVisible(false);
             }

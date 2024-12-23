@@ -1,0 +1,91 @@
+
+<widget isSystemWidget="1">
+<title>Settings</title>
+<bounds x="1" y="12" width="400" height="450" maxWidth="2304" maxHeight="1440" minWidth="250" minHeight="200" />
+<behaviour draggable="1" resizable="1" drawWidgetChrome="1" drawWidgetTitle="1" />
+<properties />
+<elements>
+<element id="OK" class="WidgetElmButton">
+<title>Apply</title>
+<bounds xExpr="${PARENT.RIGHT}" yExpr="${PARENT.BOTTOM}" />
+<properties />
+</element>
+<element id="CANCEL" class="WidgetElmButton">
+<title>Cancel</title>
+<bounds xExpr="${PARENT.LEFT}" yExpr="${PARENT.BOTTOM}" />
+<properties />
+</element>
+
+<element id="SLD_UI_SCALE" class="WidgetElmSlider" min="1" max="3.0" value="1.0" steps="4">
+    <title>UI Scale (${VALUE})</title>
+    <bounds xExpr="${PARENT.LEFT}" yExpr="${PARENT.TOP} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}" />
+    <behaviour draggable="0" resizable="0" />
+    <properties />
+</element>
+
+<element id="SLD_EXPERIENCE" class="WidgetElmSlider" min="10" max="60" value="60" steps="50">
+    <title>Experience (${VALUE})</title>
+    <bounds xExpr="${PARENT.LEFT}" yExpr="${SLD_UI_SCALE.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}" />
+    <behaviour draggable="0" resizable="0" />
+    <properties />
+</element>
+
+<element id="CHK_USE_GPU" class="WidgetElmCheckbox"  value="true">
+    <title>GPU Accelerated</title>
+    <appearance visible="0" />    
+    <bounds xExpr="${PARENT.LEFT}" yExpr="${SLD_EXPERIENCE.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}" />
+    <properties />
+</element>
+
+<element id="CHK_SHOW_FPS" class="WidgetElmCheckbox"  value="false">
+    <title>Show FPS</title>
+    <bounds xExpr="${PARENT.LEFT}" yExpr="${CHK_USE_GPU.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}" />
+    <properties />
+</element>
+
+<element id="DD_LANGUAGE" class="WidgetElmDropdown">
+    <title>Language</title>
+    <bounds xExpr="${PARENT.LEFT}" yExpr="${CHK_SHOW_FPS.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}" />
+    <properties />
+</element>
+
+<element id="CHK_AUTOLOAD_RECENT" class="WidgetElmCheckbox"  value="false">
+    <title>Autoload projects</title>
+    <bounds xExpr="${PARENT.LEFT}" yExpr="${DD_LANGUAGE.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}" />
+    <properties />
+</element>
+
+<element id="CHK_OSC_SEND" class="WidgetElmCheckbox"  value="false">
+    <title>Share Session</title>
+    <appearance />    
+    <bounds xExpr="${PARENT.LEFT}" yExpr="${CHK_AUTOLOAD_RECENT.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}" />
+    <properties />
+</element>
+
+<element id="TXT_OSC_SEND_HOST" class="WidgetElmTextbox" type="STRING"  value="localhost">
+<title>send to host</title>
+<bounds xExpr="${PARENT.LEFT}" yExpr="${CHK_OSC_SEND.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}*0.8-${PADDING}" />
+</element>
+
+<element id="TXT_OSC_SEND_PORT" class="WidgetElmTextbox" type="NUMERIC"  value="777">
+<title>port</title>
+<bounds xExpr="${TXT_OSC_SEND_HOST.RIGHT} + ${PADDING}" yExpr="${CHK_OSC_SEND.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}*0.2" />
+</element>
+
+
+<element id="CHK_OSC_RECEIVE" class="WidgetElmCheckbox"  value="false">
+    <title>Receive Session</title>
+    <appearance />    
+    <bounds xExpr="${PARENT.LEFT}" yExpr="${TXT_OSC_SEND_PORT.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}" />
+    <properties />
+</element>
+
+<element id="TXT_OSC_RECEIVE_PORT" class="WidgetElmTextbox" type="NUMERIC" value="777">
+<title>port</title>
+<bounds xExpr="${PARENT.USABLE_WIDTH}*0.8 + ${PADDING}" yExpr="${CHK_OSC_RECEIVE.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}*0.2" />
+</element>
+
+
+
+</elements>
+</widget>

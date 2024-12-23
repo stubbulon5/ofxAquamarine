@@ -1,0 +1,66 @@
+
+<widget>
+<title></title>
+<bounds minWidth="400" minHeight="400" />
+
+<elements>
+<element id="OK" class="WidgetElmButton">
+<title>Sign In</title>
+<bounds xExpr="${PARENT.RIGHT}" yExpr="${PARENT.BOTTOM}" />
+</element>
+<element id="CANCEL" class="WidgetElmButton">
+<title>Cancel</title>
+<bounds width="100" height="35" xExpr="${PARENT.LEFT}" yExpr="${PARENT.BOTTOM}" />
+</element>
+
+<element id="IMG_AVATAR" class="WidgetElmImage">
+<bounds xExpr="${PARENT.LEFT}" yExpr="${PARENT.TOP}" width="100" height="100" />
+<properties file="ui/images/default_avatar.jpg" />
+</element>
+
+<element id="TXT_USERNAME" class="WidgetElmTextbox">
+<title>username</title>
+<bounds xExpr="${IMG_AVATAR.RIGHT}+${PADDING}" yExpr="${PARENT.TOP}" widthExpr="${PARENT.USABLE_WIDTH}-${IMG_AVATAR.RIGHT}" />
+</element>
+
+<element id="TXT_PASSWORD" class="WidgetElmTextbox" type="PASSWORD" >
+<title>password</title>
+<bounds xExpr="${IMG_AVATAR.RIGHT}+${PADDING}" yExpr="${TXT_USERNAME.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}-${IMG_AVATAR.RIGHT}" />
+</element>
+
+<element id="TXT_LICENCE" class="WidgetElmTextbox" type="MULTI_LINE">
+<title>enter licence here...</title>
+<bounds xExpr="${IMG_AVATAR.RIGHT}+${PADDING}" yExpr="${TXT_PASSWORD.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}-${IMG_AVATAR.RIGHT}" />
+</element>
+
+<element id="PGS_VALIDATION_RESULT" class="WidgetElmProgressBar" isAsyncProgressBar="1" isProgressing="1">
+<bounds xExpr="${PARENT.LEFT}" yExpr="${TXT_LICENCE.BOTTOM} + ${PADDING}" widthExpr="${PARENT.USABLE_WIDTH}" height="10" />
+</element>
+
+<element id="LBL_VALIDATION_RESULT" class="WidgetElmLabel">
+<title>Validation Result</title>
+<bounds xExpr="${PARENT.LEFT}" yExpr="${PGS_VALIDATION_RESULT.BOTTOM} + ${PADDING} + 20" widthExpr="${PARENT.USABLE_WIDTH}" />
+</element>
+</elements>
+
+<childWidgets>
+    <widget id="THEME_PREVIEW_TABLE" class="WidgetTable">
+        <title style="NONE"/>
+        <bounds height="160" xExpr="${PARENT.ABSOLUTE_USABLE_X}" yExpr="${PGS_VALIDATION_RESULT.BOTTOM}" widthExpr="${PARENT.USABLE_WIDTH}"  />
+        <properties>
+            <header><cell width="200"></cell><cell></cell><cell></cell><cell></cell></header>
+            <rows>
+                <row><cell key="Row1">Row 1</cell><cell>a</cell><cell>b</cell><cell>c</cell></row>
+                <row><cell key="Row2">Row 2</cell><cell>1</cell><cell>2</cell><cell>3</cell></row>
+                <row><cell key="Row3">Row 3</cell><cell>red</cell><cell>green</cell><cell>blue</cell></row>
+                <row><cell key="Row4">Row 4</cell><cell></cell><cell></cell><cell></cell></row>
+                <row><cell key="Row5">Row 5</cell><cell></cell><cell></cell><cell></cell></row>
+                <row><cell key="Row6">Row 6</cell><cell></cell><cell></cell><cell></cell></row>
+                <row><cell key="Row7">Row 7</cell><cell></cell><cell></cell><cell></cell></row>
+                <row><cell key="Row8">Row 8</cell><cell></cell><cell></cell><cell></cell></row>                                    
+            </rows>
+        </properties>
+    </widget>
+</childWidgets>
+
+</widget>

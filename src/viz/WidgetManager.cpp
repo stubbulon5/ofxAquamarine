@@ -1,42 +1,39 @@
 
 #include "WidgetManager.h"
-#include "BG.h"
-#include "widget/WidgetDebug.h"
-#include "widget/WidgetEventListener.h"
-#include "widget/WidgetClipboardMenu.h"
-#include "widget/WidgetTable.h"
-#include "widget/WidgetMenuCollection.h"
-#include "widget/WidgetMatrix.h"
-#include "widget/WidgetSequencer.h"
-#include "widget/WidgetPianoRoll.h"
-#include "widget/WidgetVideoPlayer.h"
-#include "widget/WidgetVideoGrabber.h"
-#include "widget/WidgetSoundPlayer.h"
-#include "widget/WidgetImageView.h"
-#include "widget/WidgetSettings.h"
-#include "widget/WidgetTextEditor.h"
-#include "widget/WidgetColorPicker.h"
+// #include "BG.h"
+// #include "widget/WidgetDebug.h"
+// #include "widget/WidgetEventListener.h"
+// #include "widget/WidgetClipboardMenu.h"
+// #include "widget/WidgetTable.h"
+// #include "widget/WidgetMenuCollection.h"
+// #include "widget/WidgetMatrix.h"
+// #include "widget/WidgetSequencer.h"
+// #include "widget/WidgetPianoRoll.h"
+// #include "widget/WidgetVideoPlayer.h"
+// #include "widget/WidgetVideoGrabber.h"
+// #include "widget/WidgetSoundPlayer.h"
+// #include "widget/WidgetImageView.h"
+// #include "widget/WidgetSettings.h"
+// #include "widget/WidgetTextEditor.h"
+// #include "widget/WidgetColorPicker.h"
 
-#include "widget/system/WidgetFileList.h"
-#include "widget/system/WidgetFileLocationsList.h"
-#include "widget/system/WidgetFileExplorer.h"
-#include "widget/system/WidgetFileLoad.h"
-#include "widget/system/WidgetFileSave.h"
-#include "widget/system/WidgetThemeEditor.h"
-#include "widget/system/WidgetThemePreview.h"
-#include "widget/system/WidgetWidgetList.h"
-#include "widget/system/WidgetDialog.h"
-
-
-
+// #include "widget/system/WidgetFileList.h"
+// #include "widget/system/WidgetFileLocationsList.h"
+// #include "widget/system/WidgetFileExplorer.h"
+// #include "widget/system/WidgetFileLoad.h"
+// #include "widget/system/WidgetFileSave.h"
+// #include "widget/system/WidgetThemeEditor.h"
+// #include "widget/system/WidgetThemePreview.h"
+// #include "widget/system/WidgetWidgetList.h"
+// #include "widget/system/WidgetDialog.h"
+#include "ofxAquamarine.h"
 #include "ofxOsc.h"
 
 namespace Aquamarine
 {
     std::vector<std::reference_wrapper<Widget>> WidgetManager::mWidgets;
 
-    template <typename T>
-    Widget *createWidget(string persistentId, string widgetXML) { return new T(persistentId, widgetXML); }
+    template <typename T> Widget *WidgetManager::createWidget(string persistentId, string widgetXML) { return new T(persistentId, widgetXML); }
     WidgetManager::widget_map_type widgetClassMap;
     Widget *currentPopout = nullptr;
 
@@ -63,6 +60,7 @@ namespace Aquamarine
 
     WidgetClipboardMenu *clipboardMenu = nullptr;
     WidgetBase *targetDropWidget = nullptr;
+    WidgetDialog *dialog = nullptr;    
 
     static ofEvent<WidgetEventArgs> widgetManagerEventReceived;
 
@@ -138,7 +136,6 @@ namespace Aquamarine
             WidgetManager::addWidget(*clipboardMenu, false, "", false);
         }
     }
-
 
     void WidgetManager::addWidget(Widget &widget, bool shouldPersist, string ownerWidgetId, bool transmitOsc)
     {
@@ -240,6 +237,26 @@ namespace Aquamarine
     {
         WidgetSignature widget = Widget::getWidgetSignatureFromFile(widgetFilePath);
         return WidgetManager::loadWidget(widget.widgetClass, widget.persistentId, widget.widgetXML);
+    }
+
+    Widget *WidgetManager::loadAndAddWidget(string WIDGET_CLASS, string persistentId, string widgetXML, bool shouldPersist)
+    {
+        Widget *widget = WidgetManager::loadWidget(WIDGET_CLASS, persistentId, widgetXML);
+        
+        if (widget->didWidgetLoad() == false)
+        {
+            WidgetManager::showModal(
+               "Error loading Widget!",
+                "<xlarge><br/>There was a problem loading state for Widget '" + persistentId + "'. Please check that the XML is valid.</xlarge>",
+                true,
+                "Ok",
+                "BTN_OK",
+                [&](WidgetEventArgs args) {}
+            );
+        }
+       WidgetManager::addWidget(*widget, shouldPersist);
+       return WidgetManager::getWidgetByPersistentId(widget->getPersistentId());
+        // return widget;
     }
 
     void WidgetManager::loadWidgetFromFileToExisting(string widgetFilePath, Widget &widget)
@@ -1286,10 +1303,27 @@ namespace Aquamarine
         WidgetManager::showModal(w, true);
     }
 
+    void WidgetManager::showLoadDialog(string proposedFilePath, const std::function<void(const string &)> &loadButtonPressedCallback)
+    {
+        string classType = WidgetManager::WIDGET_CLASS_FILE_LOAD;
+        string widgetPersistentId = WidgetManager::getSuggestedNewWidgetPersistentId(classType);
+
+        WidgetFileLoad *w = dynamic_cast<WidgetFileLoad *>(WidgetManager::loadWidget(classType, widgetPersistentId, R"(
+        <widget>
+        <bounds widthExpr="${WINDOW.WIDTH}/2" heightExpr="${WINDOW.HEIGHT}/2" minWidth="75" minHeight="75"  />
+        </widget>
+        )"));
+
+        w->setPathSelectedCallback(loadButtonPressedCallback);
+        w->setPath(proposedFilePath == "" ? WidgetFileLocationsList::getMostRecentDirectory() : proposedFilePath);
+        WidgetManager::showModal(w, true);
+    }
+
     void WidgetManager::setTheme(WidgetTheme theme)
     {
         Shared::getViz()->getThemeManager()->setDefaultTheme(theme);
-        if (vizBG != nullptr) vizBG->setTheme(theme);
+        if (vizBG != nullptr)
+            vizBG->setTheme(theme);
         WidgetTheme themeForSystem = Shared::getViz()->getThemeManager()->getThemeByName(theme.Name, true);
         WidgetTheme contrastingThemeForSystem = Shared::getViz()->getThemeManager()->getContrastingSystemTheme(theme, true);
 
@@ -1389,7 +1423,7 @@ namespace Aquamarine
         if (SHOW_DEBUG_INFO)
         {
             WidgetDebug *debugWidget = dynamic_cast<WidgetDebug *>(WidgetManager::loadWidget(WIDGET_CLASS_DEBUG, "APP_DEBUG_INFO",
-                                                                                                            "<widget></widget>"));
+                                                                                             "<widget></widget>"));
             debugWidget->setWidgetMapRef(&mWidgets);
             debugWidget->getTheme().UnhoveredWidgetAlpha = 0.95f;
             debugWidget->getTheme().HoveredWidgetAlpha = 0.95f;
@@ -1463,6 +1497,31 @@ namespace Aquamarine
 
         Shared::getViz()->addToEventTransmitQueue(
             "/widget_manager/widget_show_modal", "widget_manager", "WIDGET_MANAGER", "widget_show_modal", widget->getXML(), true);
+    }
+
+    void WidgetManager::showModal(string title, string message, bool formattedMessage, string buttonTitles, string buttonIDs, const std::function<void(const WidgetEventArgs &)> &callback) // buttonTitles & buttonIDs are seperated by '|'`s
+    {
+        if (dialog == nullptr)
+        {
+            dialog = new WidgetDialog("GENERIC_DIALOG", "<widget></widget>");
+            WidgetManager::addWidget(*dialog, false, "", false);
+        }
+
+        Shared::getViz()->clearPopoutWidgetIds();
+        dialog->setIsVisible(true);
+        dialog->setModalWidget();
+        dialog->setWidgetSize(500, 300, false);
+        moveWidgetToFront(*dialog);
+        centerWidget(dialog);
+
+        dialog->showDialog(
+            title,
+            message,
+            formattedMessage,
+            buttonTitles,
+            buttonIDs,
+            callback
+        );
     }
 
     void WidgetManager::hideModal()
