@@ -1,0 +1,170 @@
+<widget>
+    <title></title>
+    <bounds minWidth="400" minHeight="400" />
+
+    <elements>
+        <element id="OK" class="WidgetElmButton">
+            <title>OK</title>
+            <bounds xExpr="${PARENT.RIGHT}" yExpr="${PARENT.BOTTOM}" />
+        </element>
+
+        <element id="IMG_LOGO" class="WidgetElmImage">
+            <bounds xExpr="${PARENT.USABLE_WIDTH}/2-150" yExpr="${PARENT.TOP}" widthExpr="300"
+                heightExpr="247" />
+            <properties file="ui/images/aquamarine-logo.png" />
+        </element>
+    </elements>
+
+    <childWidgets>
+        <widget id="ABOUT_TABS" class="WidgetMenuCollection">
+            <bounds xExpr="${PARENT.ABSOLUTE_USABLE_X}" yExpr="${IMG_LOGO.BOTTOM}"
+                widthExpr="${PARENT.USABLE_WIDTH}" />
+            <properties menuType="TAB" itemYExpression="${ABOUT_TABS.BOTTOM}+${PADDING}"
+                itemHeightExpression="${ABOUT_TABS.BOTTOM_USABLE_HEIGHT}-${PADDING}*2-${OK.HEIGHT}">
+                <items>
+
+                    <item tag="about" label="About" icon="ui/svg/ic_new_releases_48px.svg"
+                        isSelected="1">
+                        <widget id="ABOUT_TAB_TEXT_HOLDER" class="Widget">
+                            <title style="TOP_STATIC" autohide="0" staticSize="20">ionian</title>
+                            <elements>
+                                <element id="TXT_ABOUT" class="WidgetElmTextarea">
+                                    <bounds x="0" y="0" widthExpr="${PARENT.WIDTH}"
+                                        heightExpr="${PARENT.HEIGHT}" />
+                                    <behaviour draggable="0" resizable="0" />
+                                    <appearance visible="1" roundedRectangle="1" lockAspectRatio="0"
+                                        aspectRatio="1">
+                                    </appearance>
+                                    <properties isFormatted="1">
+                                        <value>
+                                            <large>
+                                                <br />
+                                            </large>
+                                            <xxlarge>
+                                                ${FRAMEWORK_NAME} ${FRAMEWORK_VER}</xxlarge>
+                                            <large>
+                                                <br />
+                                                <br />
+                                            </large>
+
+                                            <xlarge>A word from the creator:</xlarge>
+                                            <large>
+                                                <br />
+                                            </large>
+                                            <large>"Aquamarine, the open source UI framework for
+                                                building fluid, scalable widgets on top of
+                                                openFrameworks. It is my sincere hope that using
+                                                this framework will enable you to focus on what
+                                                really matters: YOUR LOGIC!"</large>
+                                            <large>
+                                                <br />
+                                                <br />
+                                            </large>
+                                            <large>
+                                                <br />
+                                            </large>
+
+                                            <xlarge>Want to contribute?</xlarge>
+                                            <large>
+                                                <br />
+                                            </large>
+                                            <large>Click the ofxAquamarine row on the Attributions
+                                                tab!</large>
+                                            <large>
+                                                <br />
+                                            </large>
+
+                                            <large><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                                                -</large>
+                                        </value>
+                                    </properties>
+                                </element>
+
+                            </elements>
+                        </widget>
+
+                    </item>
+                    <item tag="attributions" label="Attributions"
+                        icon="ui/svg/ic_favorite_48px.svg">
+                        <widget id="ABOUT_TAB_ATTRIBUTIONS" class="WidgetTable">
+                            <title style="NONE" />
+                            <appearance visible="0" />
+                            <bounds x="0" y="0" widthExpr="${PARENT.USABLE_WIDTH}"
+                                heightExpr="${PARENT.USABLE_HEIGHT}" />
+                            <properties>
+                                <header>
+                                    <cell width="33%"></cell>
+                                    <cell width="33%"></cell>
+                                    <cell width="33%"></cell>
+                                </header>
+                                <rows>
+                                    <row key="https://github.com/stubbulon5/ofxAquamarine">
+                                        <cell>ofxAquamarine</cell>
+                                        <cell>stubbulon5</cell>
+                                        <cell>UI Framework</cell>
+                                    </row>
+                                    <row key="https://github.com/stubbulon5/ofxExternalDrop">
+                                        <cell>ofxExternalDrop</cell>
+                                        <cell>stubbulon5</cell>
+                                        <cell>UI Drag/Drop</cell>
+                                    </row>
+                                    <row key="https://github.com/armadillu/ofxFontStash2">
+                                        <cell>ofxFontStash2</cell>
+                                        <cell>armadillu</cell>
+                                        <cell>Font stuff</cell>
+                                    </row>
+                                    <row key="https://github.com/braitsch/ofxSmartFont">
+                                        <cell>ofxSmartFont</cell>
+                                        <cell>braitsch</cell>
+                                        <cell>Font stuff</cell>
+                                    </row>
+                                    <row
+                                        key="https://openframeworks.cc///documentation/ofxPoco/ofxXmlPoco/">
+                                        <cell>ofxPoco</cell>
+                                        <cell></cell>
+                                        <cell></cell>
+                                    </row>
+                                    <row
+                                        key="https://openframeworks.cc///documentation/ofxSVG/ofxSVG/">
+                                        <cell>ofxSvg</cell>
+                                        <cell></cell>
+                                        <cell></cell>
+                                    </row>
+                                    <row
+                                        key="https://openframeworks.cc/documentation/ofxXmlSettings/">
+                                        <cell>ofxXmlSettings</cell>
+                                        <cell></cell>
+                                        <cell></cell>
+                                    </row>
+                                    <row key="https://openframeworks.cc/documentation/ofxOsc/">
+                                        <cell>ofxOsc</cell>
+                                        <cell></cell>
+                                        <cell></cell>
+                                    </row>
+                                </rows>
+                            </properties>
+                        </widget>
+                    </item>
+                    <item tag="contact" label="Contact us" icon="ui/svg/ic_bug_report_48px.svg">
+                        <widget id="ABOUT_TAB_CONTACT_MENU" class="WidgetMenu" isMenuPinned="1">
+                            <title titlestyle="NONE" />
+                            <properties>
+                                <tabs>
+                                    <tab tag="bugReport" label="Contact"
+                                        icon="ui/svg/ic_bug_report_48px.svg">
+                                        <item id="1" tag="bug" label="Bug report"></item>
+                                        <item id="2" tag="feature" label="Feature request"></item>
+                                        <item id="3" tag="contact" label="Contact us"></item>
+                                    </tab>
+                                </tabs>
+                            </properties>
+                        </widget>
+
+                    </item>
+                </items>
+            </properties>
+        </widget>
+
+    </childWidgets>
+
+</widget>

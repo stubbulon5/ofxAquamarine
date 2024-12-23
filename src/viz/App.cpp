@@ -19,19 +19,20 @@ namespace Aquamarine
         string defaultLanguagXML)
     {
 
-        #ifdef TARGET_OSX  
-            // Use the "internal" data folder if it exitst
-            string dataPathRoot = ofFilePath::getCurrentExeDir() + "data/";
-            if (ofDirectory::doesDirectoryExist(dataPathRoot, false)) {
-                ofSetDataPathRoot(dataPathRoot);
-            }
-        #endif 
+#ifdef TARGET_OSX
+        // Use the "internal" data folder if it exitst
+        string dataPathRoot = ofFilePath::getCurrentExeDir() + "data/";
+        if (ofDirectory::doesDirectoryExist(dataPathRoot, false))
+        {
+            ofSetDataPathRoot(dataPathRoot);
+        }
+#endif
 
-        #if VIZ_DEBUG_LEVEL > -1
-            ofSetLogLevel(ofLogLevel::OF_LOG_NOTICE);
-        #else
-            ofSetLogLevel(ofLogLevel::OF_LOG_SILENT);    
-        #endif  
+#if VIZ_DEBUG_LEVEL > -1
+        ofSetLogLevel(ofLogLevel::OF_LOG_NOTICE);
+#else
+        ofSetLogLevel(ofLogLevel::OF_LOG_SILENT);
+#endif
 
         mAPPLICATION_NAME = name;
         mAPPLICATION_NAME_FOR_FILE_SYSTEM = Shared::safeFileName(mAPPLICATION_NAME);

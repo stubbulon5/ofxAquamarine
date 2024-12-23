@@ -1,8 +1,8 @@
 # Aquamarine UI
 
-### Introduction
+## Introduction
 
-OpenGL based UI Framework written on top of OpenFrameworks. It is:
+Aquamarine is an OpenGL based UI Framework written on top of OpenFrameworks. It is:
 - Extensible
 - Optimized (target is 60fps)
 - Vectorial and scalable
@@ -11,78 +11,32 @@ OpenGL based UI Framework written on top of OpenFrameworks. It is:
 - Supports loading and saving state
 - Interprets a very simple markup language similar to HTML
 
+## Development
+This is a sole development, but I welcome collaboration and input. Have a feature request? You can maybe tempt me with coffee :-) [Buy me a coffee!](buymeacoffee.com/stubbulon5)
 
-### Show me some bare bones usage:
+## TL;DR What's it look like?
+
+
+## Setup
+VSCode is the preferred IDE. All instructions are written based on the assumption that it is being used. 
+
+To start using the addon, add the ofxAquamarine addon to the `addons.make` file and unzip `addons.zip` to your `/<OF_ROOT>/addons` folder.
+
+### Intellisense
+Using macOs, set `"compilerPath": "/usr/bin/clang"`, the inside the `.vscode/c_cpp_properties.json` 
+
+### New project
+If you would like to bootstrap from a "pre-baked" empty project, copy `example-VSCode-project` into your `/<OF_ROOT>/apps/myApps/` folder and rename the folder.
+
+
+## Show me some bare bones usage:
 ```
 
 ```
-### TL;DR What's it look like?
-
-### Setup
-
-```
-
-```
-
-### Object hierarchy
-```
-- WidgetBase
-    + Widget
-    | ---+ WidgetPopout
-    | ---+ WidgetMenu
-    |
-    | ---+ your own widget
-    |
-    + WidgetElm
-        + WidgetElementTextbox
-        ...
-```
-
-### Widget Manager
-The WidgetManager static class maintains a collection of widget (pointers) and helps manage their state. It also offers public methods to:
-- Save and load widget collection state to/from file
-- Return a pointer to a widget by a widget's id
-- Remove a particular widget by id or remove all widgets altogether
-- Dynamically layout a widget (in relation to other widgets) by providing an expression syntax
-  - (eg widget.xExpr="${OTHER_WIDGET.RIGHT}")
-```
-
-### Widget Manager
-+--------------------+
-| WidgetManager | ----[Widget w]---> addWidget, w->draw(), etc
-+--------------------+
-```
-Usage of the Widget Manager is however, entirely optional and you may opt for instantiating and drawing widgets manually.  Please see here for full documentation.
 
 
-
-### Widget
-The Widget class is a container for modularized functionality. It could be a form containing a collection of elements or a highly complex visualization. It's provides you a core Widget lifecycle and management thereof while giving you the starting point to implement your own core functionality. Please see here for full documentation.
-
-
-### Elements
-The Elm class is the base class for all....
-
-
-### Debugging
-Preprocessor directives:  VIZ_DEBUG_LEVEL
--1 or (none): no debugging
-0: core tech / animation
-1: core / base widget
-2: user widget (3rd party developers use this one)
-
-### Markup syntax reference
 
 # Platform specific project setup guides
-
-Updating a project using projectGenerator will cause some project config / settings to be lost. This means most (if not all) of the below steps need to be performed each time a project is updated using projectGenerator.
-
-## General
-- Use the corresponding openFrameworks framework projectGenerator to generate new project
-- Inside project, right click src group and add GROUP references (and make sure "Copy items" is not enabled) to the master app_widgets and Viz folders git repo (this is common code across platforms / devices / sdk's). These groups location group should be set to "Relative to Group"
-- Follow any additional instructions below and compile!
-
-- Stick with Legacy build system, see:
 
 ## macOS
 Update with projectGenerator, then open project.
@@ -114,16 +68,9 @@ Project.xcconfig file!
 Build using legacy build:
 https://forum.openframeworks.cc/t/xcode-10-of-0-10-1-will-not-build-for-simulators/31234
 
-
-
 ```
 
-Update with projectGenerator, then open project.
-Click the topmost node of the project and ensure target is selected. Click the General Tab. Scroll down to the Linked frameworks and libraries section. And add necessary libraries. For:
-```
-ofxXMLSettings -> libxml2.tbd
-ofxMidi -> CoreFoundation.framework
-```
+
 
 HAving cloned the code boom / cognition repo, left drag the files onto the XCode ide, drop the files under 'src' folder and create GROUP, RELATIVE TO GROUP (don't copy). Making relative to group is acheived by:
 1.) After the drop operation into the src folder and creating reference
@@ -144,7 +91,8 @@ Very, very NB, you must run mingw32.exe when carrying out these instructions!!
 * https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk
 
 
-# Documentation setup (Doxygen and GraphViz)
+
+## Documentation setup (Doxygen and GraphViz)
 Instructions followed from https://www.youtube.com/watch?v=LZ5E4vEhsKs
 https://www.doxygen.nl/manual/starting.html
 Install tools:
@@ -157,8 +105,8 @@ brew install graphviz
  sudo apt-get install doxygen
  sudo apt-get install graphviz
  ```
- ## Generating documentation:
+
+# Generate  Aquamarine UI Documentation
 ``` 
- cd doc/ && doxygen
-x-www-browser file://`pwd`/html/index.html
+cd src/viz/doc/ && doxygen && x-www-browser file://`pwd`/html/index.html && cd ../../../
 ```

@@ -12,6 +12,10 @@ namespace Aquamarine
     public:
         struct ApplicationProperties
         {
+            
+            string frameworkName = "Aquamarine";
+            string frameworkVersion = "0.1.0";
+
             string applicationName = "ApplicationName";
             string applicationVersion = "0.0.0";
             string fileExtension = "xml";
@@ -28,11 +32,8 @@ namespace Aquamarine
             ProjectProperties(string projectName, string absolutePath, string path, string fileName) : projectName(projectName), absolutePath(absolutePath), path(path), fileName(fileName) {};
         };
 
-        //template <typename T>
-        // static Widget *createWidget(string persistentId, string widgetXML);
-
-
-        template<typename T> static  Widget * createWidget(string persistentId, string widgetXML);
+        template <typename T>
+        static Widget *createWidget(string persistentId, string widgetXML);
         typedef std::map<std::string, Widget *(*)(string persistentId, string widgetXML)> widget_map_type;
         /* MAP STRING REPRESENTATION <---> ACTUAL CLASS */
         static void bootstrapWidgetMapDefault();
@@ -100,7 +101,8 @@ namespace Aquamarine
         static int getAppMajorVersion(string appVersionString);
         static int getAppMinorVersion(string appVersionString);
         static int getAppPointVersion(string appVersionString);
-
+        static string getFrameworkVersion();
+        static string getFrameworkName();
         static void drawDebugInfo(bool debug);
 
         static std::vector<std::reference_wrapper<Widget>> mWidgets;
@@ -144,6 +146,7 @@ namespace Aquamarine
         static const string WIDGET_CLASS_THEME_PREVIEW;
         static const string WIDGET_CLASS_WIDGET_LIST;
         static const string WIDGET_CLASS_DIALOG;
+        static const string WIDGET_CLASS_AQUAMARINE_ABOUT;
     };
 
 }

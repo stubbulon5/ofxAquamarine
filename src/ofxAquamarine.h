@@ -2,6 +2,22 @@
 #ifndef _ofxAquamarine
 #define _ofxAquamarine
 
+/*
+
+         __                                                      _
+        / _|         /\                                         (_)
+   ___ | |___  __   /  \   __ _ _   _  __ _ _ __ ___   __ _ _ __ _ _ __   ___
+  / _ \|  _\ \/ /  / /\ \ / _` | | | |/ _` | '_ ` _ \ / _` | '__| | '_ \ / _ \
+ | (_) | |  >  <  / ____ \ (_| | |_| | (_| | | | | | | (_| | |  | | | | |  __/
+  \___/|_| /_/\_\/_/    \_\__, |\__,_|\__,_|_| |_| |_|\__,_|_|  |_|_| |_|\___|
+                             | |
+                             |_|
+
+
+                                               built for openFrameworks 0.12.0
+                                  maintained by: https://github.com/stubbulon5
+*/
+
 #include "ofMain.h"
 
 // Core
@@ -18,7 +34,6 @@
 #include "./viz/BG.h"
 #include "./viz/Elm.h"
 #include "./viz/WidgetManager.h"
-
 
 // Widgets
 #include "./viz/widget/WidgetConstants.h"
@@ -55,7 +70,7 @@
 #include "./viz/widget/system/WidgetFileList.h"
 #include "./viz/widget/system/WidgetFileSave.h"
 #include "./viz/widget/system/WidgetWidgetList.h"
-
+#include "./viz/widget/system/WidgetAquamarineAbout.h"
 
 // Elements
 #include "./viz/widget/element/WidgetElmCheckbox.h"
@@ -69,7 +84,6 @@
 #include "./viz/widget/element/WidgetElmImage.h"
 #include "./viz/widget/element/WidgetElmSlider.h"
 #include "./viz/widget/element/WidgetElmXYPad.h"
-
-// WIP elements
 // #include "./viz/widget/element/WIP/WidgetElmAudioClip.h"
+
 #endif

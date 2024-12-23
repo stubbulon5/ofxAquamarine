@@ -190,6 +190,8 @@ namespace Aquamarine
                 return false;
             }
 
+            string isPinned = settings.getAttribute("widget", "isMenuPinned", "false");
+            setIsMenuPinned(isPinned == "true" || isPinned == "1" || isPinned == "yes" || isPinned == "on");
             settings.pushTag("widget");
             settings.pushTag("properties");
 
@@ -971,6 +973,9 @@ namespace Aquamarine
             {
                 WidgetMenuItemArgs args(tabMenuId, menuItem);
                 ofNotifyEvent(menuItemSelected, args);
+
+                mMenuItemSelectedCallback(args);
+
                 hideMenuAfterSelection();
             }
         }
@@ -1258,6 +1263,11 @@ namespace Aquamarine
             mShowMenuPin = val;
         }
 
+        void setMenuItemSelectedCallback(const std::function<void(const WidgetMenuItemArgs &)> &callback)
+        {
+            mMenuItemSelectedCallback = callback;
+        }        
+
     private:
         PreferredPopoutDirection mPreferredDirection;
         vector<WidgetMenuItem> mMenuItems = vector<WidgetMenuItem>();
@@ -1286,6 +1296,7 @@ namespace Aquamarine
         bool mShowMenuPin = true;
         bool mTabWidgetWasResized = false;
         bool mMenuSlicesInitialized = false;
+        std::function<void(const WidgetMenuItemArgs &)> mMenuItemSelectedCallback;
 
         /* Todo
         virtual void initWidgetScale(float scale) override {

@@ -33,7 +33,8 @@ namespace Aquamarine
 {
     std::vector<std::reference_wrapper<Widget>> WidgetManager::mWidgets;
 
-    template <typename T> Widget *WidgetManager::createWidget(string persistentId, string widgetXML) { return new T(persistentId, widgetXML); }
+    template <typename T>
+    Widget *WidgetManager::createWidget(string persistentId, string widgetXML) { return new T(persistentId, widgetXML); }
     WidgetManager::widget_map_type widgetClassMap;
     Widget *currentPopout = nullptr;
 
@@ -60,7 +61,7 @@ namespace Aquamarine
 
     WidgetClipboardMenu *clipboardMenu = nullptr;
     WidgetBase *targetDropWidget = nullptr;
-    WidgetDialog *dialog = nullptr;    
+    WidgetDialog *dialog = nullptr;
 
     static ofEvent<WidgetEventArgs> widgetManagerEventReceived;
 
@@ -92,12 +93,13 @@ namespace Aquamarine
     const string WidgetManager::WIDGET_CLASS_THEME_PREVIEW = "WidgetThemePreview";
     const string WidgetManager::WIDGET_CLASS_WIDGET_LIST = "WidgetWidgetList";
     const string WidgetManager::WIDGET_CLASS_DIALOG = "WidgetDialog";
+    const string WidgetManager::WIDGET_CLASS_AQUAMARINE_ABOUT = "WidgetAquamarineAbout";
 
     void WidgetManager::bootstrapWidgetMapDefault()
     {
         if (applicationProperties.applicationVersion == "0.0.0")
         {
-            string exceptionStr = "A valid version number has not been set for this aplication. Set it using 'WidgetManager::initWidgetManager' Terminating...";
+            string exceptionStr = "A valid version number has not been set for this aplication. Terminating...";
             throw std::runtime_error(exceptionStr.c_str());
             OF_EXIT_APP(1);
         }
@@ -128,6 +130,7 @@ namespace Aquamarine
         widgetClassMap[WIDGET_CLASS_THEME_PREVIEW] = &createWidget<WidgetThemePreview>;
         widgetClassMap[WIDGET_CLASS_WIDGET_LIST] = &createWidget<WidgetWidgetList>;
         widgetClassMap[WIDGET_CLASS_DIALOG] = &createWidget<WidgetDialog>;
+        widgetClassMap[WIDGET_CLASS_AQUAMARINE_ABOUT] = &createWidget<WidgetAquamarineAbout>;
 
         // Clipboard menu
         if (clipboardMenu == nullptr)
@@ -242,21 +245,19 @@ namespace Aquamarine
     Widget *WidgetManager::loadAndAddWidget(string WIDGET_CLASS, string persistentId, string widgetXML, bool shouldPersist)
     {
         Widget *widget = WidgetManager::loadWidget(WIDGET_CLASS, persistentId, widgetXML);
-        
+
         if (widget->didWidgetLoad() == false)
         {
             WidgetManager::showModal(
-               "Error loading Widget!",
+                "Error loading Widget!",
                 "<xlarge><br/>There was a problem loading state for Widget '" + persistentId + "'. Please check that the XML is valid.</xlarge>",
                 true,
                 "Ok",
                 "BTN_OK",
-                [&](WidgetEventArgs args) {}
-            );
+                [&](WidgetEventArgs args) {});
         }
-       WidgetManager::addWidget(*widget, shouldPersist);
-       return WidgetManager::getWidgetByPersistentId(widget->getPersistentId());
-        // return widget;
+        WidgetManager::addWidget(*widget, shouldPersist);
+        return WidgetManager::getWidgetByPersistentId(widget->getPersistentId());
     }
 
     void WidgetManager::loadWidgetFromFileToExisting(string widgetFilePath, Widget &widget)
@@ -1404,6 +1405,17 @@ namespace Aquamarine
         std::vector<std::string> ver = ofSplitString(appVersionString, ".", false, true);
         return (ver.size() > 2) ? std::atoi(ver[2].c_str()) : 0;
     }
+    
+    string WidgetManager::getFrameworkVersion()
+    {
+        return applicationProperties.frameworkVersion;
+    }
+
+    string WidgetManager::getFrameworkName()
+    {
+        return applicationProperties.frameworkName;
+    }    
+
 
     WidgetManager::widget_map_type WidgetManager::getWidgetMap()
     {
@@ -1520,8 +1532,7 @@ namespace Aquamarine
             formattedMessage,
             buttonTitles,
             buttonIDs,
-            callback
-        );
+            callback);
     }
 
     void WidgetManager::hideModal()
