@@ -2681,7 +2681,7 @@ namespace Aquamarine
         string mSETTING_language;
         int mSETTING_userExperience = MAX_FPS;
         int mSETTING_userExperience_prev = 0;
-        string mSETTING_font_path = "ofxbraitsch/fonts/";
+        string mSETTING_font_path = "fonts/";
         string mSETTING_font_file = "Raleway-Regular.ttf";
         string mSETTING_absolute_font_path = "";
         bool mSETTING_useFbo = true;

@@ -87,11 +87,6 @@ namespace Aquamarine
 
                 ofLaunchBrowser(eventRow->key);
             }
-            else if (args.sender.matchesWidgetOrParent(ABOUT_TAB_CONTACT_MENU))
-            {
-
-                cout << "zzz";
-            }
             else if (args.sender.matchesWidgetOrChildOf(this))
             {
                 if (event == "OK." + WIDGET_EVENT::CLICK)
