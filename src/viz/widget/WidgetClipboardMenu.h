@@ -172,7 +172,7 @@ namespace Aquamarine
         void initWidget() override
         {
 
-            if (clipboardMenu = nullptr)
+            if (clipboardMenu == nullptr)
             {
                 clipboardMenu = new WidgetMenu("CLIPBOARD_MENU", "<widget isSystemWidget='1'><bounds width='100' height='100'/></widget>", getWidgetId(), WidgetMenu::PreferredPopoutDirection::DOWN,
                                                     {
