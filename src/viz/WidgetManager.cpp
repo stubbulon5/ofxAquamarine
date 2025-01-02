@@ -1,41 +1,14 @@
 
 #include "WidgetManager.h"
-// #include "BG.h"
-// #include "widget/WidgetDebug.h"
-// #include "widget/WidgetEventListener.h"
-// #include "widget/WidgetClipboardMenu.h"
-// #include "widget/WidgetTable.h"
-// #include "widget/WidgetMenuCollection.h"
-// #include "widget/WidgetMatrix.h"
-// #include "widget/WidgetSequencer.h"
-// #include "widget/WidgetPianoRoll.h"
-// #include "widget/WidgetVideoPlayer.h"
-// #include "widget/WidgetVideoGrabber.h"
-// #include "widget/WidgetSoundPlayer.h"
-// #include "widget/WidgetImageView.h"
-// #include "widget/WidgetSettings.h"
-// #include "widget/WidgetTextEditor.h"
-// #include "widget/WidgetColorPicker.h"
-
-// #include "widget/system/WidgetFileList.h"
-// #include "widget/system/WidgetFileLocationsList.h"
-// #include "widget/system/WidgetFileExplorer.h"
-// #include "widget/system/WidgetFileLoad.h"
-// #include "widget/system/WidgetFileSave.h"
-// #include "widget/system/WidgetThemeEditor.h"
-// #include "widget/system/WidgetThemePreview.h"
-// #include "widget/system/WidgetWidgetList.h"
-// #include "widget/system/WidgetDialog.h"
-#include "ofxAquamarine.h"
+#include "App.h"
+#include "BG.h"
+#include "Widgets.h"
 #include "ofxOsc.h"
+
 
 namespace Aquamarine
 {
     std::vector<std::reference_wrapper<Widget>> WidgetManager::mWidgets;
-
-    template <typename T>
-    Widget *WidgetManager::createWidget(string persistentId, string widgetXML) { return new T(persistentId, widgetXML); }
-    WidgetManager::widget_map_type widgetClassMap;
     Widget *currentPopout = nullptr;
 
     typedef exprtk::expression<float> expression_t;
@@ -62,6 +35,7 @@ namespace Aquamarine
     WidgetClipboardMenu *clipboardMenu = nullptr;
     WidgetBase *targetDropWidget = nullptr;
     WidgetDialog *dialog = nullptr;
+    App *app_ptr = nullptr;
 
     static ofEvent<WidgetEventArgs> widgetManagerEventReceived;
 
@@ -95,42 +69,20 @@ namespace Aquamarine
     const string WidgetManager::WIDGET_CLASS_DIALOG = "WidgetDialog";
     const string WidgetManager::WIDGET_CLASS_AQUAMARINE_ABOUT = "WidgetAquamarineAbout";
 
-    void WidgetManager::bootstrapWidgetMapDefault()
+    void WidgetManager::BOOTSTRAP(App* app)
     {
+
+        app_ptr = app;
+
         if (applicationProperties.applicationVersion == "0.0.0")
         {
             string exceptionStr = "A valid version number has not been set for this aplication. Terminating...";
             throw std::runtime_error(exceptionStr.c_str());
             OF_EXIT_APP(1);
         }
-        widgetClassMap[WIDGET_CLASS] = &createWidget<Widget>;
-        widgetClassMap[WIDGET_CLASS_DEBUG] = &createWidget<WidgetDebug>;
-        widgetClassMap[WIDGET_CLASS_EVENT_LISTENER] = &createWidget<WidgetEventListener>;
-        widgetClassMap[WIDGET_CLASS_MENU] = &createWidget<WidgetMenu>;
-        widgetClassMap[WIDGET_CLASS_MENU_COLLECTION] = &createWidget<WidgetMenuCollection>;
-        widgetClassMap[WIDGET_CLASS_TABLE] = &createWidget<WidgetTable>;
-        widgetClassMap[WIDGET_CLASS_MATRIX] = &createWidget<WidgetMatrix>;
-        widgetClassMap[WIDGET_CLASS_SEQUENCER] = &createWidget<WidgetSequencer>;
-        widgetClassMap[WIDGET_CLASS_PIANO_ROLL] = &createWidget<WidgetPianoRoll>;
-        widgetClassMap[WIDGET_CLASS_VIDEO_PLAYER] = &createWidget<WidgetVideoPlayer>;
-        widgetClassMap[WIDGET_CLASS_VIDEO_GRABBER] = &createWidget<WidgetVideoGrabber>;
-        widgetClassMap[WIDGET_CLASS_SOUND_PLAYER] = &createWidget<WidgetSoundPlayer>;
-        widgetClassMap[WIDGET_CLASS_IMAGE_VIEW] = &createWidget<WidgetImageView>;
-        widgetClassMap[WIDGET_CLASS_CLIPBOARD_MENU] = &createWidget<WidgetClipboardMenu>;
-        widgetClassMap[WIDGET_CLASS_SETTINGS] = &createWidget<WidgetSettings>;
-        widgetClassMap[WIDGET_CLASS_TEXT_EDITOR] = &createWidget<WidgetTextEditor>;
-        widgetClassMap[WIDGET_CLASS_COLOR_PICKER] = &createWidget<WidgetColorPicker>;
-
-        widgetClassMap[WIDGET_CLASS_FILE_LIST] = &createWidget<WidgetFileList>;
-        widgetClassMap[WIDGET_CLASS_FILE_LOCATIONS_LIST] = &createWidget<WidgetFileLocationsList>;
-        widgetClassMap[WIDGET_CLASS_FILE_EXPLORER] = &createWidget<WidgetFileExplorer>;
-        widgetClassMap[WIDGET_CLASS_FILE_LOAD] = &createWidget<WidgetFileLoad>;
-        widgetClassMap[WIDGET_CLASS_FILE_SAVE] = &createWidget<WidgetFileSave>;
-        widgetClassMap[WIDGET_CLASS_THEME_EDITOR] = &createWidget<WidgetThemeEditor>;
-        widgetClassMap[WIDGET_CLASS_THEME_PREVIEW] = &createWidget<WidgetThemePreview>;
-        widgetClassMap[WIDGET_CLASS_WIDGET_LIST] = &createWidget<WidgetWidgetList>;
-        widgetClassMap[WIDGET_CLASS_DIALOG] = &createWidget<WidgetDialog>;
-        widgetClassMap[WIDGET_CLASS_AQUAMARINE_ABOUT] = &createWidget<WidgetAquamarineAbout>;
+    
+        // app->registerDefaultWidgets();
+        // app->registerCustomWidgets();
 
         // Clipboard menu
         if (clipboardMenu == nullptr)
@@ -139,6 +91,18 @@ namespace Aquamarine
             WidgetManager::addWidget(*clipboardMenu, false, "", false);
         }
     }
+
+    widget_map_type& WidgetManager::getRegisteredWidgets()
+    {
+        if(app_ptr == nullptr) {
+            throw std::runtime_error(R"(
+            ***************************** ERROR *****************************
+            WidgetManager::BOOTSTRAP(App* app) was not called, MUST call it before using WidgetManager::getRegisteredWidgets()
+            *****************************************************************
+            )");
+        }
+        return app_ptr->getRegisteredWidgets();
+    }    
 
     void WidgetManager::addWidget(Widget &widget, bool shouldPersist, string ownerWidgetId, bool transmitOsc)
     {
@@ -187,7 +151,7 @@ namespace Aquamarine
 
     Widget *WidgetManager::loadWidget(string WIDGET_CLASS, string persistentId, string widgetXML)
     {
-        WidgetManager::bootstrapWidgetMapDefault();
+        WidgetManager::BOOTSTRAP(app_ptr);
         if (persistentId == "")
         {
             persistentId = WidgetSignature::generateRandomId(WIDGET_CLASS);
@@ -199,9 +163,9 @@ namespace Aquamarine
         bool wasFoundInMap = false;
 
         // Does the class exist in the map?
-        if (widgetClassMap.count(WIDGET_CLASS) > 0)
+        if (app_ptr->getRegisteredWidgets().count(WIDGET_CLASS) > 0)
         {
-            widget = widgetClassMap[WIDGET_CLASS](persistentId, widgetXML);
+            widget = app_ptr->getRegisteredWidgets()[WIDGET_CLASS](persistentId, widgetXML);
             widget->setWidgetClassType(WIDGET_CLASS);
             wasFoundInMap = true;
         }
@@ -269,7 +233,7 @@ namespace Aquamarine
 
     void WidgetManager::loadChildWidgets(Widget &targetWidget, string widgetXML)
     {
-        WidgetManager::bootstrapWidgetMapDefault();
+        WidgetManager::BOOTSTRAP(app_ptr);
         vector<WidgetSignature> childWidgetList = Widget::getChildWidgetsList(widgetXML);
         for (WidgetSignature childWidget : childWidgetList)
         {
@@ -282,7 +246,7 @@ namespace Aquamarine
 
     Widget *WidgetManager::loadChildWidget(Widget &targetWidget, string widgetXML)
     {
-        WidgetManager::bootstrapWidgetMapDefault();
+        WidgetManager::BOOTSTRAP(app_ptr);
         Widget *w = WidgetManager::loadWidget(widgetXML);
         targetWidget.addChildWidget(*w, true);
         return w;
@@ -752,7 +716,6 @@ namespace Aquamarine
 
     void WidgetManager::removeAllWidgetsExceptMultiple(vector<WidgetBase *> exceptWidgets)
     {
-
 #if VIZ_DEBUG_LEVEL >= 1 && VIZ_DEBUG_LEVEL <= 2
         cout << "\n*************************************************************";
         cout << "\nCLEARING WIDGETS....";
@@ -1229,7 +1192,7 @@ namespace Aquamarine
         if (settings.load(fileName))
         {
 
-            WidgetManager::bootstrapWidgetMapDefault();
+            WidgetManager::BOOTSTRAP(app_ptr);
 
             TiXmlElement *rootElm = settings.doc.RootElement();
 
@@ -1358,7 +1321,7 @@ namespace Aquamarine
         vizBG = new BG(drawBG);
         applicationProperties = WidgetManager::ApplicationProperties(applicationName, applicationVersion, fileExtension);
         currentProjectProperties = WidgetManager::ProjectProperties("Untitled Project", "untitled", "", "");
-        currentProjectProperties.fileName = "untitled.jam";
+        currentProjectProperties.fileName = "untitled." + fileExtension;
         setProjectProperties(currentProjectProperties.projectName, "");
     }
 
@@ -1414,13 +1377,7 @@ namespace Aquamarine
     string WidgetManager::getFrameworkName()
     {
         return applicationProperties.frameworkName;
-    }    
-
-
-    WidgetManager::widget_map_type WidgetManager::getWidgetMap()
-    {
-        return widgetClassMap;
-    }
+    }   
 
     void WidgetManager::drawDebugInfo(bool debug)
     {
@@ -1463,15 +1420,15 @@ namespace Aquamarine
      WidgetManager::bootstrapWidgetMap(appWidgetMap);
 
     *************************************************************/
-    void WidgetManager::bootstrapWidgetMap(widget_map_type map)
-    {
-        widgetClassMap = map;
-    }
+    // void WidgetManager::bootstrapWidgetMap(widget_map_type map)
+    // {
+    //     // widgetClassMap = map;
+    // }
 
     void WidgetManager::showClipboardPopupMenu(int x, int y, string clipboardOperationTargetWidgetId)
     {
 
-        if (clipboardMenu->getMenu()->getIsVisible())
+        if (clipboardMenu->getIsVisible())
             return;
 
         clipboardMenu->setAllowCut(true);

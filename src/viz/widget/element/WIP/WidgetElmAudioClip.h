@@ -59,22 +59,22 @@ namespace Aquamarine
         virtual void update(WidgetContext context) override
         {
 
-            getIsRoundedRectangle() ? vizElm_AUDIO_CLIP.setRectRounded(getViz()->scale(getX()), getViz()->scale(getY()), getViz()->scale(getWidth()), getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha())) : vizElm_AUDIO_CLIP.setRectangle(getViz()->scale(getX()), getViz()->scale(getY()), getViz()->scale(getWidth()), getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha()));
+            getIsRoundedRectangle() ? vizElm_AUDIO_CLIP.setRectRounded(Shared::getViz()->scale(getX()), Shared::getViz()->scale(getY()), Shared::getViz()->scale(getWidth()), Shared::getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha())) : vizElm_AUDIO_CLIP.setRectangle(Shared::getViz()->scale(getX()), Shared::getViz()->scale(getY()), Shared::getViz()->scale(getWidth()), Shared::getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha()));
 
             titleFont = getLargeFontSizedForDimensions(getUsableWidth() * 0.95f, getUsableHeight() * 0.95f);
 
             titleRect = titleFont->rect(getTitle());
 
             fullFileWaveform.setup(
-                getViz()->scale(getX()),
-                getViz()->scale(getY()),
-                getViz()->scale(getWidth()),
-                getViz()->scale(getHeight()));
+                Shared::getViz()->scale(getX()),
+                Shared::getViz()->scale(getY()),
+                Shared::getViz()->scale(getWidth()),
+                Shared::getViz()->scale(getHeight()));
             wave.setup(
-                getViz()->scale(getX()),
-                getViz()->scale(getY()),
-                getViz()->scale(getWidth()),
-                getViz()->scale(getHeight()));
+                Shared::getViz()->scale(getX()),
+                Shared::getViz()->scale(getY()),
+                Shared::getViz()->scale(getWidth()),
+                Shared::getViz()->scale(getHeight()));
         }
 
         virtual void draw(WidgetContext context) override
@@ -113,7 +113,7 @@ namespace Aquamarine
             ofPopStyle();
 
             // ofSetColor(ofColor::red);
-            // float playhead = ofMap(player.getPosition(), 0,1, fullFileWaveform.getMinX(),fullFileWaveform.getMaxX()); //getViz()->scale(
+            // float playhead = ofMap(player.getPosition(), 0,1, fullFileWaveform.getMinX(),fullFileWaveform.getMaxX()); //Shared::getViz()->scale(
             // ofDrawLine(playhead, 0, playhead, fullFileWaveform.getMaxY());
 
             // // if(fullFileWaveform.inside(ofGetMouseX(), ofGetMouseY())){

@@ -669,7 +669,7 @@ namespace Aquamarine
 
         void initWidget() override
         {
-            font = getViz()->getMediumFont();
+            font = Shared::getViz()->getMediumFont();
             setShowColumnFilters(false, false);
             setFixedHeaderRowHeight(0);
             setRowHeight(26);

@@ -1,4 +1,5 @@
 #include "App.h"
+#include "WidgetManager.h"
 
 using namespace std;
 
@@ -10,9 +11,8 @@ namespace Aquamarine
     string App::mDOCUMENT_FILE_EXTENSION = "xml";
     string App::mDEFAULT_LANGUAGE_XML = "<LANGUAGE name='english'><abc>Hello world!</abc></LANGUAGE>";
 
-    void App::BOOTSTRAP(
+    App::App(
         string name,
-        WidgetManager::widget_map_type customWidgetMap,
         map<string, Icon *> customIconMap,
         string version,
         string documentFileExtension,
@@ -39,6 +39,13 @@ namespace Aquamarine
         mAPPLICATION_VERSION = version;
         mDOCUMENT_FILE_EXTENSION = documentFileExtension;
         mDEFAULT_LANGUAGE_XML = defaultLanguagXML;
+    }
+
+    // Bootstrap app
+    void App::BOOTSTRAP()
+    {
+
+        ofLogNotice("Aquamarine::App") << "Bootstrapping app `" << App::APPLICATION_NAME() << "`";
 
         ofDirectory::createDirectory(App::APPLICATION_SETTINGS_FOLDER(), true, false);
         ofDirectory::createDirectory(App::APPLICATION_CACHE_FOLDER(), true, false);
@@ -58,15 +65,63 @@ namespace Aquamarine
             settings.getValue("settings:autoLoadMostRecentProject", true),
             settings.getValue("settings:themeName", "System"));
 
+        ofLogNotice("Aquamarine::App") << "Settings initialized...";
+
+        std::shared_ptr<Viz> viz = Shared::getViz();
+
+        IconCache::bootstrapIconMap(Shared::getViz()->getScale(), getCustomIcons((Shared::getViz()->getScale())));
+        ofLogNotice("Aquamarine::App") << "Icons bootstrapped...";
+
+        // System widgets
+        registerDefaultWidgets();
+        int systemWidgetCount = getRegisteredWidgets().size();
+        ofLogNotice("Aquamarine::App") << systemWidgetCount <<  " system widgets registered";
+        
+
+        // Custom widgets
+        // registerCustomWidgets();
+        // ofLogNotice("Aquamarine::App") << systemWidgetCount - getRegisteredWidgets().size() <<  " custom widgets registered";        
+
         Shared::langLoadXML(App::mDEFAULT_LANGUAGE_XML);
 
-        WidgetManager::initWidgetManager(name,
-                                         version,
-                                         documentFileExtension,
+        WidgetManager::initWidgetManager(App::APPLICATION_NAME(),
+                                         App::APPLICATION_VERSION(),
+                                         App::DOCUMENT_FILE_EXTENSION(),
                                          true);
+        WidgetManager::BOOTSTRAP(&(*this));
+    }
 
-        WidgetManager::bootstrapWidgetMap(customWidgetMap);
-        IconCache::bootstrapIconMap(Shared::getViz()->getScale(), customIconMap);
+    // System / default widgets provided by Aquamarine
+    void App::registerDefaultWidgets()
+    {
+        registerWidgetType<Widget>("Widget");
+        registerWidgetType<WidgetDebug>("WidgetDebug");
+        registerWidgetType<WidgetEventListener>("WidgetEventListener");
+        registerWidgetType<WidgetMenu>("WidgetMenu");
+        registerWidgetType<WidgetMenuCollection>("WidgetMenuCollection");
+        registerWidgetType<WidgetTable>("WidgetTable");
+        registerWidgetType<WidgetMatrix>("WidgetMatrix");
+        registerWidgetType<WidgetSequencer>("WidgetSequencer");
+        registerWidgetType<WidgetPianoRoll>("WidgetPianoRoll");
+        registerWidgetType<WidgetVideoPlayer>("WidgetVideoPlayer");
+        registerWidgetType<WidgetVideoGrabber>("WidgetVideoGrabber");
+        registerWidgetType<WidgetSoundPlayer>("WidgetSoundPlayer");
+        registerWidgetType<WidgetImageView>("WidgetImageView");
+        registerWidgetType<WidgetClipboardMenu>("WidgetClipboardMenu");
+        registerWidgetType<WidgetSettings>("WidgetSettings");
+        registerWidgetType<WidgetTextEditor>("WidgetTextEditor");
+        registerWidgetType<WidgetColorPicker>("WidgetColorPicker");
+
+        registerWidgetType<WidgetFileList>("WidgetFileList");
+        registerWidgetType<WidgetFileLocationsList>("WidgetFileLocationsList");
+        registerWidgetType<WidgetFileExplorer>("WidgetFileExplorer");
+        registerWidgetType<WidgetFileLoad>("WidgetFileLoad");
+        registerWidgetType<WidgetFileSave>("WidgetFileSave");
+        registerWidgetType<WidgetThemeEditor>("WidgetThemeEditor");
+        registerWidgetType<WidgetThemePreview>("WidgetThemePreview");
+        registerWidgetType<WidgetWidgetList>("WidgetWidgetList");
+        registerWidgetType<WidgetDialog>("WidgetDialog");
+        registerWidgetType<WidgetAquamarineAbout>("WidgetAquamarineAbout");
     }
 
     string App::APPLICATION_NAME()
@@ -136,5 +191,4 @@ namespace Aquamarine
         return mIOSGetDocumentsDirectory;
     }
 #endif
-
 }

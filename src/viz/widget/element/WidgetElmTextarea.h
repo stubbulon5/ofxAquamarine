@@ -68,7 +68,7 @@ namespace Aquamarine
         virtual void update(WidgetContext context) override
         {
 
-            getIsRoundedRectangle() ? vizElm_TEXTAREA.setRectRounded(getViz()->scale(getX()), getViz()->scale(getY()), getViz()->scale(getWidth()), getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha())) : vizElm_TEXTAREA.setRectangle(getViz()->scale(getX()), getViz()->scale(getY()), getViz()->scale(getWidth()), getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha()));
+            getIsRoundedRectangle() ? vizElm_TEXTAREA.setRectRounded(Shared::getViz()->scale(getX()), Shared::getViz()->scale(getY()), Shared::getViz()->scale(getWidth()), Shared::getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha())) : vizElm_TEXTAREA.setRectangle(Shared::getViz()->scale(getX()), Shared::getViz()->scale(getY()), Shared::getViz()->scale(getWidth()), Shared::getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha()));
 
             ofRectangle r;
             ofColor fontColor = getTheme().TypographyPrimaryColor_withAlpha(getTheme().ElementHoveredForegroundAlpha);
@@ -76,13 +76,13 @@ namespace Aquamarine
             {
                 ofPushStyle();
                 ofSetColor(fontColor);
-                r = getViz()->getFonts(getTheme())->drawFormattedColumn(getValue(), scale(getUsableWidth() * -1 - 100), scale(getUsableY() + getNonScaledPadding()), scale(getUsableWidth() - getViz()->getNonScaledPadding() * 2.0f));
+                r = Shared::getViz()->getFonts(getTheme())->drawFormattedColumn(getValue(), scale(getUsableWidth() * -1 - 100), scale(getUsableY() + getNonScaledPadding()), scale(getUsableWidth() - Shared::getViz()->getNonScaledPadding() * 2.0f));
                 ofPopStyle();
             }
             else
             {
                 defaultStyle.color = fontColor;
-                r = getViz()->getFonts(getTheme())->drawColumn(getValue(), defaultStyle, scale(getUsableWidth() * -1 - 100), scale(getUsableY() + getNonScaledPadding()), scale(getUsableWidth() - getNonScaledPadding() * 2.0f), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
+                r = Shared::getViz()->getFonts(getTheme())->drawColumn(getValue(), defaultStyle, scale(getUsableWidth() * -1 - 100), scale(getUsableY() + getNonScaledPadding()), scale(getUsableWidth() - getNonScaledPadding() * 2.0f), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
             }
 
             setContentBoundsScaled(
@@ -101,13 +101,13 @@ namespace Aquamarine
             {
                 ofPushStyle();
                 ofSetColor(fontColor);
-                r = getViz()->getFonts(getTheme())->drawFormattedColumn(getValue(), scale(getUsableX()), scale(getUsableY() + getNonScaledPadding()), scale(getUsableWidth() - getViz()->getNonScaledPadding() * 2.0f));
+                r = Shared::getViz()->getFonts(getTheme())->drawFormattedColumn(getValue(), scale(getUsableX()), scale(getUsableY() + getNonScaledPadding()), scale(getUsableWidth() - Shared::getViz()->getNonScaledPadding() * 2.0f));
                 ofPopStyle();
             }
             else
             {
                 defaultStyle.color = fontColor;
-                r = getViz()->getFonts(getTheme())->drawColumn(getValue(), defaultStyle, scale(getUsableX()), scale(getUsableY() + getNonScaledPadding()), scale(getUsableWidth() - getNonScaledPadding() * 2.0f), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
+                r = Shared::getViz()->getFonts(getTheme())->drawColumn(getValue(), defaultStyle, scale(getUsableX()), scale(getUsableY() + getNonScaledPadding()), scale(getUsableWidth() - getNonScaledPadding() * 2.0f), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
             }
 
             if (getIsMousePressedAndReleasedOverWidget(false))
@@ -149,7 +149,7 @@ namespace Aquamarine
         void initWidget() override
         {
             setWidth(100);
-            defaultStyle = getViz()->getMediumFontStyle();
+            defaultStyle = Shared::getViz()->getMediumFontStyle();
             setScrollAction(ScrollAction::SCROLL);
             setEnableScrollYPositive(true);
             setEnableScrollYNegative(true);

@@ -1,5 +1,6 @@
 
 #pragma once
+#include "../WidgetManager.h"
 #include "Widget.h"
 
 namespace Aquamarine
@@ -1141,7 +1142,7 @@ namespace Aquamarine
 
             /*
             #if VIZ_DEBUG_LEVEL >= 2
-                shared_ptr<ofxSmartFont> debugFont = getViz()->getTinyFont();
+                shared_ptr<ofxSmartFont> debugFont = Shared::getViz()->getTinyFont();
                 //debugFont->draw(ofToString(cell.cellSlice.bounds.x) + "," + ofToString(cell.cellSlice.bounds.y) + ":" + ofToString(absoluteScaledX) + "," + ofToString(absoluteScaledY) , absoluteScaledLabelX, absoluteScaledLabelY + scale(20)); //, scaledWidth, scaledHeight
                 debugFont->draw(ofToString(cell.cellSlice.bounds.width) + "," + ofToString(cell.cellSlice.bounds.height), absoluteScaledLabelX, absoluteScaledLabelY + scale(20));
             #endif
@@ -2224,7 +2225,7 @@ namespace Aquamarine
 
         virtual void initWidgetScale(float scale) override
         {
-            font = getViz()->getMediumFont();
+            font = Shared::getViz()->getMediumFont();
         }
 
         void initWidget() override
@@ -2256,7 +2257,7 @@ namespace Aquamarine
                 drawCellContent(isRowSelected, isRowHovered, isCellHovered, absoluteScaledX, absoluteScaledY, absoluteScaledLabelX, absoluteScaledLabelY, scaledWidth, scaledHeight, row, cell, rowIndex, colIndex);
             };
 
-            font = getViz()->getMediumFont();
+            font = Shared::getViz()->getMediumFont();
             setIsAutoUpdateWhenActive(true);
             setTitleStyle(TitleStyle::TOP_STATIC);
             setScrollAction(ScrollAction::SCROLL);

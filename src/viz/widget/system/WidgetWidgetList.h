@@ -58,7 +58,7 @@ namespace Aquamarine
                 headerRow = WidgetTableRow("Header", {WidgetTableCell("widget", "Widget", 300),
                                                            WidgetTableCell("type", "Type")});
 
-                WidgetManager::widget_map_type widgetMap = WidgetManager::getWidgetMap();
+                auto widgetMap = WidgetManager::getRegisteredWidgets();
 
                 for (auto it = widgetMap.begin(); it != widgetMap.end(); it++)
                 {

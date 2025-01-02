@@ -125,13 +125,13 @@ namespace Aquamarine
             int accumWidth = 0;
             int index = 0;
 
-            getIsRoundedRectangle() ? breadcrumbBG.setRectRounded(getViz()->scale(getX()), getViz()->scale(getY()), getViz()->scale(getWidth()), getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getTheme().ElementUnhoveredBackgroundAlpha)) : breadcrumbBG.setRectangle(getViz()->scale(getX()), getViz()->scale(getY()), getViz()->scale(getWidth()), getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getTheme().ElementUnhoveredBackgroundAlpha));
+            getIsRoundedRectangle() ? breadcrumbBG.setRectRounded(Shared::getViz()->scale(getX()), Shared::getViz()->scale(getY()), Shared::getViz()->scale(getWidth()), Shared::getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getTheme().ElementUnhoveredBackgroundAlpha)) : breadcrumbBG.setRectangle(Shared::getViz()->scale(getX()), Shared::getViz()->scale(getY()), Shared::getViz()->scale(getWidth()), Shared::getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getTheme().ElementUnhoveredBackgroundAlpha));
 
             for (WidgetElmBreadcrumbItem &item : mBreadcrumbItemItems)
             {
 
-                int x = getViz()->scale(getUsableX()) - getScaledPadding() + accumWidth;
-                int y = getViz()->scale(getY());
+                int x = Shared::getViz()->scale(getUsableX()) - getScaledPadding() + accumWidth;
+                int y = Shared::getViz()->scale(getY());
 
                 fontStyle = Shared::getViz()->getLargeFontStyle();
                 ofRectangle fontRect = Shared::getViz()->getTextBounds(item.label, fontStyle, x, y);
@@ -140,7 +140,7 @@ namespace Aquamarine
 
                 int cellWidth = item.breadcrumbSlice.fontRect.width + ((getIconTag() != "") ? icon.getScaledBounds().width + getScaledPadding() * 1.0 : getScaledPadding() * 1.0);
 
-                getIsRoundedRectangle() ? item.breadcrumbSlice.button.setRectRounded(x, y, cellWidth, getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha())) : item.breadcrumbSlice.button.setRectangle(x, y, cellWidth, getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha()));
+                getIsRoundedRectangle() ? item.breadcrumbSlice.button.setRectRounded(x, y, cellWidth, Shared::getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha())) : item.breadcrumbSlice.button.setRectangle(x, y, cellWidth, Shared::getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha()));
 
                 accumWidth += cellWidth;
 
@@ -202,7 +202,7 @@ namespace Aquamarine
 
                 fontStyle.color = getTheme().TypographyPrimaryColor_withAlpha(getTheme().ElementHoveredForegroundAlpha);
 
-                getViz()->getFonts(getTheme())->draw(item.label, fontStyle, item.breadcrumbSlice.fontRect.x + ((getIconTag() != "") ? icon.getScaledBounds().width : getScaledPadding() * 1.0f), item.breadcrumbSlice.fontRect.y + item.breadcrumbSlice.fontRect.height * 0.25f + scale(getUsableHeight() * 0.5f));
+                Shared::getViz()->getFonts(getTheme())->draw(item.label, fontStyle, item.breadcrumbSlice.fontRect.x + ((getIconTag() != "") ? icon.getScaledBounds().width : getScaledPadding() * 1.0f), item.breadcrumbSlice.fontRect.y + item.breadcrumbSlice.fontRect.height * 0.25f + scale(getUsableHeight() * 0.5f));
                 ofPopStyle();
 
                 if (isHovered && getIsMousePressedAndReleasedOverWidget(false))

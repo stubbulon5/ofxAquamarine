@@ -194,7 +194,7 @@ namespace Aquamarine
 
         void initWidget() override
         {
-            font = getViz()->getMediumFont();
+            font = Shared::getViz()->getMediumFont();
             setTableUseFbo(true);
             borderColor = ofColor(0, 0, 0, 255 * 0.05f);
         }

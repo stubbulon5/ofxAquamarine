@@ -102,7 +102,7 @@ namespace Aquamarine
         {
             setWidth(100);
             setHeight(30);
-            defaultStyle = getViz()->getMediumFontStyleMono();
+            defaultStyle = Shared::getViz()->getMediumFontStyleMono();
             setScrollAction(ScrollAction::NONE);
         }
     };

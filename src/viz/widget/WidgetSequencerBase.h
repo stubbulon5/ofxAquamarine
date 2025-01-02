@@ -197,7 +197,7 @@ namespace Aquamarine
         void initWidget() override
         {
             setTableUseFbo(true);
-            font = getViz()->getMediumFont();
+            font = Shared::getViz()->getMediumFont();
             borderColor = ofColor(0, 0, 0, 255 * 0.05f);
             setGridColorX(getTheme().TypographyPrimaryColor_withAlpha(1));
             setGridColorY(getTheme().TypographyPrimaryColor_withAlpha(1));

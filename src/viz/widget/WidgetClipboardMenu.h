@@ -15,6 +15,12 @@ namespace Aquamarine
 
         virtual ~WidgetClipboardMenu()
         {
+            if (clipboardMenu != nullptr)
+            {
+                ofRemoveListener(clipboardMenu->menuItemSelected, this, &WidgetClipboardMenu::onMenuItemSelected);
+                ofRemoveListener(clipboardMenu->widgetLostFocus, this, &WidgetClipboardMenu::onMenuLostFocus);
+                ofRemoveListener(clipboardMenu->widgetHovered, this, &WidgetClipboardMenu::onMenuHovered);
+            }
         }
 
         void update(WidgetContext context) override
@@ -175,14 +181,16 @@ namespace Aquamarine
             if (clipboardMenu == nullptr)
             {
                 clipboardMenu = new WidgetMenu("CLIPBOARD_MENU", "<widget isSystemWidget='1'><bounds width='100' height='100'/></widget>", getWidgetId(), WidgetMenu::PreferredPopoutDirection::DOWN,
-                                                    {
-                                                        // ----------------------------------------------------------------------------
-                                                        // Clipboard...
-                                                        // ----------------------------------------------------------------------------
-                                                        WidgetMenuTab("Clipboard", IconCache::getIcon("MED_WIDGET_CLIPBOARD"), IconCache::IconTag::WIDGET_CLIPBOARD, {WidgetMenuItem("Cut", 0), WidgetMenuItem("Copy", 1), WidgetMenuItem("Paste", 2)}),
-                                                    });
+                                               {
+                                                   // ----------------------------------------------------------------------------
+                                                   // Clipboard...
+                                                   // ----------------------------------------------------------------------------
+                                                   WidgetMenuTab("Clipboard", IconCache::getIcon("MED_WIDGET_CLIPBOARD"), IconCache::IconTag::WIDGET_CLIPBOARD, {WidgetMenuItem("Cut", 0), WidgetMenuItem("Copy", 1), WidgetMenuItem("Paste", 2)}),
+                                               });
+                addChildWidget(*clipboardMenu);
 
-                ofAddListener(dynamic_cast<WidgetMenu *>(clipboardMenu)->menuItemSelected, this, &WidgetClipboardMenu::onMenuItemSelected);
+                // ofAddListener(clipboardMenu->menuItemSelected, this, &WidgetClipboardMenu::onMenuItemSelected);
+
                 clipboardMenu->setIsVisible(false);
                 clipboardMenu->setIsRoundedRectangle(false);
 
@@ -193,7 +201,6 @@ namespace Aquamarine
                 ofAddListener(clipboardMenu->widgetLostFocus, this, &WidgetClipboardMenu::onMenuLostFocus);
                 ofAddListener(clipboardMenu->widgetHovered, this, &WidgetClipboardMenu::onMenuHovered);
 
-                addChildWidget(*clipboardMenu);
                 clipboardMenu->setIsShadow(true);
             }
         }

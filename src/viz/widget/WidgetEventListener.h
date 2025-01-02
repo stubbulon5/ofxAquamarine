@@ -92,7 +92,7 @@ namespace Aquamarine
             if (!owner)
                 return;
 
-            getViz()->addToWidgetEventListenMap(
+            Shared::getViz()->addToWidgetEventListenMap(
                 owner->getPersistentId(),
                 source,
                 eventName,
@@ -108,7 +108,7 @@ namespace Aquamarine
             if (!owner)
                 return;
 
-            getViz()->removeFromWidgetEventListenMap(
+            Shared::getViz()->removeFromWidgetEventListenMap(
                 owner->getPersistentId(),
                 source,
                 eventName,
@@ -131,7 +131,7 @@ namespace Aquamarine
 
             eventListenLog->clearTableRows();
 
-            vector<Viz::WidgetEvent> listeningEvents = getViz()->getListeningEvents(owner->getPersistentId());
+            vector<Viz::WidgetEvent> listeningEvents = Shared::getViz()->getListeningEvents(owner->getPersistentId());
             for (Viz::WidgetEvent e : listeningEvents)
             {
                 eventListenLog->addRow(
@@ -332,7 +332,7 @@ namespace Aquamarine
                         if (!owner)
                             return;
 
-                        getViz()->updateWidgetEventListenMap(
+                        Shared::getViz()->updateWidgetEventListenMap(
                             owner->getPersistentId(),
                             updatedRow.cells[0].label,
                             updatedRow.cells[1].label,
@@ -503,7 +503,7 @@ namespace Aquamarine
                 )");
 
                 WidgetManager::addWidgetForPopout(*widgetList, getWidgetId(), true);
-                widgetList->setTheme(getViz()->getThemeManager()->getSystemThemeLight(true));
+                widgetList->setTheme(Shared::getViz()->getThemeManager()->getSystemThemeLight(true));
                 widgetList->setRowBGColor(ofColor(0, 0, 0, 0));
                 widgetList->setRowAltBGColor(ofColor(0, 0, 0, 0));
                 widgetList->setLoadedWidgetsDisplayMode(true);

@@ -705,7 +705,7 @@ namespace Aquamarine
             int tabWidthAppendRight = 0;
             int tabWidthAppendLeft = 0;
 
-            font = getViz()->getMediumFont();
+            font = Shared::getViz()->getMediumFont();
             ofRectangle fontRectHeight = font->rect("Bmaj"); // Magic text...
 
             for (int i = 0; i < mMenuCollectionSliceData.size(); i++)

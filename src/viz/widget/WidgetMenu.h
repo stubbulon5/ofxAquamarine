@@ -260,7 +260,7 @@ namespace Aquamarine
             }
             settings.popTag(); // properties
             settings.popTag(); // widget
-            return true;
+        return true;
         }
 
         virtual ~WidgetMenu()
@@ -333,7 +333,7 @@ namespace Aquamarine
             if (menuSliceData.size() == 0)
                 initializeMenuSlices(false);
 
-            font = getViz()->getMediumFont();
+            font = Shared::getViz()->getMediumFont();
             ofRectangle rectLabel = font->rect("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
             int maxItemWidth = 0;

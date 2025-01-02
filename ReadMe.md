@@ -12,6 +12,7 @@ Aquamarine is an OpenGL based UI Framework written on top of OpenFrameworks. It 
 - Interprets a very simple markup language similar to HTML
 
 ## Development
+[PLEASE NOTE: plenty of examples coming SOON!]
 This is a sole development, but I welcome collaboration and input. Have a feature request? You can maybe tempt me with coffee :-) [Buy me a coffee!](https://buymeacoffee.com/stubbulon5)
 
 ## TL;DR What's it look like?

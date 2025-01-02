@@ -178,7 +178,7 @@ namespace Aquamarine
             {
                 defaultStyle.color = getTheme().TypographyPrimaryColor_withAlpha(getTheme().ElementHoveredForegroundAlpha);
 
-                ofRectangle r = getViz()->getFonts(getTheme())->drawColumn(getTitle(), defaultStyle, getViz()->scale(getUsableX()), getViz()->scale(getUsableY() + getHeight() / 2.0f), scale(getTitleWidth()), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
+                ofRectangle r = Shared::getViz()->getFonts(getTheme())->drawColumn(getTitle(), defaultStyle, Shared::getViz()->scale(getUsableX()), Shared::getViz()->scale(getUsableY() + getHeight() / 2.0f), scale(getTitleWidth()), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
             }
         }
 
@@ -228,7 +228,7 @@ namespace Aquamarine
         {
             setWidth(100);
             setHeight(30);
-            defaultStyle = getViz()->getMediumFontStyleMono();
+            defaultStyle = Shared::getViz()->getMediumFontStyleMono();
             setScrollAction(ScrollAction::BASIC);
         }
     };

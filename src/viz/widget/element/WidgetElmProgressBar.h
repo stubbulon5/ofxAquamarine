@@ -201,16 +201,16 @@ namespace Aquamarine
 
                 /*
                 vector<ofxFontStash2::StyledLine> laidOutLines;
-                getViz()->getFonts(getTheme())->layoutLines({{getTitle(), defaultStyle}}, scale(getTitleWidth()), laidOutLines);
-                ofRectangle bbox = getViz()->getFonts(getTheme())->getTextBounds(laidOutLines, scale(getUsableX()), scale(getUsableY()));
+                Shared::getViz()->getFonts(getTheme())->layoutLines({{getTitle(), defaultStyle}}, scale(getTitleWidth()), laidOutLines);
+                ofRectangle bbox = Shared::getViz()->getFonts(getTheme())->getTextBounds(laidOutLines, scale(getUsableX()), scale(getUsableY()));
                 */
 
-                //  getViz()->scale(getUsableY() + getHeight()/2.0f),
+                //  Shared::getViz()->scale(getUsableY() + getHeight()/2.0f),
 
                 string title = getTitle();
                 ofStringReplace(title, "${VALUE}", ofToString(getValue()));
                 ofStringReplace(title, "${PERC}", ofToString(getPerc()));
-                ofRectangle r = getViz()->getFonts(getTheme())->drawColumn(title, defaultStyle, scale(getUsableX()),
+                ofRectangle r = Shared::getViz()->getFonts(getTheme())->drawColumn(title, defaultStyle, scale(getUsableX()),
                                                                            scale(getUsableY() + getHeight() / 2.0f), // scale(getUsableY()) + bbox.height*1.5f - getHeight()/2.5f,
                                                                            scale(getTitleWidth()), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
             }
@@ -280,7 +280,7 @@ namespace Aquamarine
         {
             setWidth(100);
             setHeight(30);
-            defaultStyle = getViz()->getMediumFontStyleMono();
+            defaultStyle = Shared::getViz()->getMediumFontStyleMono();
             setScrollAction(ScrollAction::BASIC);
         }
     };

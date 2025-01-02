@@ -6,10 +6,14 @@
 
 namespace Aquamarine
 {
+
+
+//------------------------------ FORWARD DECLARATIONS  --------------------------------
+
     string Shared::APP_SETTINGS_PATH;
     string Shared::APP_SETTINGS_FILE_NAME = "settings.xml";
     string Shared::APP_SETTINGS_FILE_FULL_PATH;
-    std::shared_ptr<Viz> Shared::viz;
+    std::shared_ptr<Viz> Shared::viz = nullptr;
     int Shared::mVizDebug = -1;
 
     /*
@@ -112,78 +116,78 @@ namespace Aquamarine
     {
         if (viz == nullptr)
         {
-            cout << "***************************** ERROR ***************************** " << endl;
-            cout << "Shared::configure was not called, MUST call it before using Shared::getViz()" << endl;
-            cout << "***************************************************************** " << endl;
-            viz = make_shared<Viz>(); // Use the defaults!!
-            return nullptr;
+            throw std::runtime_error(R"(
+            ***************************** ERROR *****************************
+            Shared::configure was not called, MUST call it before using Shared::getViz()
+            *****************************************************************
+            )");
         }
         return viz;
     }
 
     void Shared::setUserScale(float val)
     {
-        getViz()->setUserScale(val);
+        Shared::getViz()->setUserScale(val);
     }
 
     void Shared::setUserExperience(float val)
     {
-        getViz()->setUserExperience(val, false);
+        Shared::getViz()->setUserExperience(val, false);
     }
 
     void Shared::setUserExperience(float val, bool isInitializing)
     {
-        getViz()->setUserExperience(val, isInitializing);
+        Shared::getViz()->setUserExperience(val, isInitializing);
     }
 
     void Shared::setUseFbo(bool useFbo)
     {
-        getViz()->setUseFbo(useFbo);
+        Shared::getViz()->setUseFbo(useFbo);
     }
 
     void Shared::setShowFps(bool showFps)
     {
-        getViz()->setShowFps(showFps);
+        Shared::getViz()->setShowFps(showFps);
     }
 
     void Shared::throttleUserExperience()
     {
-        getViz()->throttleUserExperience(false);
+        Shared::getViz()->throttleUserExperience(false);
     }
 
     void Shared::revertThrottleUserExperience()
     {
-        getViz()->revertThrottleUserExperience();
+        Shared::getViz()->revertThrottleUserExperience();
     }
 
     void Shared::setResolutionMultiplier()
     {
-        getViz()->setResolutionMultiplier();
+        Shared::getViz()->setResolutionMultiplier();
     }
 
     void Shared::setUserFont(string absolutePath)
     {
-        getViz()->setUserFont(absolutePath);
+        Shared::getViz()->setUserFont(absolutePath);
     }
 
     string Shared::getUserSpecifiedFont()
     {
-        return getViz()->getUserSpecifiedFont();
+        return Shared::getViz()->getUserSpecifiedFont();
     }
 
     string Shared::lang(string tag)
     {
-        return getViz()->lang(tag);
+        return Shared::getViz()->lang(tag);
     }
 
     void Shared::langLoadXML(string xml)
     {
-        getViz()->langLoadXML(xml);
+        Shared::getViz()->langLoadXML(xml);
     }
 
     void Shared::langLoadFile(string filename)
     {
-        getViz()->lang(filename);
+        Shared::getViz()->lang(filename);
     }
 
     string Shared::encodeForXML(string val)
@@ -289,9 +293,11 @@ namespace Aquamarine
     string Shared::safeFileName(std::string &filename)
     {
         string illegalChars = "\\/:?\"<>|[]";
-        for (auto it = filename.begin() ; it < filename.end() ; ++it){
+        for (auto it = filename.begin(); it < filename.end(); ++it)
+        {
             bool found = illegalChars.find(*it) != string::npos;
-            if(found){
+            if (found)
+            {
                 *it = ' ';
             }
         }

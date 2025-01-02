@@ -59,7 +59,7 @@ namespace Aquamarine
                     int port = TXT_OSC_SEND_PORT->getValue(-1);
                     if (host != "" && port > -1)
                     {
-                        getViz()->setupOscSender(host, port);
+                        Shared::getViz()->setupOscSender(host, port);
                     }
                 }
 
@@ -69,7 +69,7 @@ namespace Aquamarine
                     int port = TXT_OSC_RECEIVE_PORT->getValue(-1);
                     if (port > -1)
                     {
-                        getViz()->setupOscReceiver(port);
+                        Shared::getViz()->setupOscReceiver(port);
                     }
                 }
 

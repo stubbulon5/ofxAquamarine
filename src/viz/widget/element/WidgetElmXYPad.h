@@ -263,16 +263,16 @@ namespace Aquamarine
                 string title = getTitle();
                 ofStringReplace(title, "${VALUE}", ofToString(getValueX()) + ":" + ofToString(getValueY()));
                 ofStringReplace(title, "${PERC}", ofToString(getPercX()) + ":" + ofToString(getPercY()));
-                ofRectangle r = getViz()->getFonts(getTheme())->drawColumn(title, defaultStyle, scale(getUsableX()),
+                ofRectangle r = Shared::getViz()->getFonts(getTheme())->drawColumn(title, defaultStyle, scale(getUsableX()),
                                                                            scale(getUsableY() + getHeight() / 2.0f), // scale(getUsableY()) + bbox.height*1.5f - getHeight()/2.5f,
                                                                            scale(getTitleWidth()), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
 
                 // if (getShowValueWhenDragging() && getIsElmDragging())
                 // {
                 //     defaultStyle.color = getTheme().TypographyPrimaryColor_withAlpha(getTheme().ElementHoveredForegroundAlpha);
-                //     ofRectangle r = getViz()->getFonts(getTheme())->drawColumn(ofToString(getValueX()) + ":" + ofToString(getValueY()), defaultStyle,
-                //                                                                getViz()->scale(getUsableX()), 
-                //                                                                getViz()->scale(getUsableY()),
+                //     ofRectangle r = Shared::getViz()->getFonts(getTheme())->drawColumn(ofToString(getValueX()) + ":" + ofToString(getValueY()), defaultStyle,
+                //                                                                Shared::getViz()->scale(getUsableX()), 
+                //                                                                Shared::getViz()->scale(getUsableY()),
                 //                                                                getHeight() / 2.0f,
                 //                                                                ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
 
@@ -392,7 +392,7 @@ namespace Aquamarine
             setAspectRatio(1);            
             setWidth(100);
             setHeight(100);
-            defaultStyle = getViz()->getMediumFontStyleMono();
+            defaultStyle = Shared::getViz()->getMediumFontStyleMono();
             setScrollAction(ScrollAction::BASIC);
         }
     };

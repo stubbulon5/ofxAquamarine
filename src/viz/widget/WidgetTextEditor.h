@@ -274,8 +274,8 @@ namespace Aquamarine
 //         void initWidget() override
 //         {
 
-//             int resolutionMultiplier = getViz()->getResolutionMultiplier();
-//             int fontScale = int((float)resolutionMultiplier * getViz()->getUserScale());
+//             int resolutionMultiplier = Shared::getViz()->getResolutionMultiplier();
+//             int fontScale = int((float)resolutionMultiplier * Shared::getViz()->getUserScale());
 //             int fontSize = 15 * fontScale;
 
 //             setScrollAction(ScrollAction::SCROLL);

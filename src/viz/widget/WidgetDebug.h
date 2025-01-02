@@ -43,15 +43,15 @@ namespace Aquamarine
 
             int LEFT_PADDING = 50;
 
-            ofGetFrameRate() < getViz()->getUserExperience() ? getTheme().setTitleFontColor(ofColor(255, 0, 0, 200)) : getTheme().setTitleFontColor(ofColor(0, 0, 0, 200));
+            ofGetFrameRate() < Shared::getViz()->getUserExperience() ? getTheme().setTitleFontColor(ofColor(255, 0, 0, 200)) : getTheme().setTitleFontColor(ofColor(0, 0, 0, 200));
 
-            // Widget* active = WidgetManager::getWidget(getViz()->getActiveWidgetId());
+            // Widget* active = WidgetManager::getWidget(Shared::getViz()->getActiveWidgetId());
             Widget *active = WidgetManager::getActiveParentWidget();
-            Widget *prior = WidgetManager::getWidget(getViz()->getPriorActiveWidgetId());
-            Widget *activeChild = WidgetManager::getWidget(getViz()->getActiveChildWidgetId());
-            Widget *priorChild = WidgetManager::getWidget(getViz()->getPriorActiveChildWidgetId());
+            Widget *prior = WidgetManager::getWidget(Shared::getViz()->getPriorActiveWidgetId());
+            Widget *activeChild = WidgetManager::getWidget(Shared::getViz()->getActiveChildWidgetId());
+            Widget *priorChild = WidgetManager::getWidget(Shared::getViz()->getPriorActiveChildWidgetId());
             WidgetBase *target = WidgetManager::getTargetDropWidget();
-            Widget *nextInlineForFocus = WidgetManager::getWidget(getViz()->getNextInLineForFocusWidgetId());
+            Widget *nextInlineForFocus = WidgetManager::getWidget(Shared::getViz()->getNextInLineForFocusWidgetId());
 
             try
             {
@@ -223,7 +223,7 @@ namespace Aquamarine
 
             debugInfo += "<small-mono>ANIMATIONS:<br/></small-mono>";
 
-            for (Viz::AnimationData animation : getViz()->getAnimations())
+            for (Viz::AnimationData animation : Shared::getViz()->getAnimations())
             {
                 string s = animation.animationName;
                 if (s.length() < LEFT_PADDING)
@@ -236,7 +236,7 @@ namespace Aquamarine
 
             debugInfo += "<small-mono>POPOUTS:<br/></small-mono>";
 
-            for (string widgetId : getViz()->getPopoutWidgetIds())
+            for (string widgetId : Shared::getViz()->getPopoutWidgetIds())
             {
                 string s = widgetId;
                 if (s.length() < LEFT_PADDING)
@@ -255,7 +255,7 @@ namespace Aquamarine
                 return;
             ofPushStyle();
             ofSetColor(getTheme().TypographyPrimaryColor_withAlpha(getTheme().ElementHoveredForegroundAlpha));
-            ofRectangle r = getViz()->getFonts(getTheme())->drawFormattedColumn(debugInfo, getViz()->scale(getUsableX()), getViz()->scale(getUsableY()), getViz()->scale(getUsableWidth() - getViz()->getNonScaledPadding() * 2.0f));
+            ofRectangle r = Shared::getViz()->getFonts(getTheme())->drawFormattedColumn(debugInfo, Shared::getViz()->scale(getUsableX()), Shared::getViz()->scale(getUsableY()), Shared::getViz()->scale(getUsableWidth() - Shared::getViz()->getNonScaledPadding() * 2.0f));
             ofPopStyle();
 
             setContentBoundsScaled(Coord::vizBounds(r.x, r.y, r.width, r.height));
@@ -383,7 +383,7 @@ namespace Aquamarine
             setPosition(
                 ofGetWindowWidth() - scale(getWidth()),
                 ofGetWindowHeight() - scale(getHeight() + 30));
-            defaultStyle = getViz()->getSmallFontStyleMono();
+            defaultStyle = Shared::getViz()->getSmallFontStyleMono();
             setScrollAction(ScrollAction::SCROLL);
             setEnableScrollYPositive(true);
             setEnableScrollYNegative(true);

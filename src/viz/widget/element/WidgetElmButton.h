@@ -75,11 +75,11 @@ namespace Aquamarine
         virtual void update(WidgetContext context) override
         {
 
-            getIsRoundedRectangle() ? vizElm_BUTTON.setRectRounded(getViz()->scale(getX()), getViz()->scale(getY()), getViz()->scale(getWidth()), getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha())) : vizElm_BUTTON.setRectangle(getViz()->scale(getX()), getViz()->scale(getY()), getViz()->scale(getWidth()), getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha()));
+            getIsRoundedRectangle() ? vizElm_BUTTON.setRectRounded(Shared::getViz()->scale(getX()), Shared::getViz()->scale(getY()), Shared::getViz()->scale(getWidth()), Shared::getViz()->scale(getHeight()), scale(5), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha())) : vizElm_BUTTON.setRectangle(Shared::getViz()->scale(getX()), Shared::getViz()->scale(getY()), Shared::getViz()->scale(getWidth()), Shared::getViz()->scale(getHeight()), getTheme().ElementBackgroundColor_withAlpha(getCurrentBackgroundAlpha()));
 
             // titleFont = getLargeFontSizedForDimensions(getUsableWidth() * 0.95f, getUsableHeight() * 0.95f);
 
-            titleRect = getViz()->getFonts(getTheme())->getTextBounds(getTitle(), defaultStyle, 0, 0);
+            titleRect = Shared::getViz()->getFonts(getTheme())->getTextBounds(getTitle(), defaultStyle, 0, 0);
         }
 
         virtual void draw(WidgetContext context) override
@@ -116,7 +116,7 @@ namespace Aquamarine
 
             defaultStyle.color = getTheme().TypographyPrimaryColor_withAlpha(getTheme().ElementHoveredForegroundAlpha);
 
-            getViz()->getFonts(getTheme())->draw(getTitle(), defaultStyle, scale(getX() + (getWidth() / 2.0f)) - titleRect.getWidth() / 2.0f, scale(getY() + (getHeight() / 2.0f)) + titleRect.getHeight() / 2.75f);
+            Shared::getViz()->getFonts(getTheme())->draw(getTitle(), defaultStyle, scale(getX() + (getWidth() / 2.0f)) - titleRect.getWidth() / 2.0f, scale(getY() + (getHeight() / 2.0f)) + titleRect.getHeight() / 2.75f);
 
             // titleFont->draw(getTitle(),
             //                 scale(getX() + (getWidth() / 2.0f)) - titleRect.getWidth() / 2.0f,
@@ -181,7 +181,7 @@ namespace Aquamarine
         void initWidget() override
         {
             setWidth(100);
-            defaultStyle = getViz()->getLargeFontStyleMono();
+            defaultStyle = Shared::getViz()->getLargeFontStyleMono();
         }
     };
 

@@ -108,7 +108,7 @@ namespace Aquamarine
 
         void initWidget() override
         {
-            font = getViz()->getMediumFont();
+            font = Shared::getViz()->getMediumFont();
         }
     };
 }

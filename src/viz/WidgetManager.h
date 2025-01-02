@@ -5,6 +5,9 @@
 
 namespace Aquamarine
 {
+    // Fwd declaration
+    class App;
+
     //------------------------------ UI VIZ WIDGET MANAGER CLASS --------------------------------
     class WidgetManager
     {
@@ -32,11 +35,9 @@ namespace Aquamarine
             ProjectProperties(string projectName, string absolutePath, string path, string fileName) : projectName(projectName), absolutePath(absolutePath), path(path), fileName(fileName) {};
         };
 
-        template <typename T>
-        static Widget *createWidget(string persistentId, string widgetXML);
-        typedef std::map<std::string, Widget *(*)(string persistentId, string widgetXML)> widget_map_type;
-        /* MAP STRING REPRESENTATION <---> ACTUAL CLASS */
-        static void bootstrapWidgetMapDefault();
+
+        static void BOOTSTRAP(App* app);
+        static widget_map_type& getRegisteredWidgets();
 
         static void addWidget(Widget &widget, bool shouldPersist, string ownerWidgetId, bool transmitOsc);
         static void addWidget(Widget &widget, bool shouldPersist, string ownerWidgetId);
@@ -106,9 +107,6 @@ namespace Aquamarine
         static void drawDebugInfo(bool debug);
 
         static std::vector<std::reference_wrapper<Widget>> mWidgets;
-        static widget_map_type getWidgetMap();
-
-        static void bootstrapWidgetMap(widget_map_type map);
         static void showClipboardPopupMenu(int x, int y, string clipboardOperationTargetWidgetId);
         static void hideClipboardPopupMenu();
         static void showModal(Widget *widget, bool center);

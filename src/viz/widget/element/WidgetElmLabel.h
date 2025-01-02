@@ -60,14 +60,14 @@ namespace Aquamarine
 
         virtual void update(WidgetContext context) override
         {
-            labelRect = getViz()->getFonts(getTheme())->getTextBoundsNVG(getValue(), defaultStyle, getViz()->scale(getUsableX()), getViz()->scale(getUsableY()), getViz()->scale(getUsableWidth() - getViz()->getNonScaledPadding() * 2.0f), OF_ALIGN_HORZ_LEFT);
+            labelRect = Shared::getViz()->getFonts(getTheme())->getTextBoundsNVG(getValue(), defaultStyle, Shared::getViz()->scale(getUsableX()), Shared::getViz()->scale(getUsableY()), Shared::getViz()->scale(getUsableWidth() - Shared::getViz()->getNonScaledPadding() * 2.0f), OF_ALIGN_HORZ_LEFT);
 
             setContentBoundsScaled(Coord::vizBounds(labelRect.x, labelRect.y, labelRect.width, labelRect.height));
         }
 
         virtual void draw(WidgetContext context) override
         {
-            ofRectangle r = getViz()->getFonts(getTheme())->drawFormattedColumn(getValue(), getViz()->scale(getUsableX()), getViz()->scale(getUsableY()) + labelRect.height / 2, getViz()->scale(getUsableWidth() - getViz()->getNonScaledPadding() * 2.0f));
+            ofRectangle r = Shared::getViz()->getFonts(getTheme())->drawFormattedColumn(getValue(), Shared::getViz()->scale(getUsableX()), Shared::getViz()->scale(getUsableY()) + labelRect.height / 2, Shared::getViz()->scale(getUsableWidth() - Shared::getViz()->getNonScaledPadding() * 2.0f));
 
             if (getIsMousePressedAndReleasedOverWidget(false))
             {
@@ -97,7 +97,7 @@ namespace Aquamarine
         void initWidget() override
         {
             setWidth(100);
-            defaultStyle = getViz()->getMediumFontStyle();
+            defaultStyle = Shared::getViz()->getMediumFontStyle();
             setScrollAction(ScrollAction::SCROLL);
             setEnableScrollYPositive(true);
             setEnableScrollYNegative(true);

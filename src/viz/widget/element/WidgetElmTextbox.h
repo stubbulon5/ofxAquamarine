@@ -258,7 +258,7 @@ namespace Aquamarine
             ofPushStyle();
      */
 
-            ofRectangle r = getViz()->getFonts(getTheme())->drawColumn(getTextOrTitle(), defaultStyle, scale(getUsableX()), scale(getUsableY()), scale(getUsableWidth() - getNonScaledPadding() * 2.0f), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
+            ofRectangle r = Shared::getViz()->getFonts(getTheme())->drawColumn(getTextOrTitle(), defaultStyle, scale(getUsableX()), scale(getUsableY()), scale(getUsableWidth() - getNonScaledPadding() * 2.0f), ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
             ofPopStyle();
 
             /*
@@ -397,11 +397,11 @@ namespace Aquamarine
 
             float columnWidth = scale(getUsableWidth() - getNonScaledPadding() * 2.0f);
             vector<ofxFontStash2::StyledText> parsed;
-            getViz()->getFonts(getTheme())->parseStyledText(getTextOrTitle(), parsed);
+            Shared::getViz()->getFonts(getTheme())->parseStyledText(getTextOrTitle(), parsed);
             vector<ofxFontStash2::StyledLine> laidOutLines;
 
             // plain
-            getViz()->getFonts(getTheme())->layoutLines({{getTextOrTitle(), defaultStyle}}, columnWidth, laidOutLines);
+            Shared::getViz()->getFonts(getTheme())->layoutLines({{getTextOrTitle(), defaultStyle}}, columnWidth, laidOutLines);
 
             // formatted
             // getFonts(getTheme())->layoutLines(parsed, columnWidth, laidOutLines);
@@ -464,9 +464,9 @@ namespace Aquamarine
             float columnWidth = scale(getUsableWidth() - getNonScaledPadding() * 2.0f);
 
             // plain
-            getViz()->getFonts(getTheme())->layoutLines({{getTextOrTitle(), defaultStyle}}, columnWidth, laidOutLines);
+            Shared::getViz()->getFonts(getTheme())->layoutLines({{getTextOrTitle(), defaultStyle}}, columnWidth, laidOutLines);
             // Draw offscreen during update...
-            ofRectangle bbox = getViz()->getFonts(getTheme())->drawLines(laidOutLines, 0 - scale(getUsableX() + columnWidth * 2), scale(getUsableY()));
+            ofRectangle bbox = Shared::getViz()->getFonts(getTheme())->drawLines(laidOutLines, 0 - scale(getUsableX() + columnWidth * 2), scale(getUsableY()));
 
             setContentBoundsScaled(Coord::vizBounds(getContentBoundsScaled().x,
                                                          getContentBoundsScaled().y,
@@ -482,8 +482,8 @@ namespace Aquamarine
             float columnWidth = scale(getUsableWidth() - getNonScaledPadding() * 2.0f);
 
             // plain
-            getViz()->getFonts(getTheme())->layoutLines({{getTextOrTitle(), defaultStyle}}, columnWidth, laidOutLines);
-            ofRectangle bbox = getViz()->getFonts(getTheme())->drawLines(laidOutLines, 0 - scale(getUsableX() + columnWidth * 2), scale(getUsableY()));
+            Shared::getViz()->getFonts(getTheme())->layoutLines({{getTextOrTitle(), defaultStyle}}, columnWidth, laidOutLines);
+            ofRectangle bbox = Shared::getViz()->getFonts(getTheme())->drawLines(laidOutLines, 0 - scale(getUsableX() + columnWidth * 2), scale(getUsableY()));
 
             setContentBoundsScaled(Coord::vizBounds(getContentBoundsScaled().x,
                                                          getContentBoundsScaled().y,
@@ -560,9 +560,9 @@ namespace Aquamarine
             vector<ofxFontStash2::StyledLine> laidOutLines;
 
             // plain
-            getViz()->getFonts(getTheme())->layoutLines({{textRange, defaultStyle}}, columnWidth, laidOutLines);
-            ofRectangle bbox = getViz()->getFonts(getTheme())->drawLines(laidOutLines, 0 - scale(getUsableX() + columnWidth * 2), scale(getUsableY()));
-            ofRectangle singleChar = getViz()->getFonts(getTheme())->drawColumn("#", defaultStyle, -100, -100, 1000, ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
+            Shared::getViz()->getFonts(getTheme())->layoutLines({{textRange, defaultStyle}}, columnWidth, laidOutLines);
+            ofRectangle bbox = Shared::getViz()->getFonts(getTheme())->drawLines(laidOutLines, 0 - scale(getUsableX() + columnWidth * 2), scale(getUsableY()));
+            ofRectangle singleChar = Shared::getViz()->getFonts(getTheme())->drawColumn("#", defaultStyle, -100, -100, 1000, ofAlignHorz::OF_ALIGN_HORZ_LEFT, false);
             mSingleCharWidth = singleChar.width;
             // formatted
             /*
@@ -757,7 +757,7 @@ namespace Aquamarine
 
             setWidth(100);
             setHeight(30);
-            defaultStyle = getViz()->getMediumFontStyleMono();
+            defaultStyle = Shared::getViz()->getMediumFontStyleMono();
             setScrollAction(ScrollAction::SCROLL);
             setEnableScrollYPositive(true);
             setEnableScrollYNegative(true);

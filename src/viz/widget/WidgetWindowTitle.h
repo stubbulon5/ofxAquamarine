@@ -24,10 +24,10 @@ namespace Aquamarine
                 if (!mIsDragging)
                 {
                     mIsDragging = true;
-                    getViz()->setIsAnyWidgetDraggingOrResizing(true);
+                    Shared::getViz()->setIsAnyWidgetDraggingOrResizing(true);
                     mDraggingStartedX = deScale(ofGetMouseX()) - ofGetMainLoop()->getCurrentWindow()->getWindowPosition().x;
                     mDraggingStartedY = deScale(ofGetMouseY()) - ofGetMainLoop()->getCurrentWindow()->getWindowPosition().y;
-                    getViz()->boostUserExperience(true);
+                    Shared::getViz()->boostUserExperience(true);
                 }
 
                 float newX = deScale(ofGetMouseX()) - mDraggingStartedX;
@@ -53,8 +53,8 @@ namespace Aquamarine
         virtual void onMouseReleased(ofMouseEventArgs &e)
         {
             mIsDragging = false;
-            getViz()->setIsAnyWidgetDraggingOrResizing(false);
-            getViz()->revertBoostUserExperience();
+            Shared::getViz()->setIsAnyWidgetDraggingOrResizing(false);
+            Shared::getViz()->revertBoostUserExperience();
         }
 
     private:

@@ -69,7 +69,7 @@ namespace Aquamarine
             if (args.eventName == WIDGET_EVENT::CLICK && (ofIsStringInString(ofToUpper(args.widgetId), "BTN_")))
             {
                 mDialogCallback(args);
-                string priorModalWidgetId = getViz()->getPriorModalWidgetId();
+                string priorModalWidgetId = Shared::getViz()->getPriorModalWidgetId();
                 clearIfModal();
                 if (priorModalWidgetId != "" && priorModalWidgetId != getWidgetId())
                 { // and not same

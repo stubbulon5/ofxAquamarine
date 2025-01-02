@@ -16,6 +16,15 @@ namespace Aquamarine
 
 #pragma once
 
+
+//------------------------------ FORWARD DECLARATIONS  --------------------------------
+class WidgetBase;
+class Widget;
+
+// Instantiate widget type
+typedef map<string, Widget *(*)(string persistentId, string widgetXML)> widget_map_type;
+
+
 #define MIN_WIDTH_8K 7680
 #define MIN_HEIGHT_8K 4320
 

@@ -309,7 +309,7 @@ namespace Aquamarine
             // Make sure every event listened to is removed in destructor!
             // NOTE ON VIRTUAL DESTRUCTOR : For this exampe: Base *myObj = new Derived(); delete myObj; If your derived class destructor is NOT virtual then
             // only base class object will get deleted (because pointer is of base class "Base *myObj"). So there will be memory leak for derived object.
-            ofRemoveListener(getViz()->scaleChanged, this, &WidgetBase::onCoreWidgetScaleChanged);
+            ofRemoveListener(Shared::getViz()->scaleChanged, this, &WidgetBase::onCoreWidgetScaleChanged);
             ofRemoveListener(ofEvents().windowResized, this, &WidgetBase::onCoreWidgetWindowResized);
             ofRemoveListener(ofEvents().mouseMoved, this, &WidgetBase::onCoreWidgetMouseMoved);
             ofRemoveListener(ofEvents().mousePressed, this, &WidgetBase::onCoreWidgetMousePressed);
@@ -328,7 +328,7 @@ namespace Aquamarine
             ofRemoveListener(widgetEventReceived, this, &WidgetBase::onCoreWidgetEventReceived);
             ofRemoveListener(widgetResized, this, &WidgetBase::onCoreWidgetResized);
 
-            getViz()->removeListeningEvents(getPersistentId());
+            Shared::getViz()->removeListeningEvents(getPersistentId());
 
 #if VIZ_DEBUG_LEVEL >= 2 && VIZ_DEBUG_LEVEL < 3
             cout << "[" << getPersistentId() << "]~WidgetBase()\n";
@@ -371,7 +371,7 @@ namespace Aquamarine
             mShouldDeleteThisWidget = true;
             if (getShowingAsPopout())
             {
-                getViz()->setIsPopoutVisible(getWidgetId(), false);
+                Shared::getViz()->setIsPopoutVisible(getWidgetId(), false);
             }
             clearActiveWidgetId();
         }
@@ -429,9 +429,9 @@ namespace Aquamarine
             if (val != mIsEnabled)
             {
 
-                WidgetTheme theme = getViz()->getThemeManager()->getThemeByName(getTheme().Name);
+                WidgetTheme theme = Shared::getViz()->getThemeManager()->getThemeByName(getTheme().Name);
                 if (!val)
-                    theme = getViz()->getThemeManager()->getLessOpacity(theme, true, 0.85f);
+                    theme = Shared::getViz()->getThemeManager()->getLessOpacity(theme, true, 0.85f);
                 setTheme(theme);
                 setNeedsUpdate(true);
                 setWidgetNeedsUpdate(true);
@@ -449,8 +449,8 @@ namespace Aquamarine
             mWasJustInitialized = val;
             if (val)
             {
-                initWidgetScale(getViz()->getUserScale());
-                onWidgetScaleChanged(getViz()->getUserScale());
+                initWidgetScale(Shared::getViz()->getUserScale());
+                onWidgetScaleChanged(Shared::getViz()->getUserScale());
                 setExpressionRecalculationRequired(true);
                 onWidgetWasJustInitialized();
             }
@@ -644,7 +644,7 @@ namespace Aquamarine
         {
             WidgetTheme theme = WidgetTheme();
             if (obj && obj->parent())
-                theme = getViz()->getThemeManager()->getThemeForPopout();
+                theme = Shared::getViz()->getThemeManager()->getThemeForPopout();
             popoutFrom(obj, popoutDirection, ignoreTheme ? WidgetTheme() : theme);
         }
 
@@ -773,8 +773,8 @@ namespace Aquamarine
             setShouldPersist(mWidgetXML.getAttribute(parentTag, "shouldPersist", false));
             setIsSystemWidget(mWidgetXML.getAttribute(parentTag, "isSystemWidget", false));
             setIsVisualDebugMode(mWidgetXML.getAttribute(parentTag, "visualDebugMode", false));
-            string defaultThemeName = getViz()->getThemeManager()->getDefaultTheme().Name;
-            setTheme(getViz()->getThemeManager()->getThemeByName((userThemeName != "" ? userThemeName : defaultThemeName), getIsSystemWidget()));
+            string defaultThemeName = Shared::getViz()->getThemeManager()->getDefaultTheme().Name;
+            setTheme(Shared::getViz()->getThemeManager()->getThemeByName((userThemeName != "" ? userThemeName : defaultThemeName), getIsSystemWidget()));
             WidgetTheme theme = getTheme();
             setIgnoreThemeChanges(userThemeName != "" ? true : false);
 
@@ -818,7 +818,7 @@ namespace Aquamarine
             {
                 for (int i = 0; i < mWidgetXML.getNumTags("event"); i++)
                 {
-                    getViz()->addToWidgetEventListenMap(
+                    Shared::getViz()->addToWidgetEventListenMap(
                         getPersistentId(),
                         mWidgetXML.getAttribute("event", "source", "", i),
                         mWidgetXML.getAttribute("event", "eventName", "", i),
@@ -1007,7 +1007,7 @@ namespace Aquamarine
                 }
 
                 // Listen events
-                vector<Viz::WidgetEvent> listeningEvents = getViz()->getListeningEvents(getPersistentId());
+                vector<Viz::WidgetEvent> listeningEvents = Shared::getViz()->getListeningEvents(getPersistentId());
                 if (listeningEvents.size() > 0)
                 {
                     mWidgetXML.addTag("listenEvents");
@@ -1070,8 +1070,8 @@ namespace Aquamarine
 
         bool eventListenersExistForThisWidget(string eventName)
         {
-            // return getTransmitOscMessages() || getViz()->doesWidgetHaveListeners(getPersistentId(), eventName);
-            return getViz()->doesWidgetHaveListeners(getPersistentId(), eventName);
+            // return getTransmitOscMessages() || Shared::getViz()->doesWidgetHaveListeners(getPersistentId(), eventName);
+            return Shared::getViz()->doesWidgetHaveListeners(getPersistentId(), eventName);
         }
 
         void eventTransmit(string eventSenderId, string eventName, string eventXML, WidgetBase &sender, WidgetBase *target, bool dispatchToLocalListeners)
@@ -1087,7 +1087,7 @@ namespace Aquamarine
             ofNotifyEvent(widgetEventReceived, args);
             onWidgetEventReceived(args);
 
-            target ? getViz()->addToEventTransmitQueue("/widget/event_transmit", "widget", eventSenderId, target->getPersistentId(), eventName, eventXML, getTransmitOscMessages(), dispatchToLocalListeners) : getViz()->addToEventTransmitQueue("/widget/event_transmit", "widget", eventSenderId, "", eventName, eventXML, getTransmitOscMessages(), dispatchToLocalListeners);
+            target ? Shared::getViz()->addToEventTransmitQueue("/widget/event_transmit", "widget", eventSenderId, target->getPersistentId(), eventName, eventXML, getTransmitOscMessages(), dispatchToLocalListeners) : Shared::getViz()->addToEventTransmitQueue("/widget/event_transmit", "widget", eventSenderId, "", eventName, eventXML, getTransmitOscMessages(), dispatchToLocalListeners);
         }
 
         void eventTransmit(string eventSenderId, string eventName, string eventXML, WidgetBase &sender, WidgetBase *target)
@@ -1104,7 +1104,7 @@ namespace Aquamarine
         {
             if (!eventListenersExistForThisWidget(eventName))
                 return;
-            getViz()->addToEventTransmitQueue(
+            Shared::getViz()->addToEventTransmitQueue(
                 "/widget/event_transmit", "widget", getPersistentId(), "", eventName, eventXML, getTransmitOscMessages(), true);
         }
 
@@ -1120,22 +1120,22 @@ namespace Aquamarine
 
         shared_ptr<ofxSmartFont> getSmallFontSizedForDimensions(int width, int height)
         {
-            return getViz()->getSmallFontSizedForDimensions(width, height);
+            return Shared::getViz()->getSmallFontSizedForDimensions(width, height);
         }
 
         shared_ptr<ofxSmartFont> getMediumFontSizedForDimensions(int width, int height)
         {
-            return getViz()->getMediumFontSizedForDimensions(width, height);
+            return Shared::getViz()->getMediumFontSizedForDimensions(width, height);
         }
 
         shared_ptr<ofxSmartFont> getFontSizedForDimensions(int width, int height)
         {
-            return getViz()->getFontSizedForDimensions(width, height);
+            return Shared::getViz()->getFontSizedForDimensions(width, height);
         }
 
         shared_ptr<ofxSmartFont> getLargeFontSizedForDimensions(int width, int height)
         {
-            return getViz()->getLargeFontSizedForDimensions(width, height);
+            return Shared::getViz()->getLargeFontSizedForDimensions(width, height);
         }
 
         virtual void setNeedsUpdate(bool needsUpdate)
@@ -1597,11 +1597,11 @@ namespace Aquamarine
             mShouldCloseThisWidget = false;
             if (getShowingAsPopout())
             {
-                getViz()->setIsPopoutVisible(getWidgetId(), value);
+                Shared::getViz()->setIsPopoutVisible(getWidgetId(), value);
                 if (!value)
                 {
                     // Restore the previously active widget
-                    getViz()->setActiveWidgetId(getViz()->getNextInLineForFocusWidgetId());
+                    Shared::getViz()->setActiveWidgetId(Shared::getViz()->getNextInLineForFocusWidgetId());
                 }
             }
 
@@ -2081,12 +2081,12 @@ namespace Aquamarine
 
         string getActiveWidgetId()
         {
-            return getViz()->getActiveWidgetId();
+            return Shared::getViz()->getActiveWidgetId();
         }
 
         bool getIsActiveWidget()
         {
-            return getViz()->isActiveWidgetId(getWidgetId());
+            return Shared::getViz()->isActiveWidgetId(getWidgetId());
         }
 
         bool getIsChildOfModal()
@@ -2108,17 +2108,17 @@ namespace Aquamarine
                 w = w->parent();
             }
 
-            if (getViz()->getModalWidgetId() != "" && !getViz()->getIsPopoutVisible())
+            if (Shared::getViz()->getModalWidgetId() != "" && !Shared::getViz()->getIsPopoutVisible())
             { // Only enforce modal logic if Context menu not visible!
                 if (!getIsChildOfModal())
                     return;
             }
-            getViz()->setActiveWidgetId(getWidgetId());
+            Shared::getViz()->setActiveWidgetId(getWidgetId());
 
             WidgetBase *r = root();
             if (r)
             {
-                getViz()->setTopmostActiveRootWidgetId(r->getWidgetId());
+                Shared::getViz()->setTopmostActiveRootWidgetId(r->getWidgetId());
             }
         }
 
@@ -2129,12 +2129,12 @@ namespace Aquamarine
                 ofRemoveListener for ALL corresponding ofAddListener in ther destructors!
             */
 
-            getViz()->clearActiveWidgetId();
+            Shared::getViz()->clearActiveWidgetId();
         }
 
         bool getIsModalWidget()
         {
-            return getViz()->isModalWidgetId(getWidgetId());
+            return Shared::getViz()->isModalWidgetId(getWidgetId());
         }
 
         void clearIfModal()
@@ -2148,13 +2148,13 @@ namespace Aquamarine
         void setModalWidget()
         {
             setActiveWidget();
-            getViz()->setModalWidgetId(getWidgetId());
+            Shared::getViz()->setModalWidgetId(getWidgetId());
         }
 
         void clearModalWidgetId()
         {
             clearActiveWidgetId();
-            getViz()->clearModalWidgetId();
+            Shared::getViz()->clearModalWidgetId();
         }
 
         bool getIsRootWidget()
@@ -2171,7 +2171,7 @@ namespace Aquamarine
         {
             mIsNextInLineForFocus = val;
             if (val)
-                getViz()->setNextInLineForFocusWidgetId(getWidgetId());
+                Shared::getViz()->setNextInLineForFocusWidgetId(getWidgetId());
         }
 
         //! Override if extending WidgetBase for returning the index of a child element
@@ -2188,57 +2188,57 @@ namespace Aquamarine
 
         string getTargetDropWidgetId()
         {
-            return getViz()->getTargetDropWidgetId();
+            return Shared::getViz()->getTargetDropWidgetId();
         }
 
         void setTargetDropWidgetId()
         {
-            getViz()->setTargetDropWidgetId(getWidgetId());
+            Shared::getViz()->setTargetDropWidgetId(getWidgetId());
         }
 
         void clearTargetDropWidgetId()
         {
-            getViz()->clearTargetDropWidgetId();
+            Shared::getViz()->clearTargetDropWidgetId();
         }
 
         int getUserExperience()
         {
-            return getViz()->getUserExperience();
+            return Shared::getViz()->getUserExperience();
         }
 
         float scale(float val)
         {
-            return getViz()->scale(val);
+            return Shared::getViz()->scale(val);
         }
 
         float deScale(float val)
         {
-            return getViz()->deScale(val);
+            return Shared::getViz()->deScale(val);
         }
 
         float scaleAnimation(string animationName, float currVal, float targetVal, float secondsDuration)
         {
-            return getViz()->scaleAnimation(getWidgetId(), getPersistentId() + "_" + animationName, currVal, targetVal, secondsDuration);
+            return Shared::getViz()->scaleAnimation(getWidgetId(), getPersistentId() + "_" + animationName, currVal, targetVal, secondsDuration);
         }
 
         float scaleAnimationForUI(string animationName, float currVal, float targetVal, float secondsDuration)
         {
-            return getViz()->scaleAnimationForUI(getWidgetId(), getPersistentId() + "_" + animationName, currVal, targetVal, secondsDuration);
+            return Shared::getViz()->scaleAnimationForUI(getWidgetId(), getPersistentId() + "_" + animationName, currVal, targetVal, secondsDuration);
         }
 
         void removeAnimation(string animationName)
         {
-            getViz()->removeAnimation(getPersistentId() + "_" + animationName);
+            Shared::getViz()->removeAnimation(getPersistentId() + "_" + animationName);
         }
 
         int getNonScaledPadding()
         {
-            return getViz()->getNonScaledPadding();
+            return Shared::getViz()->getNonScaledPadding();
         }
 
         int getScaledPadding()
         {
-            return getViz()->getScaledPadding();
+            return Shared::getViz()->getScaledPadding();
         }
 
         bool isDraggingContent()
@@ -2553,7 +2553,7 @@ namespace Aquamarine
                 // Restore values back what they were before drag operation
                 setIsDraggable(mTempIsDraggable);
                 setIsResizable(mTempIsResizable);
-                getViz()->setIsAnyWidgetDraggingOrResizing(false);
+                Shared::getViz()->setIsAnyWidgetDraggingOrResizing(false);
                 setIsDragging(false);
 
                 if (!mIsWindowHovered)
@@ -2975,7 +2975,7 @@ namespace Aquamarine
                         // Prevent the widget chrome from resizing/dragging when we're dragging content outside of it's bounds
                         mIsDraggable = false;
                         mIsResizable = false;
-                        getViz()->setIsAnyWidgetDraggingOrResizing(true);
+                        Shared::getViz()->setIsAnyWidgetDraggingOrResizing(true);
                         setIsDragging(true);
                         setRespondedToFirstMouseReleasedEvent(true);
                         mIsDraggingContent = true;
@@ -3078,11 +3078,11 @@ namespace Aquamarine
             // Implement any behaviour in derrived class which should handle key pressed
         }
 
-        shared_ptr<Viz> getViz()
-        {
-            // ofLogNotice("ofxAquamarine") << "[" << getPersistentId() << "] getViz()";
-            return viz;
-        }
+        // shared_ptr<Viz> getViz()
+        // {
+        //     // ofLogNotice("ofxAquamarine") << "[" << getPersistentId() << "] getViz()";
+        //     return viz;
+        // }
 
         int getZindex()
         {
@@ -3387,11 +3387,11 @@ namespace Aquamarine
             WidgetBase *w = parent();
             while (w)
             {
-                if (w->getWidgetId() == getViz()->getModalWidgetId())
+                if (w->getWidgetId() == Shared::getViz()->getModalWidgetId())
                     return true;
                 w = w->parent();
             }
-            return getWidgetId() == getViz()->getModalWidgetId();
+            return getWidgetId() == Shared::getViz()->getModalWidgetId();
         }
 
         ofxExternalDrop externalDrop;
@@ -3399,8 +3399,8 @@ namespace Aquamarine
 
         void init()
         {
-            viz = Shared::getViz();
-            ofAddListener(getViz()->scaleChanged, this, &WidgetBase::onCoreWidgetScaleChanged);
+            // viz = Shared::getViz();
+            ofAddListener(Shared::getViz()->scaleChanged, this, &WidgetBase::onCoreWidgetScaleChanged);
             ofAddListener(ofEvents().windowResized, this, &WidgetBase::onCoreWidgetWindowResized);
             ofAddListener(ofEvents().mouseMoved, this, &WidgetBase::onCoreWidgetMouseMoved);
             ofAddListener(ofEvents().mousePressed, this, &WidgetBase::onCoreWidgetMousePressed);
@@ -3536,7 +3536,7 @@ namespace Aquamarine
         bool mRespondedToFirstMouseReleasedEvent = false;
         bool mMousePressWasRegisteredWhenCheckingForReleased = false;
 
-        shared_ptr<Viz> viz;
+        // shared_ptr<Viz> viz;
         int mZIndex = 0;
         bool mIsNextInLineForFocus = true;
         bool mIsDraggingContent = false;
@@ -3939,7 +3939,7 @@ namespace Aquamarine
                 setTargetDropWidgetId();
             }
 
-            if ((hovered) && !getIsDragging() && !getIsResizing() && !getViz()->getIsAnyWidgetDraggingOrResizing())
+            if ((hovered) && !getIsDragging() && !getIsResizing() && !Shared::getViz()->getIsAnyWidgetDraggingOrResizing())
             {
                 if (hovered)
                 {
@@ -3964,7 +3964,7 @@ namespace Aquamarine
 
                 } // getValue() setValue(), settings and send feedback (widget with a menu on the left)
             }
-            else if (!getViz()->getIsAnyWidgetDraggingOrResizing() && getIsActiveWidget())
+            else if (!Shared::getViz()->getIsAnyWidgetDraggingOrResizing() && getIsActiveWidget())
             {
                 clearTargetDropWidgetId();
 
@@ -4092,8 +4092,8 @@ namespace Aquamarine
             ofPushStyle();
             ofSetColor(getTheme().IsDark ? ofColor::black : ofColor::white);
             titleFont->draw(ofToString(elmIndex) + ":" + getPersistentId(),
-                            getViz()->scale(getX() + (getWidth() / 2.0f)) - errRect.getRectangle().width / 2.0f,
-                            getViz()->scale(getY() + (getHeight() / 2.0f)) + errRect.getRectangle().height / 2.0f);
+                            Shared::getViz()->scale(getX() + (getWidth() / 2.0f)) - errRect.getRectangle().width / 2.0f,
+                            Shared::getViz()->scale(getY() + (getHeight() / 2.0f)) + errRect.getRectangle().height / 2.0f);
             ofPopStyle();
         }
 
@@ -4267,7 +4267,7 @@ namespace Aquamarine
 
         void init()
         {
-            titleFont = (getViz()->getScale() < 1) ? getViz()->getSmallFont() : getViz()->getMediumFont();
+            titleFont = (Shared::getViz()->getScale() < 1) ? Shared::getViz()->getSmallFont() : Shared::getViz()->getMediumFont();
             WidgetBase::setWidth(35);
             WidgetBase::setHeight(30);
             setIsResizing(false);
@@ -4883,8 +4883,8 @@ namespace Aquamarine
                 ofStringReplace(exprStr, "${" + thisPersistentId + ".USABLE_WIDTH}", ofToString(w->getUsableWidth()));
                 ofStringReplace(exprStr, "${" + thisPersistentId + ".USABLE_HEIGHT}", ofToString(w->getUsableHeight()));
 
-                ofStringReplace(exprStr, "${WINDOW.WIDTH}", ofToString(w->getViz()->deScale(ofGetWindowWidth()) - w->getScreenPadding()));
-                ofStringReplace(exprStr, "${WINDOW.HEIGHT}", ofToString(w->getViz()->deScale(ofGetWindowHeight()) - w->getScreenPadding()));
+                ofStringReplace(exprStr, "${WINDOW.WIDTH}", ofToString(Shared::getViz()->deScale(ofGetWindowWidth()) - w->getScreenPadding()));
+                ofStringReplace(exprStr, "${WINDOW.HEIGHT}", ofToString(Shared::getViz()->deScale(ofGetWindowHeight()) - w->getScreenPadding()));
                 ofStringReplace(exprStr, "${PADDING}", ofToString(w->getNonScaledPadding()));
 
                 // This is for sibling widgets referencing each other
@@ -5931,7 +5931,7 @@ namespace Aquamarine
                 setTargetDropWidgetId();
             }
 
-            if (hovered && !getIsDragging() && !getIsResizing() && !getViz()->getIsAnyWidgetDraggingOrResizing())
+            if (hovered && !getIsDragging() && !getIsResizing() && !Shared::getViz()->getIsAnyWidgetDraggingOrResizing())
             {
                 setUpdatedSinceUnhovered(false);
                 ofNotifyEvent(widgetHovered, args);
@@ -5953,7 +5953,7 @@ namespace Aquamarine
 
                 WidgetBase *r = root();
 
-                if ((isTopLevel() || getActiveWidgetId() == "") || (r && getViz()->getTopmostActiveRootWidgetId() == r->getWidgetId()))
+                if ((isTopLevel() || getActiveWidgetId() == "") || (r && Shared::getViz()->getTopmostActiveRootWidgetId() == r->getWidgetId()))
                 {
                     if (!getIsActiveWidget() && getIsNextInLineForFocus())
                     {
@@ -5978,7 +5978,7 @@ namespace Aquamarine
                         {
                             if (childWidget.isWidgetHovered())
                             {
-                                getViz()->setActiveChildWidgetId(childWidget.getWidgetId());
+                                Shared::getViz()->setActiveChildWidgetId(childWidget.getWidgetId());
                                 childWidget.setUpdatedSinceUnhovered(false);
                             }
                             else
@@ -5998,7 +5998,7 @@ namespace Aquamarine
                         ofNotifyEvent(widgetClicked, args);
                 }
             }
-            else if (!getViz()->getIsAnyWidgetDraggingOrResizing() && getIsActiveWidget())
+            else if (!Shared::getViz()->getIsAnyWidgetDraggingOrResizing() && getIsActiveWidget())
             {
                 clearTargetDropWidgetId();
 
@@ -6211,8 +6211,8 @@ namespace Aquamarine
             if (contextMenuWidget != nullptr)
             {
                 contextMenuWidget->setPopoutWidgetDirection(PopoutDirection::NONE);
-                // contextMenuWidget->setTheme(getViz()->getThemeManager()->getContrastingSystemTheme(getTheme(), true));
-                contextMenuWidget->setTheme(getViz()->getThemeManager()->getThemeForPopout());
+                // contextMenuWidget->setTheme(Shared::getViz()->getThemeManager()->getContrastingSystemTheme(getTheme(), true));
+                contextMenuWidget->setTheme(Shared::getViz()->getThemeManager()->getThemeForPopout());
 
                 contextMenuWidget->setWidgetPosition(x, y, false);
                 contextMenuWidget->setShowingAsPopout(true);
@@ -7304,11 +7304,11 @@ namespace Aquamarine
 
             setIsDragging(false);
             setIsResizing(false);
-            if (getViz()->getIsAnyWidgetDraggingOrResizing())
+            if (Shared::getViz()->getIsAnyWidgetDraggingOrResizing())
             {
-                getViz()->revertBoostUserExperience();
+                Shared::getViz()->revertBoostUserExperience();
             }
-            getViz()->setIsAnyWidgetDraggingOrResizing(false);
+            Shared::getViz()->setIsAnyWidgetDraggingOrResizing(false);
         }
 
         virtual void onCoreWidgetMouseDragged(ofMouseEventArgs &e) override
@@ -7358,6 +7358,7 @@ namespace Aquamarine
         }
 
     private:
+
         WidgetContext context;
         bool mIsWidgetPinned = false;
         bool mShowWidgetPin = false;
@@ -7422,14 +7423,14 @@ namespace Aquamarine
             mMinimizedWidth = getWidth() * 0.25f;
             mMinimizedHeight = getHeight() * 0.25f;
 
-            getViz()->addWidgetId(getWidgetId());
+            Shared::getViz()->addWidgetId(getWidgetId());
             scaleUITitleSize();
             setWasJustInitialized(true);
             mUICurrentWidgetAlpha = 0.0f; // Let it fade in on inital draw
 
-            setUseFbo(getViz()->getUseFbo());
+            setUseFbo(Shared::getViz()->getUseFbo());
 
-            if (getViz()->getUseFbo())
+            if (Shared::getViz()->getUseFbo())
             {
                 //  allocateFbo(true); // disabled since it may not even be visible yet!
             }
@@ -7443,7 +7444,7 @@ namespace Aquamarine
             widgetResizeBottom.setRectangle(scale(getWidgetStateX()), scale(getWidgetStateY() + getWidgetStateHeight() - getNonScaledPadding()), scale(getWidgetStateWidth()), getScaledPadding());
             widgetResizeLeft.setRectangle(scale(getWidgetStateX()), scale(getWidgetStateY()), getScaledPadding(), scale(getWidgetStateHeight()));
             widgetResizeRight.setRectangle(scale(getWidgetStateX() + getWidgetStateWidth() - getNonScaledPadding()), scale(getWidgetStateY()), getScaledPadding(), scale(getWidgetStateHeight()));
-            titleFont = (getViz()->getScale() < 1) ? getViz()->getSmallFont() : getViz()->getMediumFont();
+            titleFont = (Shared::getViz()->getScale() < 1) ? Shared::getViz()->getSmallFont() : Shared::getViz()->getMediumFont();
             ofRectangle rectTitleFontAreaOf = titleFont->rect(getTitle() + "Xy"); // (concat an upper case and a descender letter)
             rectTitleFontArea.setRectangle(rectTitleFontAreaOf.getX(), rectTitleFontAreaOf.getY(), rectTitleFontAreaOf.getWidth(), rectTitleFontAreaOf.getHeight());
             updateWidgetUIPathElm();
@@ -7608,7 +7609,7 @@ namespace Aquamarine
                         iconY = (widgetTitle.getRectangle().y) + scale(getCoreUsableHeight()) + ((icons[i].getScaledBounds().height * 1.5f * i) * -1) - getScaledPadding() * 2;
                     }
 
-                    if (getIsActiveWidget() && !getViz()->getIsAnyWidgetDraggingOrResizing())
+                    if (getIsActiveWidget() && !Shared::getViz()->getIsAnyWidgetDraggingOrResizing())
                     {
                         icons[i].setScaledPos(iconX, iconY);
                         icons[i].setColor(getTheme().TitleFontColor_withAlpha(0.5f));
@@ -7771,7 +7772,7 @@ namespace Aquamarine
                 {
                     if (!mIsTitleResizing)
                     {
-                        getViz()->boostUserExperience(false);
+                        Shared::getViz()->boostUserExperience(false);
                     }
                     mIsTitleResizing = true;
 
@@ -7790,9 +7791,9 @@ namespace Aquamarine
                 }
                 else
                 {
-                    if (mIsTitleResizing && (!getViz()->getIsAnyWidgetDraggingOrResizing()))
+                    if (mIsTitleResizing && (!Shared::getViz()->getIsAnyWidgetDraggingOrResizing()))
                     {
-                        getViz()->revertBoostUserExperience();
+                        Shared::getViz()->revertBoostUserExperience();
                     }
                     setNeedsUpdate(true);
                     mIsTitleResizing = false;
@@ -7804,7 +7805,7 @@ namespace Aquamarine
                 {
                     if (!mIsTitleResizing)
                     {
-                        getViz()->boostUserExperience(false);
+                        Shared::getViz()->boostUserExperience(false);
                     }
                     mIsTitleResizing = true;
 
@@ -7827,9 +7828,9 @@ namespace Aquamarine
                 }
                 else
                 {
-                    if (mIsTitleResizing && (!getViz()->getIsAnyWidgetDraggingOrResizing()))
+                    if (mIsTitleResizing && (!Shared::getViz()->getIsAnyWidgetDraggingOrResizing()))
                     {
-                        getViz()->revertBoostUserExperience();
+                        Shared::getViz()->revertBoostUserExperience();
                     }
                     mIsTitleResizing = false;
                 }
@@ -7865,8 +7866,8 @@ namespace Aquamarine
                     }
 
                     setIsDragging(true);
-                    getViz()->setIsAnyWidgetDraggingOrResizing(true);
-                    getViz()->boostUserExperience(true);
+                    Shared::getViz()->setIsAnyWidgetDraggingOrResizing(true);
+                    Shared::getViz()->boostUserExperience(true);
                     mDraggingStartedX = deScale(ofGetMouseX()) - getWidgetStateX();
                     mDraggingStartedY = deScale(ofGetMouseY()) - getWidgetStateY();
                     update(WidgetContext());
@@ -7901,13 +7902,13 @@ namespace Aquamarine
                 setIsDragging(false);
                 mDraggingStartedXOriginal = -1;
                 mDraggingStartedYOriginal = -1;
-                if (!getViz()->getIsAnyWidgetDraggingOrResizing())
+                if (!Shared::getViz()->getIsAnyWidgetDraggingOrResizing())
                 {
-                    getViz()->revertBoostUserExperience();
+                    Shared::getViz()->revertBoostUserExperience();
                 }
             }
 
-            getViz()->setIsAnyWidgetDraggingOrResizing(getIsDragging());
+            Shared::getViz()->setIsAnyWidgetDraggingOrResizing(getIsDragging());
         }
 
         void handleResize()
@@ -7937,7 +7938,7 @@ namespace Aquamarine
                     setIsResizing(true);
                     mMustNotifyAfterUserResizingEndedTimeout = ofGetSystemTimeMillis() + 500;
 
-                    getViz()->boostUserExperience(true);
+                    Shared::getViz()->boostUserExperience(true);
                     mDraggingStartedX = deScale(ofGetMouseX()) - getWidgetStateX();
                     mDraggingStartedY = deScale(ofGetMouseY()) - getWidgetStateY();
                     mResizingStartedX = deScale(ofGetMouseX()) - getWidgetStateWidth();
@@ -7989,13 +7990,13 @@ namespace Aquamarine
                 setIsResizing(false);
                 mIsResizingLeft = false;
 
-                if (!getViz()->getIsAnyWidgetDraggingOrResizing())
+                if (!Shared::getViz()->getIsAnyWidgetDraggingOrResizing())
                 {
-                    getViz()->revertBoostUserExperience();
+                    Shared::getViz()->revertBoostUserExperience();
                 }
             }
 
-            getViz()->setIsAnyWidgetDraggingOrResizing(getIsResizing());
+            Shared::getViz()->setIsAnyWidgetDraggingOrResizing(getIsResizing());
         }
 
         void updateWidgetTitlePathElm()
