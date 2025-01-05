@@ -1,6 +1,8 @@
 
 #pragma once
 #include "../WidgetTable.h"
+#include "core/nlohmann/json.hpp"
+using json = nlohmann::json;
 
 namespace Aquamarine
 {
@@ -182,17 +184,14 @@ namespace Aquamarine
             // addLocation("AWS S3", "[AWS_S3]", "REG_CLOUD", "DIR");
 
             // Favourite locations
-            ofxXmlSettings settings = WidgetSettings::getSettings();
-            if (settings.pushTag("settings"))
-            {
-                if (settings.pushTag("favouriteLocations"))
-                {
-                    for (int j = 0; j < settings.getNumTags("location"); j++)
-                    {
-                        string path = settings.getAttribute("location", "path", "", j);
-                        string name = settings.getValue("location", "", j);
-                        addLocation(name, path, "", "DIR");
-                    }
+            json settings = WidgetSettings::getSettingsJson();
+
+            if (settings.contains("settings") && settings["settings"].contains("favouriteLocations")) {
+                for (auto& loc : settings["settings"]["favouriteLocations"].items()) {            
+                    string path, name;
+                    loc.value()["path"].get_to(path);
+                    loc.value()["name"].get_to(name);
+                    addLocation(name, path, "", "DIR");
                 }
             }
 
@@ -202,48 +201,12 @@ namespace Aquamarine
 
         static void addFavouriteLocation(string name, string path)
         {
-            ofxXmlSettings settings = WidgetSettings::getSettings();
-            if (settings.pushTag("settings"))
-            {
-
-                if (!settings.pushTag("favouriteLocations"))
-                {
-                    settings.addTag("favouriteLocations");
-                    settings.pushTag("favouriteLocations");
-                }
-
-                settings.addTag("location");
-                int maxLocations = settings.getNumTags("location") - 1;
-                settings.setAttribute("location", "path", path, maxLocations);
-                settings.setValue("location", name, maxLocations);
-                settings.saveFile(Shared::getSettingsFileFullPath()); // puts settings.xml file in the bin/data folder
-            }
+            addRecentLocation(path, "favouriteLocations", name);
         }
 
         static void addRecentLocation(string path)
         {
-            ofxXmlSettings settings = WidgetSettings::getSettings();
-
-            if (settings.pushTag("settings"))
-            {
-
-                if (!settings.pushTag("recentLocations"))
-                {
-                    settings.addTag("recentLocations");
-                    settings.pushTag("recentLocations");
-                }
-
-                settings.addTag("location");
-                settings.setAttribute("location", "path", path, 0);
-
-                // Remove stale locations
-                for (int j = 4; j < settings.getNumTags("location"); j++)
-                {
-                    settings.removeTag("location", j);
-                }
-
-                settings.saveFile(Shared::getSettingsFileFullPath()); // puts settings.xml file in the bin/data folder
-            }
+            addRecentLocation(path, "recentLocations");
         }
 
         static void addRecentFile(string path)
@@ -291,65 +254,53 @@ namespace Aquamarine
             return getMostRecentLocation("recentProjects");
         }
 
-        static void addRecentLocation(string filePath, string tagName)
+        static void addRecentLocation(string filePath, string tagName, string name = "")
         {
-            ofxXmlSettings settings = WidgetSettings::getSettings();
 
-            if (settings.pushTag("settings"))
-            {
+            json sett = WidgetSettings::getSettingsJson();
 
-                if (!settings.pushTag(tagName))
+            vector<json> locationsAdded;
+            locationsAdded.push_back( { {"path", filePath}, {"name", name} });
+
+            if (!sett.contains("settings")) sett["settings"] = nullptr;
+            if (!sett["settings"].contains(tagName)) sett["settings"][tagName] = {};
+
+
+            auto ary = sett["settings"][tagName];
+
+            for (auto& loc : ary.items()) {            
+                string path;
+                loc.value()["path"].get_to(path);
+
+                string name;
+                loc.value()["name"].get_to(name);
+
+                if (std::find(ary.begin(), ary.end(), path) == ary.end())
                 {
-                    settings.addTag(tagName);
-                    settings.pushTag(tagName);
+                    if (locationsAdded.size() < 5) locationsAdded.push_back( { {"path", path}, {"name", name} });
                 }
-
-                // Cache them
-                vector<string> locationsAdded = vector<string>();
-                locationsAdded.push_back(filePath);
-                for (int j = 0; j < settings.getNumTags("location"); j++)
-                {
-                    string path = settings.getAttribute("location", "path", "", j);
-                    bool locationAlreadyAdded = false;
-                    for (int k = 0; k < locationsAdded.size(); k++)
-                    {
-                        if (locationsAdded[k] == path)
-                        {
-                            locationAlreadyAdded = true;
-                            break;
-                        }
-                    }
-                    if (!locationAlreadyAdded && path != "")
-                        locationsAdded.push_back(path);
-                }
-                // clear stale locations
-                settings.popTag(); // tagName
-                settings.clearTagContents(tagName);
-                settings.pushTag(tagName);
-                int addedItems = 0;
-                for (int j = 0; j < locationsAdded.size(); j++)
-                {
-                    settings.addTag("location");
-                    settings.setAttribute("location", "path", locationsAdded[j], j);
-                    addedItems++;
-                    if (addedItems >= 5)
-                        break;
-                }
-
-                settings.saveFile(Shared::getSettingsFileFullPath()); // puts settings.xml file in the bin/data folder
             }
+
+            sett["settings"][tagName] = locationsAdded;
+
+            std::ofstream ofs(Shared::getSettingsFileFullPath());
+            ofs << sett;
         }
 
         static vector<string> getRecentLocation(string tagName)
         {
-            ofxXmlSettings settings = WidgetSettings::getSettings();
+            json sett = WidgetSettings::getSettingsJson();
+
+            if (!sett.contains("settings")) sett["settings"] = nullptr;
+            if (!sett["settings"].contains(tagName)) sett["settings"][tagName] = {};
+
             vector<string> locations = vector<string>();
-            if (settings.pushTag("settings") && settings.pushTag(tagName))
-            {
-                for (int j = 0; j < settings.getNumTags("location"); j++)
-                {
-                    locations.push_back(settings.getAttribute("location", "path", "", j));
-                }
+            auto ary = sett["settings"][tagName];
+
+            for (auto& loc : ary.items()) {            
+                string path;
+                loc.value()["path"].get_to(path);
+                locations.push_back(path);
             }
             return locations;
         }

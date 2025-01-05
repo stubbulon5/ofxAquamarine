@@ -1,6 +1,8 @@
 
 #pragma once
 #include "WidgetMenu.h"
+#include "core/nlohmann/json.hpp"
+using json = nlohmann::json;
 
 namespace Aquamarine
 {
@@ -83,26 +85,52 @@ namespace Aquamarine
             }
         }
 
-        virtual void afterLoad(ofxXmlSettings settings)
+        virtual void afterLoad(json settings)
         { // Override in descendant for after load hook
         }
 
-        static ofxXmlSettings getSettings()
+        static json getSettingsJson()
         {
-            ofxXmlSettings settings;
-            string settingsFile = Shared::getSettingsFileFullPath();
-            if (!settings.loadFile(settingsFile))
+            json doc;
+            try
             {
-                string exceptionStr = "Invalid Settings file. Set it using 'Shared::initSettingsFile' Terminating...";
-                throw std::runtime_error(exceptionStr.c_str());
-                OF_EXIT_APP(1);
+                std::ifstream ifs(Shared::getSettingsFileFullPath());
+                std::string data((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+                doc = json::parse(data);
+                return doc;
+
             }
-            return settings;
+            catch (exception &error)
+            {
+                json settings =
+                    Shared::initSettingsFile(
+                        App::APPLICATION_SETTINGS_FOLDER(),
+                        App::APPLICATION_SETTINGS_FILE());
+                return settings;
+            }
         }
 
         void loadSettings()
         {
-            ofxXmlSettings settings = getSettings();
+            json settings = getSettingsJson();
+
+            float userInterfaceScaling = Shared::getDefaultScaling();
+            string language = "english";
+            int userExperience = Shared::getDefaultFPS();
+            bool useFbo = true;
+            bool showFps = false;
+            string fontPath = "fonts/Verdana.ttf";
+            bool autoLoadMostRecentProject = true;
+            string themeName = "System";
+
+            settings["settings"]["userInterfaceScaling"].get_to(userInterfaceScaling);
+            settings["settings"]["language"].get_to(language);
+            settings["settings"]["userExperience"].get_to(userExperience);
+            settings["settings"]["useFbo"].get_to(useFbo);
+            settings["settings"]["showFps"].get_to(showFps);
+            settings["settings"]["fontPath"].get_to(fontPath);
+            settings["settings"]["autoLoadMostRecentProject"].get_to(autoLoadMostRecentProject);
+            settings["settings"]["themeName"].get_to(themeName);
 
             WidgetElmSlider *SLD_UI_SCALE = getSlider("SLD_UI_SCALE");
             WidgetElmSlider *SLD_EXPERIENCE = getSlider("SLD_EXPERIENCE");
@@ -110,25 +138,24 @@ namespace Aquamarine
             WidgetElmCheckbox *CHK_SHOW_FPS = getCheckbox("CHK_SHOW_FPS");
             WidgetElmCheckbox *CHK_AUTOLOAD_RECENT = getCheckbox("CHK_AUTOLOAD_RECENT");
 
-            SLD_UI_SCALE->setValue(settings.getValue("settings:userInterfaceScaling", 1.0), true);
-            SLD_EXPERIENCE->setValue(settings.getValue("settings:userExperience", 60), true);
-            CHK_USE_GPU->setValue(settings.getValue("settings:useFbo", true), true, false);
-            CHK_SHOW_FPS->setValue(settings.getValue("settings:showFps", false), true, false);
-            CHK_AUTOLOAD_RECENT->setValue(settings.getValue("settings:autoLoadMostRecentProject", true), true, false);
+            SLD_UI_SCALE->setValue(userInterfaceScaling, false);
+            SLD_EXPERIENCE->setValue(userExperience, false);
+            CHK_USE_GPU->setValue(useFbo, false, false);
+            CHK_SHOW_FPS->setValue(showFps, false, false);
+            CHK_AUTOLOAD_RECENT->setValue(autoLoadMostRecentProject, false, false);
 
-            string themeName = settings.getValue("settings:themeName", "");
             settingsMenu->selectMenuItemByLabel(IconCache::IconTag::WIDGET_THEMES, themeName, false);
 
             afterLoad(settings);
         }
 
-        virtual void beforeSave(ofxXmlSettings settings)
+        virtual void beforeSave(json settings)
         { // Override in descendant for save hook
         }
 
         void saveSettings()
         {
-            ofxXmlSettings settings = getSettings();
+            json settings = getSettingsJson();
 
             WidgetElmSlider *SLD_UI_SCALE = getSlider("SLD_UI_SCALE");
             WidgetElmSlider *SLD_EXPERIENCE = getSlider("SLD_EXPERIENCE");
@@ -136,17 +163,20 @@ namespace Aquamarine
             WidgetElmCheckbox *CHK_SHOW_FPS = getCheckbox("CHK_SHOW_FPS");
             WidgetElmCheckbox *CHK_AUTOLOAD_RECENT = getCheckbox("CHK_AUTOLOAD_RECENT");
 
-            settings.setValue("settings:userExperience", SLD_EXPERIENCE->getValue());
-            settings.setValue("settings:useFbo", CHK_USE_GPU->getValue());
-            settings.setValue("settings:showFps", CHK_SHOW_FPS->getValue());
-            settings.setValue("settings:language", "english");
-            settings.setValue("settings:fontPath", "fonts/Verdana.ttf");
-            settings.setValue("settings:userInterfaceScaling", SLD_UI_SCALE->getValue());
-            settings.setValue("settings:autoLoadMostRecentProject", CHK_AUTOLOAD_RECENT->getValue());
-            settings.setValue("settings:themeName", selectedTheme.Name);
+            settings["settings"]["userExperience"] = SLD_EXPERIENCE->getValue();
+            settings["settings"]["useFbo"] = CHK_USE_GPU->getValue();
+            settings["settings"]["showFps"] = CHK_SHOW_FPS->getValue();
+            settings["settings"]["language"] = "english";
+            settings["settings"]["fontPath"] = "fonts/Verdana.ttf";
+            settings["settings"]["userInterfaceScaling"] = SLD_UI_SCALE->getValue();
+            settings["settings"]["autoLoadMostRecentProject"] = CHK_AUTOLOAD_RECENT->getValue();
+            settings["settings"]["themeName"] = selectedTheme.Name;
 
             beforeSave(settings);
-            settings.saveFile(Shared::getSettingsFileFullPath()); // puts settings.xml file in the bin/data folder
+
+            // Save the file
+            std::ofstream ofs(Shared::getSettingsFileFullPath());
+            ofs << settings;
         }
 
         virtual void onMenuItemSelected(WidgetMenuItemArgs &args)

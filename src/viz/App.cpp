@@ -43,20 +43,40 @@ namespace Aquamarine
         ofDirectory::createDirectory(App::APPLICATION_SETTINGS_FOLDER(), true, false);
         ofDirectory::createDirectory(App::APPLICATION_CACHE_FOLDER(), true, false);
 
-        ofxXmlSettings settings =
+        json settings =
             Shared::initSettingsFile(
                 App::APPLICATION_SETTINGS_FOLDER(),
                 App::APPLICATION_SETTINGS_FILE());
 
+
+        float userInterfaceScaling = Shared::getDefaultScaling();
+        string language = "english";
+        int userExperience = Shared::getDefaultFPS();
+        bool useFbo = true;
+        bool showFps = false;
+        string fontPath = "fonts/Verdana.ttf";
+        bool autoLoadMostRecentProject = true;
+        string themeName = "System";
+
+        settings["settings"]["userInterfaceScaling"].get_to(userInterfaceScaling);
+        settings["settings"]["language"].get_to(language);
+        settings["settings"]["userExperience"].get_to(userExperience);
+        settings["settings"]["useFbo"].get_to(useFbo);
+        settings["settings"]["showFps"].get_to(showFps);
+        settings["settings"]["fontPath"].get_to(fontPath);
+        settings["settings"]["autoLoadMostRecentProject"].get_to(autoLoadMostRecentProject);
+        settings["settings"]["themeName"].get_to(themeName);
+
         Shared::configure(
-            settings.getValue("settings:userInterfaceScaling", Shared::getDefaultScaling()),
-            settings.getValue("settings:language", "english"),
-            settings.getValue("settings:userExperience", Shared::getDefaultFPS()),
-            settings.getValue("settings:useFbo", true),
-            settings.getValue("settings:showFps", false),
-            settings.getValue("settings:fontPath", "fonts/Verdana.ttf"),
-            settings.getValue("settings:autoLoadMostRecentProject", true),
-            settings.getValue("settings:themeName", "System"));
+            userInterfaceScaling,
+            language,
+            userExperience,
+            useFbo,
+            showFps,
+            fontPath,
+            autoLoadMostRecentProject,
+            themeName
+        );
 
         Shared::langLoadXML(App::mDEFAULT_LANGUAGE_XML);
 
@@ -102,12 +122,12 @@ namespace Aquamarine
 
     string App::APPLICATION_SETTINGS_FILE()
     {
-        return "settings.xml";
+        return "settings.json";
     }
 
     string App::APPLICATION_SETTINGS_FILE_FULL_PATH()
     {
-        return ofFilePath::join(App::APPLICATION_SETTINGS_FOLDER(), App::APPLICATION_SETTINGS_FILE()); // eg ~/.myapp/settings.xml
+        return ofFilePath::join(App::APPLICATION_SETTINGS_FOLDER(), App::APPLICATION_SETTINGS_FILE()); // eg ~/.myapp/settings.json
     }
 
     int App::getAppMajorVersion()

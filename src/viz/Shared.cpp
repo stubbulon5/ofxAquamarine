@@ -4,10 +4,11 @@
 #include "Poco/Base64Encoder.h"
 #include "uriparser/Uri.h"
 
+
 namespace Aquamarine
 {
     string Shared::APP_SETTINGS_PATH;
-    string Shared::APP_SETTINGS_FILE_NAME = "settings.xml";
+    string Shared::APP_SETTINGS_FILE_NAME = "settings.json";
     string Shared::APP_SETTINGS_FILE_FULL_PATH;
     std::shared_ptr<Viz> Shared::viz;
     int Shared::mVizDebug = -1;
@@ -15,7 +16,7 @@ namespace Aquamarine
     /*
      static methods
      */
-    ofxXmlSettings Shared::initSettingsFile(string settingsPath, string settingsFileName)
+    json Shared::initSettingsFile(string settingsPath, string settingsFileName)
     {
         APP_SETTINGS_PATH = settingsPath;
         APP_SETTINGS_FILE_NAME = settingsFileName;
@@ -23,18 +24,36 @@ namespace Aquamarine
         ofDirectory::createDirectory(APP_SETTINGS_PATH, true, false);
         APP_SETTINGS_FILE_FULL_PATH = ofFilePath::join(APP_SETTINGS_PATH, APP_SETTINGS_FILE_NAME);
 
-        ofxXmlSettings settings;
-        if (!settings.loadFile(APP_SETTINGS_FILE_FULL_PATH))
+        json doc;
+        try
         {
-            ofxXmlSettings settings;
-            settings.setValue("settings:userInterfaceScaling", Shared::getDefaultScaling());
-            settings.setValue("settings:userExperience", Shared::getDefaultFPS());
-            settings.setValue("settings:useFbo", true);
-            settings.setValue("settings:showFps", false);
-            settings.saveFile(APP_SETTINGS_FILE_FULL_PATH);
-            settings.loadFile(APP_SETTINGS_FILE_FULL_PATH);
+            std::ifstream ifs(APP_SETTINGS_FILE_FULL_PATH);
+            std::string data((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+            doc = json::parse(data);
+            return doc;
+
         }
-        return settings;
+        catch (exception &error)
+        {
+            std::cerr << "\nWriting new settings file... : `" << APP_SETTINGS_FILE_FULL_PATH << std::endl;
+            doc["settings"]["userExperience"] = 60;
+            doc["settings"]["useFbo"] = true;
+            doc["settings"]["showFps"] = false;
+            doc["settings"]["language"] = "english";
+            doc["settings"]["fontPath"] = "fonts/Verdana.ttf";
+            doc["settings"]["userInterfaceScaling"] = 1.0;
+            doc["settings"]["themeName"] = "System";
+            doc["settings"]["recentFiles"] = {};
+            doc["settings"]["recentDirectories"] = {};
+            doc["settings"]["recentProjects"] = {};
+            doc["settings"]["autoLoadMostRecentProject"] = true;
+            doc["settings"]["favouriteLocations"] = {};
+
+            // Save the file
+            std::ofstream ofs(APP_SETTINGS_FILE_FULL_PATH);
+            ofs << doc;            
+        }
+        return doc;
     }
 
     string Shared::getSettingsPath()

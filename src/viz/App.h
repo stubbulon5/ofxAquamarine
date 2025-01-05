@@ -2,6 +2,8 @@
 #include <string>
 #include "Shared.h"
 #include "WidgetManager.h"
+#include "core/nlohmann/json.hpp"
+using json = nlohmann::json;
 
 namespace Aquamarine
 {

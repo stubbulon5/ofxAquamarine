@@ -3773,7 +3773,7 @@ namespace Aquamarine
 
             if (mWidgetXML.tagExists("appearance"))
             {
-                theme.loadForElement(theme, widgetXML);
+                theme.loadForElement_DEPRECATE(theme, widgetXML);
             }
             mWidgetXML.popTag(); // element
 
@@ -4613,7 +4613,7 @@ namespace Aquamarine
 
             if (mWidgetXML.pushTag("appearance"))
             {
-                theme.loadForWidget(theme, widgetXML);
+                theme.loadForWidget_DEPRECATE(theme, widgetXML);
                 setTheme(theme);
                 mWidgetXML.popTag(); // appearance
             }

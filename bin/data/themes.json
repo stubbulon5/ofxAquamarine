@@ -1,0 +1,364 @@
+{
+    "themes": [
+        {
+            "widgets": {
+                "roundedRectangle": true,
+                "widgetColor": {
+                    "color": "#FFFFFFFF"
+                },
+                "widgetContentColor": {
+                    "color": "#FFFFFFEE"
+                },
+                "widgetAccentColor": {
+                    "color1": "#004D7A",
+                    "color2": "#051937",
+                    "color3": "#008793",
+                    "color4": "#A8EB12"
+                },
+                "backgroundColor": {
+                    "color1": "#00CED1",
+                    "color2": "#5F9EA0",
+                    "color3": "#008793",
+                    "color4": "#004D7A"
+                },
+                "widgetAlternatingColor": {
+                    "color1": "#D5D5D5FF",
+                    "color2": "#DDDDDDFF"
+                },
+                "widgetModalBackgroundColor": {
+                    "color": "#000000B4"
+                },
+                "widgetAlpha": {
+                    "hovered": 0.950000,
+                    "unhovered": 0.900000,
+                    "contentChrome": 0.800000
+                },
+                "titleFontColor": {
+                    "color": "#000000EE"
+                },
+                "titleFontAlpha": {
+                    "hovered": 0.900000,
+                    "unhovered": 0.700000
+                },
+                "titleColor": {
+                    "color": "#FEFEFEFF"
+                },
+                "titleGradientColor": {
+                    "color1": "#FFFFFFFF",
+                    "color2": "#FEFEFEFF",
+                    "color3": "#FEFEFEFF",
+                    "color4": "#FFFFFFFF"
+                },
+                "titleAlpha": {
+                    "hovered": 0.950000,
+                    "unhovered": 0.800000
+                },
+                "typographyColor": {
+                    "primary": "#333333FF",
+                    "secondary": "#555555FF",
+                    "tertiary": "#AAAAAAFF",
+                    "quaternary": "#EEEEEEFF"
+                },
+                "selection": {
+                    "foreground": "#FFFFFFFF",
+                    "background": "#999999FF"
+                },
+                "hover": {
+                    "foreground": "#FFFFFFFF",
+                    "background": "#AAAAAAFF"
+                }
+            },
+            "elements": {
+                "roundedRectangle": true,
+                "foregroundColor": {
+                    "color": "#333333DD"
+                },
+                "backgroundColor": {
+                    "color": "#CCCCCCEE"
+                },
+                "foregroundAlpha": {
+                    "hovered": 0.95,
+                    "unhovered": 0.9
+                },
+                "backgroundAlpha": {
+                    "hovered": 0.95,
+                    "unhovered": 0.9
+                }
+            },
+            "name": "System",
+            "isDark": false,
+            "mainMenuColor": "",
+            "popoutMenuColor": ""
+        },
+        {
+            "widgets": {
+                "roundedRectangle": true,
+                "widgetColor": {
+                    "color": "#151515FF"
+                },
+                "widgetContentColor": {
+                    "color": "#15151599"
+                },
+                "widgetAccentColor": {
+                    "color1": "#008793",
+                    "color2": "#A8EB12",
+                    "color3": "#051937",
+                    "color4": "#004D7A"
+                },
+                "backgroundColor": {
+                    "color1": "#008793",
+                    "color2": "#008793",
+                    "color3": "#051937",
+                    "color4": "#004D7A"
+                },
+                "widgetAlternatingColor": {
+                    "color1": "#252525FF",
+                    "color2": "#222222FF"
+                },
+                "widgetModalBackgroundColor": {
+                    "color": "#DDDDDDB4"
+                },
+                "widgetAlpha": {
+                    "hovered": 0.900000,
+                    "unhovered": 0.800000,
+                    "contentChrome": 0.700000
+                },
+                "titleFontColor": {
+                    "color": "#FFFFFFFF"
+                },
+                "titleFontAlpha": {
+                    "hovered": 0.900000,
+                    "unhovered": 0.600000
+                },
+                "titleColor": {
+                    "color": "#252525FF"
+                },
+                "titleGradientColor": {
+                    "color1": "#252525FF",
+                    "color2": "#151515FF",
+                    "color3": "#151515FF",
+                    "color4": "#252525FF"
+                },
+                "titleAlpha": {
+                    "hovered": 0.900000,
+                    "unhovered": 0.700000
+                },
+                "typographyColor": {
+                    "primary": "#EEEEEEFF",
+                    "secondary": "#AAAAAAFF",
+                    "tertiary": "#666666FF",
+                    "quaternary": "#444444FF"
+                },
+                "selection": {
+                    "foreground": "#FFFFFFFF",
+                    "background": "#A8EB12AA"
+                },
+                "hover": {
+                    "foreground": "#FFFFFFFF",
+                    "background": "#A8EB1299"
+                }
+            },
+            "elements": {
+                "roundedRectangle": true,
+                "foregroundColor": {
+                    "color": "#000000DD"
+                },
+                "backgroundColor": {
+                    "color": "#999999EE"
+                },
+                "foregroundAlpha": {
+                    "hovered": 0.95,
+                    "unhovered": 0.9
+                },
+                "backgroundAlpha": {
+                    "hovered": 0.95,
+                    "unhovered": 0.9
+                }
+            },
+            "name": "SystemDark",
+            "isDark": true,
+            "mainMenuColor": "",
+            "popoutMenuColor": ""
+        },
+        {
+            "widgets": {
+                "roundedRectangle": true,
+                "widgetColor": {
+                    "color": "#262626FF"
+                },
+                "widgetContentColor": {
+                    "color": "#15151599"
+                },
+                "widgetAccentColor": {
+                    "color1": "#f25c5a",
+                    "color2": "#ffe066",
+                    "color3": "#24799e",
+                    "color4": "#70c2b4"
+                },
+                "backgroundColor": {
+                    "color1": "#f25c5a",
+                    "color2": "#ffe066",
+                    "color3": "#24799e",
+                    "color4": "#70c2b4"
+                },
+                "widgetAlternatingColor": {
+                    "color1": "#252525FF",
+                    "color2": "#222222FF"
+                },
+                "widgetModalBackgroundColor": {
+                    "color": "#DDDDDDB4"
+                },
+                "widgetAlpha": {
+                    "hovered": 0.950000,
+                    "unhovered": 0.800000,
+                    "contentChrome": 0.90000
+                },
+                "titleFontColor": {
+                    "color": "#FFFFFFFF"
+                },
+                "titleFontAlpha": {
+                    "hovered": 0.900000,
+                    "unhovered": 0.600000
+                },
+                "titleColor": {
+                    "color": "#252525FF"
+                },
+                "titleGradientColor": {
+                    "color1": "#252525FF",
+                    "color2": "#262626FF",
+                    "color3": "#262626FF",
+                    "color4": "#252525FF"
+                },
+                "titleAlpha": {
+                    "hovered": 0.900000,
+                    "unhovered": 0.700000
+                },
+                "typographyColor": {
+                    "primary": "#EEEEEEFF",
+                    "secondary": "#AAAAAAFF",
+                    "tertiary": "#666666FF",
+                    "quaternary": "#444444FF"
+                },
+                "selection": {
+                    "foreground": "#EEEEEEFF",
+                    "background": "#24799EAA"
+                },
+                "hover": {
+                    "foreground": "#EEEEEEFF",
+                    "background": "#24799E99"
+                }
+            },
+            "elements": {
+                "roundedRectangle": true,
+                "foregroundColor": {
+                    "color": "#000000DD"
+                },
+                "backgroundColor": {
+                    "color": "#999999EE"
+                },
+                "foregroundAlpha": {
+                    "hovered": 0.95,
+                    "unhovered": 0.9
+                },
+                "backgroundAlpha": {
+                    "hovered": 0.95,
+                    "unhovered": 0.9
+                }
+            },
+            "name": "Tequila",
+            "isDark": true,
+            "mainMenuColor": "",
+            "popoutMenuColor": ""
+        },
+        {
+            "widgets": {
+                "roundedRectangle": true,
+                "widgetColor": {
+                    "color": "#222831FF"
+                },
+                "widgetContentColor": {
+                    "color": "#222831"
+                },
+                "widgetAccentColor": {
+                    "color1": "#f25c5a",
+                    "color2": "#ffe066",
+                    "color3": "#24799e",
+                    "color4": "#70c2b4"
+                },
+                "backgroundColor": {
+                    "color1": "#72767d",
+                    "color2": "#222831",
+                    "color3": "#72767d",
+                    "color4": "#1c2129"
+                },
+                "widgetAlternatingColor": {
+                    "color1": "#484d55AA",
+                    "color2": "#5d6169AA"
+                },
+                "widgetModalBackgroundColor": {
+                    "color": "#DDDDDDB4"
+                },
+                "widgetAlpha": {
+                    "hovered": 0.950000,
+                    "unhovered": 0.800000,
+                    "contentChrome": 0.90000
+                },
+                "titleFontColor": {
+                    "color": "#FFFFFFFF"
+                },
+                "titleFontAlpha": {
+                    "hovered": 0.900000,
+                    "unhovered": 0.600000
+                },
+                "titleColor": {
+                    "color": "#222831FF"
+                },
+                "titleGradientColor": {
+                    "color1": "#222831FF",
+                    "color2": "#222831FF",
+                    "color3": "#222831FF",
+                    "color4": "#222831FF"
+                },
+                "titleAlpha": {
+                    "hovered": 0.900000,
+                    "unhovered": 0.700000
+                },
+                "typographyColor": {
+                    "primary": "#EEEEEEFF",
+                    "secondary": "#AAAAAAFF",
+                    "tertiary": "#666666FF",
+                    "quaternary": "#444444FF"
+                },
+                "selection": {
+                    "foreground": "#EEEEEEFF",
+                    "background": "#24799EAA"
+                },
+                "hover": {
+                    "foreground": "#EEEEEEFF",
+                    "background": "#24799E99"
+                }
+            },
+            "elements": {
+                "roundedRectangle": true,
+                "foregroundColor": {
+                    "color": "#000000AA"
+                },
+                "backgroundColor": {
+                    "color": "#999999AA"
+                },
+                "foregroundAlpha": {
+                    "hovered": 0.95,
+                    "unhovered": 0.9
+                },
+                "backgroundAlpha": {
+                    "hovered": 0.95,
+                    "unhovered": 0.9
+                }
+            },
+            "name": "Cognition",
+            "isDark": true,
+            "mainMenuColor": "#1c2129FF",
+            "popoutMenuColor": "#1c2129FF"
+        }
+    ]
+}

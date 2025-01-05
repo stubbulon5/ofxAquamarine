@@ -20,6 +20,11 @@ This is a sole development, but I welcome collaboration and input. Have a featur
 ## Setup
 VSCode is the preferred IDE. All instructions are written based on the assumption that it is being used. 
 
+```
+git clone git@github.com:stubbulon5/ofxAquamarine.git
+
+```
+
 To start using the addon, add the ofxAquamarine addon to the `addons.make` file and unzip `addons.zip` to your `/<OF_ROOT>/addons` folder.
 
 ### Intellisense

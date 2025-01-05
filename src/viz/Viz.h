@@ -9,6 +9,9 @@
 #include "Lang.h"
 #include "Coord.h"
 #include "ofxOsc.h"
+#include <fstream>
+#include "core/nlohmann/json.hpp"
+using json = nlohmann::json;
 
 namespace Aquamarine
 {
@@ -40,7 +43,7 @@ namespace Aquamarine
         {
         }
 
-        bool loadForWidget(WidgetTheme &fallback, string themeXML)
+        bool loadForWidget_DEPRECATE(WidgetTheme &fallback, string themeXML)
         {
             ofxXmlSettings settings;
             if (settings.loadFromBuffer(themeXML.c_str()))
@@ -50,7 +53,7 @@ namespace Aquamarine
                     RoundedRectangle = settings.getAttribute("appearance", "roundedRectangle", RoundedRectangle, 0);
                     if (settings.pushTag("appearance"))
                     {
-                        populateWidgetTheme(fallback, settings);
+                        populateWidgetTheme_DEPRECATE(fallback, settings);
                         settings.popTag(); // appearance
                     }
                     settings.popTag(); // widget
@@ -60,7 +63,7 @@ namespace Aquamarine
             return false;
         }
 
-        bool loadForElement(WidgetTheme &fallback, string themeXML)
+        bool loadForElement_DEPRECATE(WidgetTheme &fallback, string themeXML)
         {
             ofxXmlSettings settings;
             if (settings.loadFromBuffer(themeXML.c_str()))
@@ -70,7 +73,7 @@ namespace Aquamarine
                     ElementRoundedRectangle = settings.getAttribute("appearance", "roundedRectangle", ElementRoundedRectangle, 0);
                     if (settings.pushTag("appearance"))
                     {
-                        populateElementTheme(fallback, settings);
+                        populateElementTheme_DEPRECATE(fallback, settings);
                         settings.popTag(); // appearance
                     }
                     settings.popTag(); // widget
@@ -80,7 +83,7 @@ namespace Aquamarine
             return false;
         }
 
-        bool load(string themeXML)
+        bool load_DEPRECATE(string themeXML)
         {
 
             ofxXmlSettings settings;
@@ -98,7 +101,7 @@ namespace Aquamarine
                 if (settings.pushTag("widgets"))
                 {
                     RoundedRectangle = settings.getAttribute("appearance", "roundedRectangle", RoundedRectangle, 0);
-                    populateWidgetTheme(*this, settings);
+                    populateWidgetTheme_DEPRECATE(*this, settings);
                     settings.popTag(); // widgets
                 }
 
@@ -106,7 +109,7 @@ namespace Aquamarine
                 if (settings.pushTag("elements"))
                 {
                     ElementRoundedRectangle = settings.getAttribute("appearance", "roundedRectangle", ElementRoundedRectangle, 0);
-                    populateElementTheme(*this, settings);
+                    populateElementTheme_DEPRECATE(*this, settings);
                     settings.popTag(); // elemets
                 }
 
@@ -119,7 +122,7 @@ namespace Aquamarine
             return false;
         }
 
-        void populateWidgetTheme(WidgetTheme &fallback, ofxXmlSettings &settings)
+        void populateWidgetTheme_DEPRECATE(WidgetTheme &fallback, ofxXmlSettings &settings)
         {
 
             setWidgetColor(settings.getAttribute("widgetColor", "color", ""));
@@ -176,7 +179,7 @@ namespace Aquamarine
                 settings.getAttribute("hover", "background", fallback.getHoverBackgroundColorHex()));
         }
 
-        void populateElementTheme(WidgetTheme &fallback, ofxXmlSettings &settings)
+        void populateElementTheme_DEPRECATE(WidgetTheme &fallback, ofxXmlSettings &settings)
         {
 
             setElementForegroundColor(settings.getAttribute("foregroundColor", "color", ""));
@@ -188,6 +191,218 @@ namespace Aquamarine
 
             ElementHoveredBackgroundAlpha = settings.getAttribute("backgroundAlpha", "hovered", fallback.ElementHoveredBackgroundAlpha);
             ElementUnhoveredBackgroundAlpha = settings.getAttribute("backgroundAlpha", "unhovered", fallback.ElementUnhoveredBackgroundAlpha);
+        }
+
+        /******** NEW */
+
+        bool loadForWidgetJson(WidgetTheme &fallback, string widgetJson)
+        {
+            json doc;
+            try
+            {
+                doc = json::parse(widgetJson);
+                doc["widget"]["appearance"]["roundedRectangle"].get_to(RoundedRectangle);
+                return populateWidgetThemeJson(fallback, doc);
+            }
+            catch (exception &error)
+            {
+                std::cerr << "\nTheme JSON error for Widget: " << error.what() << std::endl;
+            }
+            return false;
+        }
+
+        bool loadForElementJson(WidgetTheme &fallback, string elementJson)
+        {
+            json doc;
+            try
+            {
+                doc = json::parse(elementJson);
+                doc["element"]["appearance"]["roundedRectangle"].get_to(ElementRoundedRectangle);
+                return populateElementThemeJson(fallback, doc);
+            }
+            catch (exception &error)
+            {
+                std::cerr << "\nTheme JSON error for Element: " << error.what() << std::endl;
+            }
+            return false;
+        }
+
+        bool loadJson(string themeJson)
+        {
+            json doc;
+            try
+            {
+                doc = json::parse(themeJson);
+
+                Name = "Unknown";
+                doc["name"].get_to(Name);
+
+                doc["isDark"].get_to(IsDark);
+
+                // Widgets
+                populateWidgetThemeJson(*this, doc);
+
+                // Elements
+                populateElementThemeJson(*this, doc);
+
+                string strMainMenuColor = "";
+                string strPopoutMenuColor = "";
+                doc["mainMenuColor"].get_to(strMainMenuColor);
+                doc["popoutMenuColor"].get_to(strPopoutMenuColor);
+
+                setMainMenuColor(strMainMenuColor);
+                setPopoutMenuColor(strPopoutMenuColor);
+
+                return true;
+            }
+            catch (exception &error)
+            {
+                std::cerr << "\nTheme JSON error: " << error.what() << std::endl;
+                return false;
+            }
+            return false;
+        }
+
+        bool populateWidgetThemeJson(WidgetTheme &fallback, json &doc)
+        {
+            doc["widgets"]["roundedRectangle"].get_to(RoundedRectangle);
+
+            string tmp_str = "";
+            doc["widgets"]["widgetColor"]["color"].get_to(tmp_str);
+            setWidgetColor(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["widgetContentColor"]["color"].get_to(tmp_str);
+            setWidgetContentColor(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["widgetAccentColor"]["color1"].get_to(tmp_str);
+            setWidgetAccent1Color(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["widgetAccentColor"]["color2"].get_to(tmp_str);
+            setWidgetAccent2Color(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["widgetAccentColor"]["color3"].get_to(tmp_str);
+            setWidgetAccent3Color(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["widgetAccentColor"]["color4"].get_to(tmp_str);
+            setWidgetAccent4Color(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["backgroundColor"]["color1"].get_to(tmp_str);
+            setBackgroundColor1(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["backgroundColor"]["color2"].get_to(tmp_str);
+            setBackgroundColor2(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["backgroundColor"]["color3"].get_to(tmp_str);
+            setBackgroundColor3(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["backgroundColor"]["color4"].get_to(tmp_str);
+            setBackgroundColor4(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["widgetAlternatingColor"]["color1"].get_to(tmp_str);
+            setWidgetAlternating1Color(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["widgetAlternatingColor"]["color2"].get_to(tmp_str);
+            setWidgetAlternating2Color(tmp_str);
+
+            tmp_str = "";
+            doc["widgets"]["widgetModalBackgroundColor"]["color"].get_to(tmp_str);
+            setWidgetModalBackgroundColor(tmp_str);
+
+            doc["widgets"]["widgetAlpha"]["hovered"].get_to(HoveredWidgetAlpha);
+            doc["widgets"]["widgetAlpha"]["unhovered"].get_to(UnhoveredWidgetAlpha);
+            doc["widgets"]["widgetAlpha"]["contentChrome"].get_to(ContentChromeAlpha);
+
+            tmp_str = "";
+            doc["widgets"]["titleFontColor"]["color"].get_to(tmp_str);
+            setTitleFontColor(tmp_str);
+
+            doc["widgets"]["titleFontAlpha"]["hovered"].get_to(HoveredTitleFontAlpha);
+            doc["widgets"]["titleFontAlpha"]["unhovered"].get_to(UnhoveredTitleFontAlpha);
+
+            tmp_str = "";
+            doc["widgets"]["titleColor"]["color"].get_to(tmp_str);
+            setTitleColor(tmp_str);
+
+            doc["widgets"]["titleAlpha"]["hovered"].get_to(HoveredTitleAlpha);
+            doc["widgets"]["titleAlpha"]["unhovered"].get_to(UnhoveredTitleAlpha);
+
+            string titleGradientColor1 = fallback.getTitleGradientColor1Hex();
+            doc["widgets"]["titleGradientColor"]["color1"].get_to(titleGradientColor1);
+
+            string titleGradientColor2 = fallback.getTitleGradientColor2Hex();
+            doc["widgets"]["titleGradientColor"]["color2"].get_to(titleGradientColor2);
+
+            string titleGradientColor3 = fallback.getTitleGradientColor3Hex();
+            doc["widgets"]["titleGradientColor"]["color3"].get_to(titleGradientColor3);
+
+            string titleGradientColor4 = fallback.getTitleGradientColor4Hex();
+            doc["widgets"]["titleGradientColor"]["color4"].get_to(titleGradientColor4);
+
+            setTitleGradientColors(titleGradientColor1, titleGradientColor2, titleGradientColor3, titleGradientColor4);
+
+            string typographyColor1 = fallback.getTypographyPrimaryColorHex();
+            doc["widgets"]["typographyColor"]["primary"].get_to(typographyColor1);
+
+            string typographyColor2 = fallback.getTypographySecondaryColorHex();
+            doc["widgets"]["typographyColor"]["secondary"].get_to(typographyColor2);
+
+            string typographyColor3 = fallback.getTypographyTertiaryColorHex();
+            doc["widgets"]["typographyColor"]["tertiary"].get_to(typographyColor3);
+
+            string typographyColor4 = fallback.getTypographyQuaternaryColorHex();
+            doc["widgets"]["typographyColor"]["quaternary"].get_to(typographyColor4);
+
+            setTypographyColors(typographyColor1, typographyColor2, typographyColor3, typographyColor4);
+
+            string selectionColorsForeground = "";
+            doc["widgets"]["selection"]["foreground"].get_to(selectionColorsForeground);
+
+            string selectionColorsBackground = "";
+            doc["widgets"]["selection"]["background"].get_to(selectionColorsBackground);
+
+            setSelectionColors(selectionColorsForeground, selectionColorsBackground);
+
+            string hoverColorsForeground = "";
+            doc["widgets"]["hover"]["foreground"].get_to(hoverColorsForeground);
+
+            string hoverColorsBackground = "";
+            doc["widgets"]["hover"]["background"].get_to(hoverColorsBackground);
+
+            setHoverColors(hoverColorsForeground, hoverColorsBackground);
+
+            return true;
+        }
+
+        bool populateElementThemeJson(WidgetTheme &fallback, json &doc)
+        {
+            doc["elements"]["roundedRectangle"].get_to(ElementRoundedRectangle);
+
+            string tmp_str = "";
+            doc["elements"]["foregroundColor"]["color"].get_to(tmp_str);
+            setElementForegroundColor(tmp_str);
+
+            doc["elements"]["foregroundAlpha"]["hovered"].get_to(ElementHoveredForegroundAlpha);
+            doc["elements"]["foregroundAlpha"]["unhovered"].get_to(ElementUnhoveredForegroundAlpha);
+
+            tmp_str = "";
+            doc["elements"]["backgroundColor"]["color"].get_to(tmp_str);
+            setElementBackgroundColor(tmp_str);
+
+            doc["elements"]["backgroundAlpha"]["hovered"].get_to(ElementHoveredBackgroundAlpha);
+            doc["elements"]["backgroundAlpha"]["unhovered"].get_to(ElementUnhoveredBackgroundAlpha);
+
+            return true;
         }
 
         bool isDefaultLight()
@@ -1022,15 +1237,15 @@ namespace Aquamarine
 
         WidgetThemeManager(ofxXmlSettings themesXML)
         {
-            load(themesXML);
+            load_DEPRECATE(themesXML);
         }
 
         WidgetThemeManager(string themesXML)
         {
-            load(themesXML);
+            load_DEPRECATE(themesXML);
         }
 
-        bool load(ofxXmlSettings settings)
+        bool load_DEPRECATE(ofxXmlSettings settings)
         {
             mThemes.clear();
             TiXmlElement *themesElm = settings.doc.RootElement(); // themes
@@ -1045,7 +1260,7 @@ namespace Aquamarine
                     string themeXML = printer.CStr();
 
                     WidgetTheme currTheme = WidgetTheme();
-                    if (currTheme.load(themeXML))
+                    if (currTheme.load_DEPRECATE(themeXML))
                     {
                         mThemes.push_back(currTheme);
                         if (currTheme.Name == "System")
@@ -1059,25 +1274,79 @@ namespace Aquamarine
             return false;
         }
 
-        bool load(string themesXML)
+        bool load_DEPRECATE(string themesXML)
         {
             ofxXmlSettings settings;
             if (settings.loadFromBuffer(themesXML.c_str()))
             {
-                return load(settings);
+                return load_DEPRECATE(settings);
             }
             return false;
         }
 
-        bool loadThemesFromFile(string fileName)
+        bool loadThemesFromFile_DEPRECATE(string fileName)
         {
             ofxXmlSettings settings;
             if (settings.loadFile(fileName))
             {
-                return load(settings);
+                return load_DEPRECATE(settings);
             }
             else
             {
+                return false;
+            }
+        }
+
+        bool load(json &doc)
+        {
+            mThemes.clear();
+
+            int themesLoaded = 0;
+            for (auto theme : doc["themes"])
+            {
+                // cout << "SJON  " << theme.dump();
+
+                WidgetTheme currTheme = WidgetTheme();
+                if (currTheme.loadJson(theme.dump()))
+                {
+                    mThemes.push_back(currTheme);
+                    if (currTheme.Name == "System")
+                        mSystemTheme = currTheme;
+                    if (currTheme.Name == "SystemDark")
+                        mSystemThemeDark = currTheme;
+                }
+
+                themesLoaded++;
+            }
+
+            return themesLoaded > 0;
+        }
+
+        bool load(string json_string)
+        {
+            try
+            {
+                json doc = json::parse(json_string);
+                return load(doc);
+            }
+            catch (exception &error)
+            {
+                std::cerr << "\nTheme JSON error: " << error.what() << " near ";
+                return false;
+            }
+        }
+
+        bool loadThemesFromFile(string fileName)
+        {
+            try
+            {
+                std::ifstream ifs(fileName);
+                std::string data((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+                return load(data);
+            }
+            catch (exception &error)
+            {
+                std::cerr << "\nError loading Theme file: `" << fileName << "` : " << error.what() << std::endl;
                 return false;
             }
         }
@@ -1282,7 +1551,8 @@ namespace Aquamarine
 
         void loadTheme(string themeName, bool reInit = true)
         {
-            themeManager.loadThemesFromFile("themes.xml");
+            // themeManager.loadThemesFromFile_DEPRECATE("themes.xml");
+            themeManager.loadThemesFromFile(ofToDataPath("themes.json"));
             WidgetTheme theme = themeManager.getThemeByName(themeName);
             themeManager.setDefaultTheme(theme);
 

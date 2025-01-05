@@ -23,6 +23,7 @@
 // Core
 #include "./viz/core/exprtk/exprtk.hpp"
 #include "./viz/core/machineid/machineid.h"
+#include "./viz/core/nlohmann/json.hpp"
 
 // Viz
 #include "./viz/App.h"

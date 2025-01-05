@@ -3,6 +3,8 @@
 #include "Viz.h"
 #include "Lang.h"
 #include "ofxXmlSettings.h"
+#include "core/nlohmann/json.hpp"
+using json = nlohmann::json;
 
 namespace Aquamarine
 {
@@ -10,7 +12,7 @@ namespace Aquamarine
     {
 
     public:
-        static ofxXmlSettings initSettingsFile(string settingsPath, string settingsFileName);
+        static json initSettingsFile(string settingsPath, string settingsFileName);
         static string getSettingsPath();
         static string getSettingsFileName();
         static string getSettingsFileFullPath();

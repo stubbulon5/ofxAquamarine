@@ -59,7 +59,7 @@ namespace Aquamarine
         {
             string themePath = ofToDataPath("themes.xml", true);
             textEditor->saveFile(themePath, false);
-            Shared::getViz()->getThemeManager()->loadThemesFromFile(themePath);
+            Shared::getViz()->getThemeManager()->loadThemesFromFile_DEPRECATE(themePath);
 
             WidgetTheme selectedTheme = Shared::getViz()->getThemeManager()->getThemeByName(Shared::getViz()->getThemeManager()->getDefaultTheme().Name);
             WidgetManager::setTheme(selectedTheme);
