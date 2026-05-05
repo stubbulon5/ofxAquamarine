@@ -13,6 +13,8 @@
 namespace Aquamarine
 {
     using Poco::RegularExpression;
+    using std::min;
+    using std::reference_wrapper;
 
 #pragma once
 
